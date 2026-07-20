@@ -1,0 +1,120 @@
+/* QUANTUM LABS — Simulator Page */
+
+/* Tools Grid */
+.tools-grid {
+  display: grid;
+  gap: var(--sp-6);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  margin-top: var(--sp-8);
+}
+
+/* Tool Card */
+.tool-card {
+  position: relative;
+  padding: var(--sp-6);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+  cursor: pointer;
+  overflow: hidden;
+}
+.tool-card::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ember), var(--molten));
+  opacity: 0;
+  transition: opacity var(--duration-normal);
+  content: '';
+}
+.tool-card:hover {
+  box-shadow: var(--shadow-lg), var(--glow-ember);
+  transform: translateY(-3px);
+  border-color: var(--ember-40);
+}
+.tool-card:hover::before {
+  opacity: 1;
+}
+
+/* Tool Card Icon */
+.tool-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--sp-4);
+  color: var(--ember);
+  background: var(--ember-10);
+  border: 1px solid var(--ember-15);
+  border-radius: var(--radius-md);
+}
+.tool-card-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* Tool Card */
+.tool-card h3 {
+  margin-bottom: var(--sp-2);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+.tool-card p {
+  margin-bottom: var(--sp-4);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ash);
+}
+
+/* Tool Card Badge */
+.tool-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--smoke);
+  background: var(--graphite);
+  border-radius: 10px;
+  letter-spacing: 0.06em;
+}
+.tool-card-badge.ready {
+  color: var(--success);
+  background: var(--success-15);
+}
+.tool-card-badge.soon {
+  color: var(--warning);
+  background: rgba(243, 156, 18, 0.1);
+}
+
+/* Tool Card Arrow */
+.tool-card-arrow {
+  position: absolute;
+  top: var(--sp-6);
+  right: var(--sp-6);
+  color: var(--wire-light);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* Tool Card */
+.tool-card:hover .tool-card-arrow {
+  color: var(--ember);
+  transform: translateX(4px);
+}
+
+/* Tool Card Arrow */
+.tool-card-arrow svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}

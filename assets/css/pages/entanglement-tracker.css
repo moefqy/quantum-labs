@@ -1,0 +1,550 @@
+/* QUANTUM LABS — Entanglement Tracker Page */
+
+/* Gate Palette grid — 3-col layout unique to ET */
+.et-palette {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-2);
+}
+
+/* ET-specific palette states (active selection, multi-gate dashed) */
+.et-palette-btn.active {
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+
+/* Et Palette Btn */
+.et-palette-btn.et-multi {
+  border-style: dashed;
+}
+
+/* Et Palette Hint */
+.et-palette-hint {
+  font-size: var(--text-xs);
+  color: var(--ash);
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: var(--sp-1);
+}
+
+/* 3-COLUMN LAYOUT */
+.et-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr 300px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* LEFT: Controls */
+.et-controls {
+  display: block;
+  background: var(--carbon);
+  overflow-y: auto;
+  border-right: 1px solid var(--wire);
+}
+
+/* CENTER: Entanglement Web */
+.et-center {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--obsidian);
+  border-right: 1px solid var(--wire);
+  overflow: hidden;
+}
+
+/* Et Center Title */
+.et-center-title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ash);
+  letter-spacing: 0.5px;
+  margin-bottom: var(--sp-3);
+}
+
+/* RIGHT: Analysis accordions */
+.et-right {
+  display: block;
+  background: var(--carbon);
+  overflow-y: auto;
+}
+
+/* Et Web Wrapper */
+.et-web-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  min-height: 180px;
+}
+
+/* Et Web Canvas */
+.et-web-canvas {
+  display: block;
+  width: 100%;
+  flex: 1;
+  border-radius: var(--radius-sm);
+}
+
+/* Et Web Overlays */
+.et-web-overlays {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Et Web Label */
+.et-web-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  pointer-events: auto;
+}
+
+/* Et Web Qubit Lbl */
+.et-web-qubit-lbl {
+  font-size: var(--text-base);
+  color: var(--on-accent) !important;
+}
+.et-web-qubit-lbl .katex {
+  font-size: 1em !important;
+  color: var(--on-accent) !important;
+}
+
+/* Et Web Entropy Lbl */
+.et-web-entropy-lbl {
+  font-size: var(--text-xs);
+}
+
+/* Et Web Tether Lbl */
+.et-web-tether-lbl {
+  font-weight: bold;
+  font-size: var(--text-xs);
+}
+
+/* Et Web Legend */
+.et-web-legend {
+  display: flex;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
+}
+
+/* Et Legend Item */
+.et-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  color: var(--ash);
+}
+
+/* Et Legend Dot */
+.et-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Et Legend Pure */
+.et-legend-pure {
+  background: var(--ash);
+}
+
+/* Et Legend Entangled */
+.et-legend-entangled {
+  background: var(--ember);
+}
+
+/* Entropy Gauges */
+.et-gauges-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* Et Gauge Item */
+.et-gauge-item {
+  display: grid;
+  grid-template-columns: 32px 1fr 46px;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Et Gauge Label */
+.et-gauge-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ash);
+  text-align: right;
+}
+.et-gauge-label .katex {
+  font-size: 0.85em !important;
+}
+
+/* Et Gauge Bar Wrap */
+.et-gauge-bar-wrap {
+  height: 8px;
+  background: var(--graphite);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* Et Gauge Bar */
+.et-gauge-bar {
+  height: 100%;
+  background: var(--smoke);
+  border-radius: var(--radius-md);
+  transition: width 0.4s ease;
+}
+.et-gauge-bar.entangled {
+  background: var(--ember);
+}
+
+/* Et Gauge Value */
+.et-gauge-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ash);
+  text-align: left;
+}
+.et-gauge-value.entangled {
+  color: var(--ember);
+}
+
+/* Et Gauge Axis */
+.et-gauge-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--sp-2);
+  padding: 0 56px 0 42px;
+  font-size: var(--text-xs);
+  color: var(--ash);
+  opacity: 0.6;
+}
+
+/* Pair Accordions */
+
+.et-pair-acc-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Et Pair Card */
+.et-pair-card {
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  transition: border-color 0.2s;
+}
+
+/* Et Pair Card  Entangled */
+.et-pair-card--entangled {
+  border-color: var(--ember-30);
+}
+
+/* Et Pair Header */
+.et-pair-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+}
+
+/* Et Pair Title */
+.et-pair-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--bone);
+}
+.et-pair-title .katex {
+  font-size: 0.9em !important;
+}
+
+/* Et Status Badge */
+.et-status-badge {
+  margin-left: auto;
+  margin-right: 16px;
+  padding: 3px var(--sp-2);
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Et Status Pure */
+.et-status-pure {
+  color: var(--ash);
+  background: var(--graphite);
+}
+
+/* Et Status Entangled */
+.et-status-entangled {
+  color: var(--on-accent);
+  background: var(--ember);
+}
+
+/* Metrics Grid */
+.et-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-3);
+}
+
+/* Et Metric */
+.et-metric {
+  background: var(--graphite);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2);
+  border: 1px solid var(--wire);
+  text-align: center;
+}
+
+/* Et Metric  Negative */
+.et-metric--negative {
+  border-color: var(--ember);
+  background: var(--ember-06);
+}
+
+/* Et Metric Label */
+.et-metric-label {
+  display: block;
+  font-size: 12px;
+  color: var(--chalk);
+  margin-bottom: 6px;
+}
+.et-metric-label .katex {
+  font-size: 1em !important;
+}
+
+/* Et Metric Value */
+.et-metric-value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--bone);
+  font-weight: 400;
+}
+
+/* Et Metric  Negative */
+.et-metric--negative .et-metric-value {
+  color: var(--ember);
+}
+
+/* Quantum Alert */
+.et-quantum-alert {
+  padding: var(--sp-2) var(--sp-3);
+  margin-bottom: var(--sp-3);
+  background: var(--ember-06);
+  border: 1px solid var(--ember-30);
+  border-left: 3px solid var(--ember);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--bone);
+  line-height: 1.5;
+}
+
+/* Reduced Density Matrix */
+.et-rdm {
+  margin-top: var(--sp-1);
+}
+
+/* Et Rdm Label */
+.et-rdm-label {
+  font-size: var(--text-xs);
+  color: var(--ash);
+  margin-bottom: var(--sp-2);
+}
+.et-rdm-label .katex {
+  font-size: 1em !important;
+}
+
+/* Et Rdm Grid */
+.et-rdm-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-1);
+  max-width: 280px;
+}
+
+/* Et Rdm Cell */
+.et-rdm-cell {
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--bone);
+  text-align: center;
+}
+
+/* Et Rdm Offdiag */
+.et-rdm-offdiag {
+  color: var(--smoke);
+}
+
+/* GLOSSARY & LEGEND */
+.et-glossary-container {
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--ash);
+}
+
+/* Et Glossary Mb */
+.et-glossary-mb {
+  margin-bottom: var(--sp-2);
+}
+
+/* Et Glossary Formula */
+.et-glossary-formula {
+  margin-bottom: var(--sp-3);
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+
+/* Et Glossary Footer */
+.et-glossary-footer {
+  padding-top: var(--sp-3);
+  margin-top: var(--sp-2);
+  border-top: 1px solid var(--wire);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+}
+
+/* Et Glossary Formula Inner */
+.et-glossary-formula-inner {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* Et Web Legend */
+.et-web-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+/* Et Legend Row */
+.et-legend-row {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Et Legend Info */
+.et-legend-info {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: var(--sp-1);
+}
+
+/* Et Legend Note */
+.et-legend-note {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-top: var(--sp-3);
+  max-width: 500px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Et Line Separable */
+.et-line-separable {
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--ash);
+  opacity: 0.5;
+}
+
+/* Et Line Correlated */
+.et-line-correlated {
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  background: var(--ember);
+  opacity: 0.4;
+}
+
+/* Et Line Entangled */
+.et-line-entangled {
+  display: inline-block;
+  width: 24px;
+  height: 3px;
+  background: var(--ember);
+  opacity: 0.75;
+}
+
+/* Et Line Bell */
+.et-line-bell {
+  display: inline-block;
+  width: 24px;
+  height: 5px;
+  background: var(--ember);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .et-layout {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto !important;
+  }
+
+  /* Et Controls */
+  .et-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-modal);
+    display: block;
+    width: 100%;
+    height: 75%;
+    max-height: 550px;
+    background: var(--carbon);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-bottom-sheet);
+    transform: translateY(100%);
+    transition: transform 0.35s ease-out;
+    border-top: 1px solid var(--wire);
+    border-right: none;
+    border-bottom: none;
+  }
+  .et-controls.show {
+    transform: translateY(0);
+  }
+
+  /* Et Center */
+  .et-center {
+    min-height: 600px;
+    border-right: none;
+    border-bottom: 1px solid var(--wire);
+    flex-shrink: 0;
+  }
+
+  /* Et Right */
+  .et-right {
+    overflow-y: visible;
+  }
+
+  /* Et Metrics Grid */
+  .et-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

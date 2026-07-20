@@ -1,0 +1,126 @@
+/* QUANTUM LABS — Animations */
+
+/* Wire pulse on simulation */
+@keyframes wire-pulse {
+  0% { background: var(--wire-light); }
+  50% { background: var(--ember); box-shadow: 0 0 8px var(--ember-50); }
+  100% { background: var(--wire-light); }
+}
+
+/* Circuit Board */
+.circuit-board.simulating .qubit-wire::before {
+  animation: wire-pulse 0.6s ease-out;
+}
+
+/* Gate snap */
+@keyframes gate-snap {
+  0% { opacity: 0.7; transform: scale(1.15); }
+  50% { transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Placed Gate */
+.placed-gate.just-placed {
+  animation: gate-snap 0.25s var(--ease-out);
+}
+
+/* Ember glow pulse */
+@keyframes ember-pulse {
+  0%, 100% { box-shadow: 0 0 8px var(--ember-20); }
+  50% { box-shadow: 0 0 16px var(--ember-50); }
+}
+
+/* Btn Primary */
+.btn-primary.running {
+  animation: ember-pulse 1s ease-in-out infinite;
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sv Row */
+.sv-row {
+  animation: fadeIn 0.2s var(--ease-out) both;
+}
+.sv-row:nth-child(1) { animation-delay: 0ms; }
+.sv-row:nth-child(2) { animation-delay: 30ms; }
+.sv-row:nth-child(3) { animation-delay: 60ms; }
+.sv-row:nth-child(4) { animation-delay: 90ms; }
+.sv-row:nth-child(5) { animation-delay: 120ms; }
+.sv-row:nth-child(6) { animation-delay: 150ms; }
+.sv-row:nth-child(7) { animation-delay: 180ms; }
+.sv-row:nth-child(8) { animation-delay: 210ms; }
+
+/* Results tab slide */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Tab Pane */
+.tab-pane.active {
+  animation: slideIn 0.2s var(--ease-out);
+}
+
+/* Drop zone highlight */
+@keyframes drop-glow {
+  0%, 100% { border-color: var(--ember-30); }
+  50% { border-color: var(--ember); }
+}
+
+/* Gate Slot */
+.gate-slot.drop-ready {
+  animation: drop-glow 1.2s ease-in-out infinite;
+  border-style: dashed;
+}
+
+/* Canvas Area */
+.canvas-area:has(.drop-hover) .gate-slot.drop-ready {
+  animation: none;
+}
+
+/* Bloch sphere spin */
+@keyframes sphere-idle {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+/* Notification toast */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: var(--sp-6);
+  left: 50%;
+  z-index: var(--z-toast);
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--text-sm);
+  color: var(--chalk);
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transform: translateX(-50%);
+  animation: toast-in 0.3s var(--ease-out);
+}
+.toast.removing {
+  animation: toast-out 0.2s var(--ease-out) forwards;
+}
+.toast.toast-success {
+  border-color: var(--success-30);
+}
+.toast.toast-error {
+  border-color: var(--danger-30);
+}

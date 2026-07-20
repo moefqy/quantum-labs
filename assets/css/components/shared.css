@@ -1,0 +1,660 @@
+/* QUANTUM LABS — Shared Components */
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  user-select: none;
+}
+
+/* Logo Mark */
+.logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+.logo-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Logo Text */
+.logo-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--bone);
+  letter-spacing: -0.02em;
+}
+.logo-text .accent {
+  color: var(--ember);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  height: 30px;
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--chalk);
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Btn */
+.btn:hover {
+  background: var(--steel);
+  border-color: var(--wire-light);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+  fill: none;
+  stroke: currentColor;
+}
+
+/* Btn Primary */
+.btn-primary {
+  color: var(--on-accent);
+  background: var(--ember);
+  border-color: var(--ember);
+}
+.btn-primary:hover {
+  color: var(--on-accent);
+  background: var(--flame);
+  box-shadow: var(--glow-ember);
+  border-color: var(--flame);
+}
+
+/* Btn Success */
+.btn-success {
+  color: var(--success);
+  background: var(--success-15);
+  border-color: var(--success-30);
+}
+.btn-success:hover {
+  background: var(--success-25);
+  border-color: var(--success);
+}
+
+/* Btn Danger */
+.btn-danger {
+  color: var(--danger);
+}
+.btn-danger:hover {
+  background: var(--danger-15);
+  border-color: var(--danger-30);
+}
+
+/* Btn Icon */
+.btn-icon {
+  width: 30px;
+  padding: 0;
+}
+
+/* Btn Lg */
+.btn-lg {
+  height: auto;
+  padding: var(--sp-3) var(--sp-6);
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+/* Btn Sm */
+.btn-sm {
+  height: auto;
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-xs);
+}
+
+/* Btn Outline */
+.btn-outline {
+  background: transparent;
+  border-color: var(--wire-light);
+}
+.btn-outline.btn-primary {
+  color: var(--ember);
+  border-color: var(--ember-30);
+}
+.btn-outline.btn-primary:hover {
+  background: var(--ember-10);
+  box-shadow: none;
+  border-color: var(--ember);
+}
+.btn-outline:not(.btn-primary):hover {
+  color: var(--bone);
+  background: var(--white-03);
+  border-color: var(--ash);
+}
+
+/* Form Inputs (Toolbar) */
+.toolbar-select,
+.toolbar-input {
+  height: 30px;
+  padding: 0 var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--bone);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  outline: none;
+}
+
+/* Toolbar Select */
+.toolbar-select:hover,
+.toolbar-input:hover,
+.toolbar-select:focus,
+.toolbar-input:focus {
+  background: var(--graphite);
+  border-color: var(--ember-40);
+}
+.toolbar-select {
+  padding-right: 24px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%2394A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+[data-theme="light"] .toolbar-select,
+[data-theme="light"] .toolbar-input {
+  color: var(--bone);
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+[data-theme="light"] .toolbar-select:hover,
+[data-theme="light"] .toolbar-input:hover,
+[data-theme="light"] .toolbar-select:focus,
+[data-theme="light"] .toolbar-input:focus {
+  border-color: var(--ember);
+}
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  z-index: var(--z-tooltip);
+  max-width: 280px;
+  padding: var(--sp-3);
+  font-size: var(--text-xs);
+  color: var(--chalk);
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--duration-fast), transform var(--duration-fast);
+  pointer-events: none;
+}
+.tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tooltip Title */
+.tooltip-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--bone);
+}
+.tooltip-title .katex {
+  font-size: 0.85em;
+  color: var(--ember);
+}
+
+/* Tooltip Desc */
+.tooltip-desc {
+  margin-bottom: 6px;
+  font-size: 10px;
+  line-height: 1.3;
+  color: var(--ash);
+}
+
+/* Tooltip Matrix */
+.tooltip-matrix {
+  padding-top: 6px;
+  text-align: center;
+  border-top: 1px solid var(--wire);
+}
+.tooltip-matrix:empty {
+  display: none;
+}
+.tooltip-matrix .katex {
+  font-size: 0.75em;
+}
+
+/* Cards */
+.ui-card {
+  padding: var(--sp-6);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+/* Ui Card */
+.ui-card.interactive:hover {
+  box-shadow: var(--shadow-lg), var(--glow-ember);
+  transform: translateY(-2px);
+  border-color: var(--ember);
+}
+.ui-card h3 {
+  margin-bottom: var(--sp-3);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--ember);
+}
+.ui-card p, .ui-card li {
+  color: var(--ash);
+  line-height: 1.5;
+  font-size: var(--text-sm);
+}
+.ui-card p + p {
+  margin-top: var(--sp-3);
+}
+.ui-card ul {
+  margin-top: var(--sp-2);
+  padding-left: var(--sp-5);
+}
+.ui-card li {
+  margin-bottom: var(--sp-1);
+}
+
+/* Mt 3 */
+.mt-3 { margin-top: var(--sp-3); }
+
+/* Mt 4 */
+.mt-4 { margin-top: var(--sp-4); }
+
+/* Shared Mobile Toggle Button */
+.ql-mobile-toggle {
+  display: none;
+}
+
+/* Shared Sidebar Components */
+/* Unified accordion, gate-button, slider, and toggle-button styles used across all tools. */
+
+/* Group Header */
+.ql-group-header {
+  padding: var(--sp-3) var(--sp-5);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ash);
+  user-select: none;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--wire);
+}
+
+/* Accordion */
+.ql-accordion {
+  border-bottom: 1px solid var(--wire);
+  overflow: hidden;
+}
+
+/* Ql Accordion */
+.ql-accordion:first-child {
+  border-top: none;
+}
+
+/* Ql Accordion Header */
+.ql-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--sp-5);
+  cursor: pointer;
+  user-select: none;
+  background: var(--carbon);
+  transition: background 0.15s;
+}
+.ql-accordion-header:hover {
+  background: var(--graphite);
+}
+
+/* Ql Accordion Title */
+.ql-accordion-title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--smoke);
+  letter-spacing: 0.06em;
+}
+
+/* Ql Chevron */
+.ql-chevron {
+  width: 16px;
+  height: 16px;
+  stroke: var(--ash);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  transform: rotate(-90deg);
+}
+
+/* Ql Accordion  Open */
+.ql-accordion--open .ql-chevron {
+  transform: rotate(0deg);
+}
+
+/* Ql Accordion Body */
+.ql-accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.25s ease;
+  padding: 0 var(--sp-5);
+}
+
+/* Ql Accordion  Open */
+.ql-accordion--open .ql-accordion-body {
+  max-height: 1200px;
+  padding: var(--sp-4) var(--sp-5);
+}
+
+/* Gate Grid */
+.ql-gate-grid {
+  display: grid;
+  gap: var(--sp-2);
+  grid-template-columns: repeat(4, minmax(56px, 1fr));
+  min-width: 240px;
+}
+
+/* Ql Gate Grid  3col */
+.ql-gate-grid--3col {
+  grid-template-columns: repeat(3, minmax(56px, 1fr));
+}
+
+/* Gate Button (shared standard, matches CB draggable style) */
+.ql-gate-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: var(--sp-2) var(--sp-1);
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Ql Gate Btn */
+.ql-gate-btn:hover {
+  background: var(--steel);
+  box-shadow: var(--glow-ember);
+  transform: translateY(-1px);
+  border-color: var(--ember);
+}
+.ql-gate-btn:active {
+  transform: scale(0.95);
+}
+
+/* selected / active — both class names work */
+.ql-gate-btn.selected,
+.ql-gate-btn.active {
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+
+/* Ql Gate Btn */
+.ql-gate-btn.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  filter: grayscale(100%);
+}
+
+/* Draggable variant — used by Circuit Builder palette */
+.ql-gate-btn--draggable {
+  cursor: grab;
+  touch-action: none; /* Prevent scroll gesture from consuming pointer events */
+}
+
+/* Ql Gate Btn  Draggable */
+.ql-gate-btn--draggable:active {
+  cursor: grabbing;
+  transform: none; /* Override base :active scale — transform breaks setPointerCapture */
+}
+
+/* Gate Symbol */
+.ql-gate-sym {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: 700;
+  line-height: normal;
+  color: var(--bone);
+}
+
+/* Ql Gate Sym */
+.ql-gate-sym .katex {
+  font-size: 0.9em !important;
+}
+
+/* Gate Label */
+.ql-gate-label {
+  margin-top: 2px;
+  font-size: 9px;
+  line-height: 1.1;
+  color: var(--smoke);
+  text-align: center;
+}
+
+/* Measure gate — larger symbol */
+.ql-gate-btn--measure .ql-gate-sym {
+  font-size: var(--text-lg);
+}
+
+/* Range Slider */
+.ql-slider {
+  width: 100%;
+  height: 4px;
+  background: var(--wire);
+  border-radius: 2px;
+  transition: background var(--duration-fast);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+/* Ql Slider */
+.ql-slider::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--ember);
+  border: 2px solid var(--carbon);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ql-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.ql-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--ember);
+  border: 2px solid var(--carbon);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast);
+  cursor: pointer;
+}
+.ql-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Toggle Buttons (e.g. qubit count selector) */
+.ql-toggle-group {
+  display: flex;
+  gap: var(--sp-1);
+}
+
+/* Ql Toggle Btn */
+.ql-toggle-btn {
+  flex: 1;
+  padding: var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ash);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.ql-toggle-btn:hover {
+  color: var(--bone);
+  border-color: var(--smoke);
+}
+.ql-toggle-btn.active {
+  color: var(--on-accent);
+  background: var(--ember);
+  border-color: var(--ember);
+}
+
+/* Bottom Sheet (mobile slide-up panel) */
+
+/* Light theme: gate buttons */
+[data-theme="light"] .ql-gate-btn {
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+
+/* Ql Gate Btn */
+[data-theme="light"] .ql-gate-btn:hover {
+  background: var(--graphite);
+  border-color: var(--ember-40);
+}
+[data-theme="light"] .ql-gate-btn.selected,
+[data-theme="light"] .ql-gate-btn.active {
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+
+/* Segmented Control (shared — used by CB mode selector and any tool) */
+.segmented-control {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+}
+
+/* Segmented Btn */
+.segmented-btn {
+  flex: 1;
+  padding: var(--sp-1) 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--chalk);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+.segmented-btn:hover {
+  color: var(--bone);
+  background: var(--graphite);
+}
+.segmented-btn.active {
+  color: var(--on-accent);
+  background: var(--ember);
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="light"] .segmented-btn.active {
+  color: var(--on-accent);
+  background: var(--ember);
+}
+
+/* Segmented Control */
+[data-theme="light"] .segmented-control {
+  background: var(--graphite);
+  border-color: var(--wire);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .ql-mobile-toggle {
+    position: fixed;
+    right: var(--sp-5);
+    bottom: var(--sp-5);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    color: var(--on-accent);
+    background: var(--ember);
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, background 0.2s;
+    cursor: pointer;
+  }
+  
+  /* Ql Mobile Toggle */
+  .ql-mobile-toggle svg {
+    width: 24px;
+    height: 24px;
+  }
+  .ql-mobile-toggle:active {
+    transform: scale(0.95);
+  }
+
+  /* Ql Bottom Sheet */
+  .ql-bottom-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-modal);
+    width: 100%;
+    height: 75%;
+    max-height: 550px;
+    background: var(--carbon);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-bottom-sheet);
+    transform: translateY(100%);
+    transition: transform 0.35s var(--ease-out);
+    border-top: 1px solid var(--wire);
+    overflow-y: auto;
+  }
+  .ql-bottom-sheet.show {
+    transform: translateY(0);
+  }
+}

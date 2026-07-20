@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Quantum Labs | A drag-and-drop, no-code quantum circuit simulator and toolkit. Build, simulate, and visualize quantum circuits entirely in your browser." />
+  <meta name="keywords" content="quantum computing, quantum simulator, quantum circuits, quantum gates, drag and drop, no code, Bloch sphere" />
+  <meta name="author" content="A Muh Mufqi Zuhudi" />
+  <meta property="og:title" content="Quantum Labs | Quantum Computing Toolkit" />
+  <meta property="og:description" content="Build, simulate, and visualize quantum circuits entirely in your browser." />
+  <meta property="og:type" content="website" />
+  <title>Quantum Labs | Quantum Computing Toolkit</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+
+  <!-- Structured Data for SEO Sitelinks -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://quantumlabs.moefqy.com/#website",
+        "url": "https://quantumlabs.moefqy.com/",
+        "name": "Quantum Labs",
+        "description": "A drag-and-drop, no-code quantum circuit simulator and toolkit.",
+        "publisher": {
+          "@type": "Person",
+          "name": "A Muh Mufqi Zuhudi",
+          "url": "https://moefqy.com"
+        }
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Simulator",
+        "url": "https://quantumlabs.moefqy.com/simulator"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Examples",
+        "url": "https://quantumlabs.moefqy.com/examples"
+      },
+      {
+        "@type": "SiteNavigationElement",
+        "name": "Docs",
+        "url": "https://quantumlabs.moefqy.com/documentation"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Base -->
+  <link rel="stylesheet" href="assets/css/base/design-system.css">
+  <link rel="stylesheet" href="assets/css/base/animations.css">
+
+  <!-- Layout -->
+  <link rel="stylesheet" href="assets/css/layout/navbar.css">
+  <link rel="stylesheet" href="assets/css/layout/modal.css">
+  <link rel="stylesheet" href="assets/css/layout/layout.css">
+
+  <!-- Components -->
+  <link rel="stylesheet" href="assets/css/components/shared.css">
+  <link rel="stylesheet" href="assets/css/components/mini-circuit.css">
+
+  <!-- Pages -->
+  <link rel="stylesheet" href="assets/css/pages/page-shared.css">
+  <link rel="stylesheet" href="assets/css/pages/home.css">
+  <link rel="stylesheet" href="assets/css/pages/simulator.css">
+  <link rel="stylesheet" href="assets/css/pages/examples.css">
+  <link rel="stylesheet" href="assets/css/pages/docs.css">
+  <link rel="stylesheet" href="assets/css/pages/about.css">
+  <link rel="stylesheet" href="assets/css/pages/circuit-builder.css">
+  <link rel="stylesheet" href="assets/css/pages/bloch-explorer.css">
+  <link rel="stylesheet" href="assets/css/pages/state-analyzer.css">
+  <link rel="stylesheet" href="assets/css/pages/entanglement-tracker.css">
+
+  <!-- Theme (must be last to override) -->
+  <link rel="stylesheet" href="assets/css/base/theme.css">
+
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function() {
+      const saved = localStorage.getItem('quantum-labs-theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+
+  <!-- GitHub Pages SPA Redirect Handler -->
+  <script type="text/javascript">
+    (function(l) {
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location));
+  </script>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-left">
+      <a href="/" class="nav-brand">
+        <img src="/assets/img/apple-touch-icon.png" alt="Quantum Labs logo" class="logo-mark" width="32" height="32" />
+        <span class="logo-text">Quantum<span class="accent">Labs</span></span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <ul class="nav-links" id="nav-links">
+        <li><a href="/" class="nav-link active">Home</a></li>
+        <li><a href="/simulator" class="nav-link">Simulator</a></li>
+        <li><a href="/examples" class="nav-link">Examples</a></li>
+        <li><a href="/documentation" class="nav-link">Docs</a></li>
+        <li><a href="/about" class="nav-link">About</a></li>
+      </ul>
+      <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">
+        <span id="icon-theme-sun"></span>
+        <span id="icon-theme-moon"></span>
+      </button>
+
+      <button class="nav-hamburger" id="nav-hamburger">
+        <span id="icon-nav-hamburger"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT (swapped by router) -->
+  <div class="page-container" id="page-content"></div>
+
+  <!-- TOOL MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <div class="modal-title">
+          <div class="modal-icon">
+            <span id="icon-modal-tool"></span>
+          </div>
+          <h2>Tool</h2>
+        </div>
+        <button class="modal-close" id="modal-close" title="Close (Escape)">
+          <span id="icon-modal-close"></span>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip">
+    <div class="tooltip-title" id="tooltip-title"></div>
+    <div class="tooltip-desc" id="tooltip-desc"></div>
+    <div class="tooltip-matrix" id="tooltip-matrix"></div>
+  </div>
+
+  <!-- Context Menu -->
+  <div class="context-menu" id="context-menu">
+    <div class="context-menu-item" data-action="edit-param">
+      <span id="icon-ctx-edit"></span>
+      Edit Parameter
+    </div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item danger" data-action="delete">
+      <span id="icon-ctx-delete"></span>
+      Delete Gate
+    </div>
+  </div>
+
+  <!-- Param Popover -->
+  <div class="param-popover" id="param-popover">
+    <div class="param-header">
+      <label id="param-label">Angle (rad)</label>
+      <div class="param-toggle">
+        <button class="param-toggle-btn active" data-unit="rad">rad</button>
+        <button class="param-toggle-btn" data-unit="deg">deg</button>
+      </div>
+    </div>
+    <input type="text" id="param-input" placeholder="e.g. π/2">
+    <div class="param-slider-wrap">
+      <input type="range" id="param-slider" min="-2" max="2" step="0.125" value="0.25">
+    </div>
+    <div class="param-actions">
+      <button class="btn btn-primary" id="param-ok">OK</button>
+      <button class="btn" id="param-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- U1 Gate Popover (name + 3-angle: θ, φ, λ) -->
+  <div class="param-popover" id="u1-popover">
+    <div class="param-header">
+      <label id="u1-label">U₁ Gate Parameters</label>
+      <div class="param-toggle">
+        <button class="u1-toggle-btn active" data-unit="rad">rad</button>
+        <button class="u1-toggle-btn" data-unit="deg">deg</button>
+      </div>
+    </div>
+    <div class="u1-angle-section">Gate Name</div>
+    <input type="text" id="u1-name" placeholder="e.g. MyGate">
+    
+    <div class="u1-angle-section">θ (theta)</div>
+    <input type="text" id="u1-theta" placeholder="e.g. π/2">
+    <div class="param-slider-wrap">
+      <input type="range" id="u1-theta-slider" min="-2" max="2" step="0.125" value="0">
+    </div>
+    
+    <div class="u1-angle-section">φ (phi)</div>
+    <input type="text" id="u1-phi" placeholder="e.g. π/4">
+    <div class="param-slider-wrap">
+      <input type="range" id="u1-phi-slider" min="-2" max="2" step="0.125" value="0">
+    </div>
+    
+    <div class="u1-angle-section">λ (lambda)</div>
+    <input type="text" id="u1-lambda" placeholder="e.g. 0">
+    <div class="param-slider-wrap">
+      <input type="range" id="u1-lambda-slider" min="-2" max="2" step="0.125" value="0">
+    </div>
+    <div class="param-actions">
+      <button class="btn btn-primary" id="u1-ok">OK</button>
+      <button class="btn" id="u1-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- KaTeX JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <!-- html2canvas -->
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <!-- Scripts -->
+  <script type="module" src="assets/js/app.js"></script>
+
+</body>
+</html>

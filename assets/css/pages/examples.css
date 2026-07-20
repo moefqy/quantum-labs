@@ -1,0 +1,397 @@
+/* QUANTUM LABS — Examples Page */
+
+.example-card-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--smoke);
+  background: var(--graphite);
+  overflow: hidden;
+}
+
+/* Example Card Visual */
+.example-card-visual::after {
+  position: absolute;
+  background: linear-gradient(135deg, var(--ember-05) 0%, transparent 60%);
+  content: '';
+  inset: 0;
+}
+
+/* Example Circuit Preview */
+.example-circuit-preview {
+  position: relative;
+  z-index: var(--z-elevated);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  transform: scale(0.8);
+}
+
+/* Example Qubit Label */
+.example-qubit-label {
+  width: 40px;
+  color: var(--ash);
+  text-align: right;
+  user-select: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* Example Wire */
+.example-wire {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+}
+
+/* Example Wire Line */
+.example-wire-line {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  height: 1px;
+  padding: 0 4px;
+  background: var(--wire-light);
+}
+
+/* Example Gate */
+.example-gate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--bone);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Example Empty */
+.example-empty {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+/* Example Target Symbol */
+.example-target-symbol {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--bone);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.example-target-symbol::before,
+.example-target-symbol::after {
+  position: absolute;
+  background: var(--bone);
+  content: '';
+}
+.example-target-symbol::before {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+.example-target-symbol::after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+/* Example Swap Symbol */
+.example-swap-symbol {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--bone);
+  transform: translate(-50%, -50%);
+}
+
+/* Example Control Dot */
+.example-control-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  margin: 0 9px;
+  background: var(--bone);
+  border: none;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Example Connector */
+.example-connector {
+  position: absolute;
+  top: 100%; /* Start exactly at the bottom edge of the control dot */
+  left: 50%;
+  z-index: var(--z-behind);
+  width: 1px;
+  background: var(--wire-light);
+  transform: translateX(-50%);
+}
+
+/* Example Card Body */
+.example-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--sp-4);
+}
+.example-card-body h3 {
+  margin-bottom: var(--sp-2);
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+.example-card-body p {
+  margin-bottom: var(--sp-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--ash);
+}
+
+/* Example Tip */
+.example-tip {
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--ash);
+  background: var(--surface-hover);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  border-left: 3px solid var(--ember);
+}
+.example-tip strong {
+  font-weight: 600;
+  color: var(--bone);
+}
+
+/* Example Card Meta */
+.example-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: auto;
+}
+
+/* Example Meta Tag */
+.example-meta-tag {
+  padding: 2px 8px;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ember);
+  background: var(--ember-10);
+  border-radius: 10px;
+  letter-spacing: 0.04em;
+}
+
+/* Example Card Container */
+.example-card-container {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Example Connector Line */
+.example-connector-line {
+  position: absolute;
+  width: 1px;
+  background: var(--wire);
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+}
+
+/* Example Gate Relative */
+.example-gate-relative {
+  position: relative;
+}
+
+/* Example Card Actions */
+.example-card-actions {
+  display: flex;
+  width: 100%;
+  padding-top: 16px;
+}
+
+/* Example Card Btn */
+.example-card-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Saved Circuits Btn */
+.saved-circuits-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* My Saved Circuits Card */
+.saved-circuits-card {
+  border: 1px solid var(--info);
+}
+
+/* Saved Circuits Card */
+.saved-circuits-card.interactive:hover {
+  border-color: var(--info);
+}
+.saved-circuits-card h3 {
+  color: var(--info);
+}
+.saved-circuits-card .example-meta-tag {
+  color: var(--info);
+  background: var(--info-10);
+}
+.saved-circuits-card .saved-circuits-btn {
+  background: var(--info);
+  border-color: var(--info);
+}
+.saved-circuits-card .saved-circuits-btn:hover {
+  background: var(--info);
+  border-color: var(--info);
+}
+
+/* Saved Circuits Icon */
+.saved-circuits-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Saved Circuits Count */
+.saved-circuits-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--ember);
+  color: var(--bone);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 5px;
+  line-height: 1.4;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Saved Circuit Modal */
+.saved-circuits-modal-container {
+  width: 800px;
+  max-width: 90vw;
+  margin: auto;
+  flex: none;
+  min-height: 50vh;
+  max-height: 85vh;
+}
+
+/* Saved Circuits Modal Body */
+.saved-circuits-modal-body {
+  padding: var(--sp-4);
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Saved Circuit Modal Empty State */
+.saved-circuits-empty {
+  text-align: center;
+  padding: var(--sp-8);
+  color: var(--ash);
+}
+
+/* Saved Circuits Empty Subtitle */
+.saved-circuits-empty-subtitle {
+  font-size: var(--text-sm);
+  margin-top: var(--sp-2);
+}
+
+/* Saved Circuit Modal Rows */
+.saved-circuit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--wire);
+}
+
+/* Saved Circuit Row */
+.saved-circuit-row:last-child {
+  border-bottom: none;
+}
+
+/* Saved Circuit Name */
+.saved-circuit-name {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--bone);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Saved Circuit Actions */
+.saved-circuit-actions {
+  display: flex;
+  gap: var(--sp-4);
+  flex-shrink: 0;
+}
+.saved-circuit-actions .btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Saved Circuit Action Link */
+.saved-circuit-action-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.saved-circuit-action-link:hover {
+  transform: scale(1.15);
+}
+.saved-circuit-action-link.load {
+  color: var(--ember);
+}
+.saved-circuit-action-link.copy {
+  color: var(--ember);
+}
+.saved-circuit-action-link.delete {
+  color: var(--danger);
+}
+.saved-circuit-action-link svg {
+  width: 14px;
+  height: 14px;
+}

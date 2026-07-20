@@ -1,0 +1,109 @@
+/* QUANTUM LABS — About Page */
+
+.about-hero {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 100px 24px 60px;
+  text-align: center;
+}
+
+/* About Hero */
+.about-hero h1 {
+  margin-bottom: var(--sp-4);
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+.about-hero p {
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--ash);
+}
+
+/* About Grid */
+.about-grid {
+  display: grid;
+  gap: var(--sp-6);
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* Footer */
+.site-footer {
+  padding: var(--sp-8) var(--sp-6);
+  text-align: center;
+  border-top: 1px solid var(--wire);
+}
+
+/* Site Footer */
+.site-footer p {
+  font-size: var(--text-xs);
+  color: var(--smoke);
+}
+.site-footer a {
+  color: var(--ash);
+}
+.site-footer a:hover {
+  color: var(--ember);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero {
+    gap: 40px;
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 80px 24px 60px;
+  }
+
+  /* Hero Visual */
+  .hero-visual {
+    display: none;
+  }
+
+  /* Hero Title */
+  .hero-title {
+    font-size: 3.2rem;
+  }
+
+  /* Docs Layout */
+  .docs-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Docs Sidebar */
+  .docs-sidebar {
+    position: static;
+    display: block;
+    padding-bottom: 0;
+    overflow-x: auto;
+    border-bottom: none;
+  }
+
+  /* Docs Nav */
+  .docs-nav {
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    min-width: 100%;
+    border-bottom: 1px solid var(--wire);
+  }
+
+  /* Docs Nav Item */
+  .docs-nav-item {
+    margin-bottom: -1px;
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+  }
+  .docs-nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--ember);
+  }
+
+  /* About Grid */
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}

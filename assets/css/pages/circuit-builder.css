@@ -1,0 +1,1319 @@
+/* QUANTUM LABS — Circuit Builder Page */
+
+.circuit-board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 100%;
+  min-height: 100%;
+  padding: var(--sp-6);
+}
+
+/* Qubit Row */
+.qubit-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+
+/* Qubit Label */
+.qubit-label {
+  width: 50px;
+  padding-right: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ash);
+  text-align: right;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Qubit Wire */
+.qubit-wire {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  height: 100%;
+}
+
+/* The wire line */
+.qubit-wire::before {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  z-index: var(--z-base);
+  height: 1px;
+  background: var(--wire-light);
+  transform: translateY(-50%);
+  content: '';
+}
+
+/* Cbit Wire */
+.cbit-wire::before {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  z-index: var(--z-base);
+  height: 3px;
+  background: transparent;
+  transform: translateY(-50%);
+  content: '';
+  border-top: 1px solid var(--wire-light);
+  border-bottom: 1px solid var(--wire-light);
+}
+
+/* Gate Slots Container */
+.gate-slots {
+  position: relative;
+  z-index: var(--z-elevated);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  padding: 0 8px;
+  transition: background var(--duration-fast);
+}
+
+/* Gate Slot */
+.gate-slot.step-active {
+  background: var(--ember-08);
+  border: 1px solid var(--ember-40);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 10px var(--ember-20);
+}
+
+/* Gate Slot (Drop Zone) */
+.gate-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px dashed transparent;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+/* Gate Slot */
+.gate-slot.empty {
+  border-color: transparent;
+}
+
+/* Show empty slots when dragging a gate or when a gate is selected in palette */
+.gate-slot.drop-ready,
+.editor-placing .gate-slot.empty {
+  border-color: var(--wire-light);
+  background: var(--white-02);
+}
+
+/* Gate Slot */
+.gate-slot.drop-hover,
+.gate-slot.empty.drop-hover {
+  background: var(--ember-08);
+  box-shadow: var(--glow-ember);
+  border-color: var(--ember);
+}
+.gate-slot.empty:hover,
+.editor-placing .gate-slot.empty:hover {
+  background: var(--ember-08);
+  box-shadow: var(--glow-ember);
+  border-color: var(--ember);
+}
+
+/* Highlight for pending multi-qubit gate placement (e.g., waiting for target qubit) */
+.gate-slot.editor-pending,
+.editor-placing .gate-slot.empty.editor-pending {
+  border-color: var(--flame);
+  box-shadow: 0 0 12px var(--flame-20);
+  background: var(--flame-10);
+  animation: pulsePending 1.5s infinite;
+}
+
+@keyframes pulsePending {
+  0% { box-shadow: 0 0 0 0 var(--flame-40); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+}
+
+/* Placed Gate */
+.placed-gate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: var(--graphite);
+  background: var(--bone);
+  border: 1px solid var(--graphite);
+  border-radius: 0;
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  user-select: none;
+}
+.placed-gate:hover {
+  background: var(--ember-15);
+  transform: scale(1.05);
+  border-color: var(--ember);
+}
+.placed-gate.multi-gate,
+.placed-gate.multi-gate:hover,
+.placed-gate.multi-gate.selected {
+  color: var(--bone);
+  background: transparent;
+  border-color: transparent;
+}
+.placed-gate.selected {
+  color: var(--on-accent);
+  background: var(--ember);
+  transform: scale(1.05);
+  border-color: var(--flame);
+}
+
+/* Param badge on parametric gates */
+.placed-gate .param-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  z-index: 2;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 50px;
+  padding: 2px 5px;
+  font-size: 8px !important;
+  line-height: 1;
+  color: var(--chalk);
+  text-align: center;
+  background: var(--carbon);
+  border: 1px solid var(--wire-light);
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+  transform: translateX(-50%);
+  white-space: nowrap !important;
+}
+
+/* Edit Parameter Button */
+.edit-param-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: var(--carbon);
+  border: 1px solid var(--wire-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--chalk);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.2s var(--ease-out);
+  z-index: 5;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Edit Param Btn */
+.edit-param-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Placed Gate */
+.placed-gate:hover .edit-param-btn,
+.placed-gate.selected .edit-param-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Edit Param Btn */
+.edit-param-btn:hover {
+  background: var(--ember);
+  color: var(--on-accent);
+  border-color: var(--ember);
+}
+
+/* Placed Gate */
+.placed-gate .param-badge .katex,
+.placed-gate .param-badge .katex-html {
+  display: inline-block !important;
+  font-size: 1em !important;
+  white-space: nowrap !important;
+}
+.placed-gate .katex {
+  pointer-events: none;
+}
+
+/* Multi-qubit gate connector lines */
+.gate-connector {
+  position: absolute;
+  left: 50%;
+  z-index: var(--z-base);
+  width: 1px;
+  background: var(--wire-light);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* Control dot for CNOT etc. */
+.control-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: var(--z-top);
+  width: 12px;
+  height: 12px;
+  background: var(--bone);
+  border: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Target symbol for CNOT */
+.target-symbol {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--bone);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Target Symbol */
+.target-symbol::before,
+.target-symbol::after {
+  position: absolute;
+  background: var(--bone);
+  content: '';
+}
+.target-symbol::before {
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+.target-symbol::after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+/* Swap symbol for SWAP / CSWAP */
+.swap-symbol {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+}
+
+/* Swap Symbol */
+.swap-symbol::before,
+.swap-symbol::after {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: var(--bone);
+  content: '';
+}
+.swap-symbol::before {
+  transform: translateX(-50%) rotate(45deg);
+}
+.swap-symbol::after {
+  transform: translateX(-50%) rotate(-45deg);
+}
+
+/* Selected state for multi-qubit elements */
+.gate-connector.selected {
+  background: var(--flame);
+}
+
+/* Gate Connector */
+.gate-connector.classical {
+  width: 4px;
+  background: transparent;
+  transform: translateX(-1.5px);
+  border-left: 1px solid var(--wire-light);
+  border-right: 1px solid var(--wire-light);
+}
+.gate-connector.classical.selected {
+  border-color: var(--flame);
+}
+
+/* Placed Gate */
+.placed-gate.selected .control-dot {
+  background: var(--flame);
+}
+.placed-gate.selected .target-symbol {
+  border-color: var(--flame);
+}
+.placed-gate.selected .target-symbol::before,
+.placed-gate.selected .target-symbol::after,
+.placed-gate.selected .swap-symbol::before,
+.placed-gate.selected .swap-symbol::after {
+  background: var(--flame);
+}
+
+/* New gate symbol types (c-X, c-Z, M multi, CP target) */
+
+/* Classical control dot — appears on the cbit wire for c-X and c-Z */
+.classical-control-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: var(--z-top);
+  width: 10px;
+  height: 10px;
+  background: var(--smoke);
+  border: 2px solid var(--ash);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Measurement cbit landing indicator — dashed circle on the classical wire */
+.cbit-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border: 2px dashed var(--ember);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Generic text box target (e.g. CP phase box, CY gate) */
+.placed-gate.multi-gate.box-target {
+  color: var(--graphite) !important;
+  background: var(--bone);
+  border: 1px solid var(--graphite);
+}
+
+/* Placed Gate */
+.placed-gate.multi-gate.box-target:hover {
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+
+/* Box Label */
+.box-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: 700;
+  color: inherit;
+  font-style: normal;
+}
+
+/* c-Z quantum target — styled box with Z label */
+.placed-gate.multi-gate.cz-target {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bone);
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+}
+
+/* Placed Gate */
+.placed-gate.multi-gate.cz-target:hover {
+  background: var(--steel);
+  border-color: var(--ember);
+}
+.placed-gate.multi-gate.box-target.selected,
+.placed-gate.multi-gate.cz-target.selected {
+  color: var(--on-accent) !important;
+  background: var(--ember);
+  border-color: var(--flame);
+}
+
+/* M cbit slot — keep fully transparent, only the indicator dot is visible */
+.placed-gate.cbit-result-slot {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* Classical control dot selected state */
+.placed-gate.selected .classical-control-dot {
+  background: var(--flame);
+  border-color: var(--flame);
+}
+
+/* Cbit indicator selected state */
+.placed-gate.selected .cbit-indicator {
+  border-color: var(--flame);
+}
+
+/* Add Step Button */
+.add-step-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: var(--text-lg);
+  color: var(--wire-light);
+  border: 1px dashed var(--wire);
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  pointer-events: none;
+  flex-shrink: 0;
+  visibility: hidden;
+}
+
+/* Add Step Zone */
+.add-step-zone.drop-ready,
+.editor-placing .add-step-zone {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+.add-step-zone:hover {
+  color: var(--ember);
+  background: var(--ember-05);
+  border-color: var(--ember);
+}
+.add-step-zone.drop-hover {
+  color: var(--flame);
+  background: var(--ember-10);
+  box-shadow: var(--glow-ember);
+  border-color: var(--ember);
+}
+
+/* Drag Ghost & Pending */
+.drag-ghost {
+  position: fixed;
+  z-index: var(--z-max);
+  opacity: 0.9;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+
+/* Drag Ghost */
+.drag-ghost .placed-gate {
+  border-color: var(--flame);
+}
+
+/* Placed Gate */
+.placed-gate.pending {
+  font-size: 10px;
+  background: var(--ember-10);
+  border: 1px dashed var(--ember);
+  opacity: 0.6;
+  pointer-events: none;
+  animation: pendingPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pendingPulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+}
+
+/* Circuit Builder — UI Components */
+
+/* Toolbar Divider */
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 var(--sp-1);
+  background: var(--wire);
+}
+
+/* Qubit Counter */
+.qubit-counter {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--ash);
+}
+.qubit-counter span {
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Qubit Count Value */
+.qubit-count-value {
+  font-weight: 600;
+  color: var(--bone);
+}
+
+/* Sidebar */
+
+.setup-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--bone);
+}
+
+/* Setup Row */
+.setup-row:last-child {
+  margin-bottom: 0;
+}
+
+/* Shots Slider Layout */
+.setup-shots-container {
+  margin-top: var(--sp-2);
+}
+
+/* Setup Slider Row */
+.setup-slider-row {
+  display: grid;
+  align-items: center;
+  gap: var(--sp-3);
+  grid-template-columns: 40px 1fr 80px;
+  width: 100%;
+}
+
+/* Setup Slider Input */
+.setup-slider-input {
+  width: 100%;
+  text-align: center;
+}
+
+/* Results Panel */
+.results-header {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+}
+
+/* Results Tab */
+.results-tab {
+  flex: 1;
+  padding: var(--sp-3) var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--smoke);
+  text-align: center;
+  background: none;
+  border: none;
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  border-bottom: 2px solid transparent;
+}
+.results-tab:hover {
+  color: var(--chalk);
+  background: var(--white-02);
+}
+.results-tab.active {
+  color: var(--ember);
+  border-bottom-color: var(--ember);
+}
+
+/* Running indicator — subtle shimmer on the header while simulation is in progress */
+.results-panel--running .results-header {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Results Panel  Running */
+.results-panel--running .results-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--white-02) 40%,
+    var(--ember-dim, rgba(196, 75, 43, 0.12)) 50%,
+    var(--white-02) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: results-shimmer 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes results-shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+/* Results Filter */
+.results-filter-container {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--carbon);
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+/* Filter Chip */
+.filter-chip {
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--smoke);
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  transition: all var(--duration-fast);
+  cursor: pointer;
+}
+.filter-chip:hover {
+  color: var(--chalk);
+  background: var(--wire);
+}
+.filter-chip.active {
+  color: var(--ember);
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+
+/* Results Body */
+.results-body {
+  flex: 1;
+  padding: var(--sp-3);
+  overflow-y: auto;
+}
+
+/* Tab Pane */
+.tab-pane {
+  display: none;
+}
+.tab-pane.active {
+  display: block;
+}
+
+/* State Vector Table */
+.statevector-table {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+/* Sv Row */
+.sv-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-2);
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast);
+}
+.sv-row:hover {
+  background: var(--white-03);
+}
+
+/* Sv Index */
+.sv-index {
+  min-width: 24px;
+  margin-right: var(--sp-1);
+  font-size: 0.9em;
+  color: var(--smoke);
+  text-align: right;
+}
+
+/* Sv Basis */
+.sv-basis {
+  min-width: 50px;
+  font-weight: 600;
+  color: var(--ember);
+}
+
+/* Sv Amplitude */
+.sv-amplitude {
+  flex: 1;
+  color: var(--chalk);
+  text-align: right;
+}
+
+/* Sv Prob */
+.sv-prob {
+  min-width: 50px;
+  color: var(--ash);
+  text-align: right;
+}
+
+/* Sv Bar Container */
+.sv-bar-container {
+  flex: 1;
+  height: 4px;
+  background: var(--wire);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* Sv Bar */
+.sv-bar {
+  height: 100%;
+  background: var(--ember);
+  border-radius: 2px;
+  transition: width var(--duration-slow) var(--ease-out);
+}
+
+/* Probability Chart */
+.prob-chart {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+/* Bloch Sphere Container */
+.bloch-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+/* Bloch Container */
+.bloch-container canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Bloch Info */
+.bloch-info {
+  padding: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ash);
+}
+.bloch-info .coord-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--sp-1) 0;
+}
+.bloch-info .coord-label {
+  color: var(--smoke);
+}
+.bloch-info .coord-value {
+  color: var(--bone);
+}
+
+/* Param Input Popover */
+.param-popover {
+  position: fixed;
+  z-index: var(--z-popover);
+  display: none;
+  padding: var(--sp-3);
+  background: var(--graphite);
+  border: 1px solid var(--ember);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glow-ember), var(--shadow-lg);
+}
+
+/* Param Popover */
+.param-popover.show {
+  display: block;
+}
+
+/* Param Header */
+.param-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-2);
+}
+.param-header label {
+  font-size: var(--text-xs);
+  color: var(--ash);
+}
+
+/* Param Toggle */
+.param-toggle {
+  display: flex;
+  padding: 2px;
+  background: var(--carbon);
+  border-radius: var(--radius-sm);
+}
+
+/* Param Toggle Btn */
+.param-toggle-btn, .u1-toggle-btn {
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--smoke);
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.param-toggle-btn.active, .u1-toggle-btn.active {
+  color: var(--ember);
+  background: var(--graphite);
+}
+
+/* Param Popover */
+.param-popover input[type="text"] {
+  width: 120px;
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--bone);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+.param-popover input[type="text"]:focus {
+  border-color: var(--ember);
+}
+
+/* Param Slider Wrap */
+.param-slider-wrap {
+  margin-top: 4px;
+  margin-bottom: var(--sp-1);
+}
+
+/* Param Popover */
+.param-popover input[type="range"] {
+  width: 100%;
+  height: 4px;
+  background: var(--carbon);
+  border-radius: 2px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+.param-popover input[type="range"]::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--ember);
+  border: 2px solid var(--carbon);
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.param-popover input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--ember);
+  border: 2px solid var(--carbon);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.param-popover .param-actions {
+  display: flex;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+}
+.param-popover .param-actions .btn {
+  flex: 1;
+}
+
+/* U1 Gate Popover (3-angle) */
+.u1-popover {
+  width: 230px;
+}
+
+/* U1 Popover */
+.u1-popover input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* U1 Gate Popover — angle section labels (θ, φ, λ) */
+.u1-angle-section {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--ash);
+  margin-top: var(--sp-2);
+  margin-bottom: 4px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--sp-8);
+  color: var(--smoke);
+  text-align: center;
+}
+
+/* U2 Name Input (Matches U1 Popover) */
+.u2-name-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--bone);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+/* U2 Name Input */
+.u2-name-input:focus {
+  border-color: var(--ember);
+}
+
+/* Empty State */
+.empty-state svg {
+  width: 48px;
+  height: 48px;
+  stroke: var(--wire-light);
+}
+
+/* Shots Range Slider */
+.cb-slider {
+  width: 100%;
+  height: 4px;
+  background: var(--wire);
+  border-radius: 2px;
+  transition: background var(--duration-fast);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+/* Cb Slider */
+.cb-slider::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--ember);
+  border: 2px solid var(--carbon);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.cb-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.cb-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--ember);
+  border: 2px solid var(--carbon);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--duration-fast);
+  cursor: pointer;
+}
+.cb-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Empty State */
+.empty-state p {
+  max-width: 200px;
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+/* Context Menu */
+.context-menu {
+  position: fixed;
+  z-index: var(--z-dropdown);
+  display: none;
+  min-width: 140px;
+  padding: var(--sp-1) 0;
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.context-menu.show {
+  display: block;
+}
+
+/* Context Menu Item */
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--chalk);
+  transition: background var(--duration-fast);
+  cursor: pointer;
+}
+.context-menu-item:hover {
+  color: var(--bone);
+  background: var(--ember-15);
+}
+.context-menu-item.danger {
+  color: var(--danger);
+}
+.context-menu-item svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Context Menu Divider */
+.context-menu-divider {
+  height: 1px;
+  margin: var(--sp-1) 0;
+  background: var(--wire);
+}
+
+/* Preset Dropdown */
+.preset-dropdown {
+  position: relative;
+}
+
+/* Preset Menu */
+.preset-menu {
+  position: fixed;
+  z-index: var(--z-popover);
+  display: none;
+  min-width: 180px;
+  padding: var(--sp-1) 0;
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.preset-menu.show {
+  display: block;
+}
+
+/* Preset Menu Item */
+.preset-menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--chalk);
+  text-align: left;
+  background: none;
+  border: none;
+  transition: background var(--duration-fast);
+  cursor: pointer;
+}
+.preset-menu-item:hover {
+  color: var(--bone);
+  background: var(--ember-15);
+}
+.preset-menu-item .preset-name {
+  font-weight: 500;
+}
+.preset-menu-item .preset-desc {
+  margin-top: 1px;
+  font-size: 10px;
+  color: var(--smoke);
+}
+
+/* Export Dialog */
+.export-overlay {
+  position: fixed;
+  z-index: var(--z-modal);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+}
+
+/* Export Overlay */
+.export-overlay.open {
+  display: flex;
+}
+
+/* Export Backdrop */
+.export-backdrop {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  inset: 0;
+}
+
+/* Export Dialog */
+.export-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 640px;
+  max-height: 80vh;
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: exportDialogIn var(--duration-normal) var(--ease-out);
+}
+
+@keyframes exportDialogIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Export Dialog Header */
+.export-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--carbon);
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+}
+
+/* Export Dialog Title */
+.export-dialog-title {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--bone);
+}
+
+/* Export Dialog Body */
+.export-dialog-body {
+  flex: 1;
+  padding: var(--sp-4);
+  overflow-y: auto;
+}
+
+/* Export Code Wrap */
+.export-code-wrap {
+  position: relative;
+}
+
+/* Export Code */
+.export-code {
+  max-height: 50vh;
+  margin: 0;
+  padding: var(--sp-4);
+  padding-right: 80px;
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-md);
+  overflow: auto;
+}
+.export-code code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--chalk);
+  white-space: pre;
+}
+
+/* Export Copy Btn */
+.export-copy-btn {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  padding: var(--sp-1) var(--sp-3) !important;
+  font-size: var(--text-xs) !important;
+}
+
+/* Light theme */
+[data-theme="light"] .export-backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Export Dialog */
+[data-theme="light"] .export-dialog {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Empty State */
+.empty-state.error {
+  color: var(--flame);
+}
+.empty-state.error svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--flame);
+  margin-bottom: var(--sp-3);
+}
+.empty-state.error .title {
+  font-weight: 700;
+  margin-bottom: var(--sp-2);
+}
+.empty-state.error p {
+  max-width: 250px;
+  line-height: 1.4;
+}
+
+/* MINI-CIRCUIT MODAL (U2 Gate) */
+
+#mini-circuit-modal {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mini Circuit Modal */
+#mini-circuit-modal .modal-container {
+  max-width: 500px;
+  width: calc(100% - 32px);
+  min-width: 0;
+  max-height: 90vh;
+  height: auto;
+  flex: none;
+  background: var(--graphite);
+  border: 1px solid var(--ember);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glow-ember), var(--shadow-lg);
+  padding: 0;
+}
+
+/* Mini Circuit Body */
+#mini-circuit-body {
+  padding: var(--sp-3);
+  background: transparent;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--sp-3);
+}
+
+/* Mini Circuit Palette */
+#mini-circuit-palette {
+  margin-bottom: 0;
+}

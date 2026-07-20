@@ -1,0 +1,109 @@
+/* QUANTUM LABS — Home Page */
+
+.hero {
+  display: grid;
+  align-items: center;
+  gap: 64px;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px 80px;
+}
+
+/* Hero Content */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+/* Hero Title */
+.hero-title {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--bone);
+  letter-spacing: -0.04em;
+}
+.hero-title .gradient-text {
+  background: linear-gradient(135deg, var(--ember), var(--molten));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hero Desc */
+.hero-desc {
+  max-width: 480px;
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--ash);
+}
+
+/* Hero Actions */
+.hero-actions {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-2);
+}
+
+/* Hero stats */
+.hero-stats {
+  display: flex;
+  gap: var(--sp-8);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-6);
+  border-top: 1px solid var(--wire);
+}
+
+/* Hero Stat */
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Hero Stat Value */
+.hero-stat-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--bone);
+}
+
+/* Hero Stat Label */
+.hero-stat-label {
+  font-size: var(--text-xs);
+  color: var(--smoke);
+  letter-spacing: 0.04em;
+}
+
+/* Hero visual */
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hero Circuit Preview */
+.hero-circuit-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-lg);
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+.hero-circuit-preview::before {
+  position: absolute;
+  background: radial-gradient(ellipse at 30% 50%, var(--ember-06) 0%, transparent 70%);
+  content: '';
+  inset: 0;
+}
+

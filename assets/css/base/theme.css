@@ -1,0 +1,259 @@
+/* QUANTUM LABS — Light Theme Overrides */
+/* Additional overrides for components that use hardcoded RGBA values or need special treatment. */
+/* Navbar */
+[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom-color: var(--wire);
+}
+
+/* Modal */
+[data-theme="light"] .modal-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Container */
+[data-theme="light"] .modal-container {
+  box-shadow: var(--shadow-xl);
+}
+
+/* Cards */
+[data-theme="light"] .ui-card,
+[data-theme="light"] .tool-card {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Ui Card */
+[data-theme="light"] .ui-card.interactive:hover,
+[data-theme="light"] .tool-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Tool Card */
+[data-theme="light"] .tool-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), var(--glow-ember);
+}
+
+/* Gate items (light theme overrides in shared.css via .ql-gate-btn) */
+[data-theme="light"] .gate-item,
+[data-theme="light"] .bex-preset-btn {
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+
+/* Gate Item */
+[data-theme="light"] .gate-item:hover,
+[data-theme="light"] .bex-preset-btn:hover {
+  background: var(--graphite);
+  border-color: var(--ember-40);
+}
+
+/* Circuit */
+[data-theme="light"] .gate-slot.empty:hover {
+  background: var(--ember-06);
+  border-color: var(--ember-25);
+}
+
+/* Placed Gate */
+[data-theme="light"] .placed-gate {
+  color: var(--bone);
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+
+/* Box Target Light Mode (e.g. CP, CY) */
+[data-theme="light"] .placed-gate.multi-gate.box-target {
+  color: var(--bone) !important;
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+
+/* Placed Gate */
+[data-theme="light"] .placed-gate.multi-gate.box-target:hover {
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+[data-theme="light"] .placed-gate.multi-gate.cz-target:hover {
+  background: var(--steel);
+  border-color: var(--ember);
+}
+[data-theme="light"] .placed-gate.multi-gate.box-target.selected,
+[data-theme="light"] .placed-gate.multi-gate.cz-target.selected {
+  color: var(--on-accent) !important;
+  background: var(--ember);
+  border-color: var(--flame);
+}
+
+/* Qubit Wire */
+[data-theme="light"] .qubit-wire::before {
+  background: var(--wire);
+}
+
+/* Tooltip */
+[data-theme="light"] .tooltip {
+  background: var(--carbon);
+  box-shadow: var(--shadow-md);
+  border-color: var(--wire);
+}
+
+/* Context Menu */
+[data-theme="light"] .context-menu {
+  background: var(--carbon);
+  box-shadow: var(--shadow-md);
+}
+
+/* Param popover (U1/Param Edit) & U2 Modal */
+[data-theme="light"] .param-popover,
+[data-theme="light"] #mini-circuit-modal .modal-container {
+  background: var(--carbon);
+  border-color: var(--ember);
+  box-shadow: var(--shadow-md);
+}
+
+/* Param Popover */
+[data-theme="light"] .param-popover input[type="text"],
+[data-theme="light"] .u2-name-input {
+  color: var(--bone);
+  background: var(--graphite);
+  border-color: var(--wire);
+}
+[data-theme="light"] .param-popover input[type="range"] {
+  background: var(--wire);
+}
+
+/* Buttons */
+[data-theme="light"] .btn:not(.btn-primary):not(.btn-success):not(.btn-danger) {
+  color: var(--bone);
+  background: var(--graphite);
+  border-color: var(--wire);
+}
+
+/* Btn */
+[data-theme="light"] .btn:not(.btn-primary):not(.btn-success):not(.btn-danger):hover {
+  background: var(--steel);
+}
+
+/* Results */
+[data-theme="light"] .results-tab {
+  color: var(--ash);
+}
+
+/* Results Tab */
+[data-theme="light"] .results-tab:hover {
+  background: var(--white-03);
+}
+
+/* Toast */
+[data-theme="light"] .toast {
+  color: var(--bone);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  box-shadow: var(--shadow-md);
+}
+
+/* Sidebar */
+[data-theme="light"] .sidebar {
+  background: var(--carbon);
+  border-right-color: var(--wire);
+}
+
+/* Preset menu */
+[data-theme="light"] .preset-menu {
+  background: var(--carbon);
+  box-shadow: var(--shadow-md);
+}
+
+/* Preset Menu Item */
+[data-theme="light"] .preset-menu-item:hover {
+  background: var(--graphite);
+}
+
+/* Hero circuit preview */
+[data-theme="light"] .hero-circuit-preview {
+  background: var(--graphite);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Empty state */
+[data-theme="light"] .empty-state {
+  color: var(--ash);
+}
+
+/* Bloch info */
+[data-theme="light"] .bloch-info {
+  background: var(--graphite);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--ash);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+
+/* Theme Toggle */
+.theme-toggle:hover {
+  color: var(--ember);
+}
+.theme-toggle svg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  transition: opacity var(--duration-normal), transform var(--duration-normal) var(--ease-out);
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Dark mode: show moon, hide sun */
+.theme-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
+/* Theme Toggle */
+.theme-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+/* Light mode: show sun, hide moon */
+[data-theme="light"] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+/* Theme Toggle */
+[data-theme="light"] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.5);
+}
+
+/* Ensure selected/hovered gates are distinct in light mode */
+[data-theme="light"] .placed-gate:hover {
+  background: var(--ember-15);
+  border-color: var(--ember);
+}
+
+/* Placed Gate */
+[data-theme="light"] .placed-gate.selected {
+  color: var(--on-accent);
+  background: var(--ember);
+  border-color: var(--flame);
+}
+[data-theme="light"] .placed-gate.multi-gate,
+[data-theme="light"] .placed-gate.multi-gate:hover {
+  background: transparent;
+  border-color: transparent;
+}
+[data-theme="light"] .placed-gate.multi-gate.selected {
+  background: transparent;
+  border-color: transparent;
+}

@@ -1,0 +1,199 @@
+/* QUANTUM LABS — Layout (IDE-style grid) */
+
+.app-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr var(--results-width);
+  grid-template-rows: var(--toolbar-height) 1fr;
+  width: 100vw;
+  height: 100vh;
+  grid-template-areas:
+    "toolbar toolbar toolbar"
+    "sidebar canvas results";
+  overflow: hidden;
+}
+
+/* Cb Controls Wrapper */
+.cb-controls-wrapper {
+  display: contents;
+}
+
+/* Toolbar */
+.toolbar {
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 0 var(--sp-4);
+  background: var(--carbon);
+  grid-area: toolbar;
+  border-bottom: 1px solid var(--wire);
+}
+
+/* Toolbar Left */
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+/* Toolbar Center */
+.toolbar-center {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Toolbar Right */
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Sidebar (Gate Palette) */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: var(--carbon);
+  grid-area: sidebar;
+  border-right: 1px solid var(--wire);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* Circuit Canvas Area */
+.canvas-area {
+  position: relative;
+  display: block;
+  /* Switched to block so children stretch naturally */
+  background: var(--obsidian);
+  grid-area: canvas;
+  overflow: auto;
+}
+
+/* Results Panel */
+.results-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--carbon);
+  grid-area: results;
+  border-left: 1px solid var(--wire);
+  overflow: hidden;
+}
+
+/* Responsive: collapse results panel on small screens */
+
+@media (max-width: 1100px) {
+  .app-shell {
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-rows: var(--toolbar-height) 1fr 1fr;
+    grid-template-areas:
+      "toolbar toolbar"
+      "sidebar canvas"
+      "sidebar results";
+  }
+
+  /* Results Panel */
+  .results-panel {
+    border-left: none;
+    border-top: 1px solid var(--wire);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow-y: auto;
+  }
+
+  /* Canvas Area */
+  .canvas-area {
+    min-height: 60vh;
+    flex-shrink: 0;
+  }
+
+  /* Results Panel */
+  .results-panel {
+    min-height: 60vh;
+    padding-bottom: 80px;
+    /* space for FAB */
+    flex-shrink: 0;
+    border-left: none;
+    border-top: 1px solid var(--wire);
+  }
+
+  /* Cb Controls Wrapper */
+  .cb-controls-wrapper {
+    position: fixed;
+    /* Fixed instead of absolute */
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-modal);
+    /* Ensure above scrolling content */
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 75%;
+    max-height: 550px;
+    background: var(--carbon);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: var(--shadow-bottom-sheet);
+    transform: translateY(100%);
+    transition: transform 0.35s var(--ease-out);
+    border-top: 1px solid var(--wire);
+  }
+
+  /* Cb Controls Wrapper */
+  .cb-controls-wrapper.show {
+    transform: translateY(0);
+  }
+
+  /* Toolbar */
+  .toolbar {
+    justify-content: flex-start;
+    /* Pack to left */
+    gap: var(--sp-2);
+    height: auto;
+    padding: var(--sp-2) var(--sp-4);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  /* Toolbar */
+  .toolbar::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar for a cleaner look */
+  }
+
+  /* Toolbar Divider */
+  .toolbar-divider {
+    display: none;
+  }
+
+  /* Toolbar Center */
+  .toolbar-center {
+    justify-content: flex-start;
+    /* Reset from space-between */
+    width: auto;
+    /* Reset from 100% */
+    flex-wrap: nowrap;
+  }
+
+  /* Toolbar Right */
+  .toolbar-right {
+    flex-wrap: nowrap;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+}

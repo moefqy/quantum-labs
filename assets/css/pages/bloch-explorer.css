@@ -1,0 +1,280 @@
+/* QUANTUM LABS — Bloch Explorer Page */
+
+.bex-layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Sphere Panel (left) */
+.bex-sphere-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: var(--sp-6);
+  background: var(--obsidian);
+  border-right: 1px solid var(--wire);
+}
+
+/* Bex Sphere Wrap */
+.bex-sphere-wrap {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+}
+.bex-sphere-wrap canvas {
+  display: block;
+  cursor: grab;
+}
+.bex-sphere-wrap canvas:active {
+  cursor: grabbing;
+}
+
+/* Readout */
+.bex-state-readout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  width: max-content;
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+
+/* Bex Ket */
+.bex-ket {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--ember);
+  letter-spacing: -0.02em;
+}
+
+/* Bex Coords */
+.bex-coords,
+.bex-angles,
+.bex-probs {
+  display: flex;
+  gap: var(--sp-5);
+  font-size: var(--text-sm);
+  color: var(--ash);
+}
+.bex-coords strong,
+.bex-angles strong,
+.bex-probs strong {
+  color: var(--bone);
+}
+
+/* Controls Panel (right) */
+.bex-controls {
+  display: block;
+  background: var(--carbon);
+  overflow-y: auto;
+  border-left: 1px solid var(--wire);
+}
+
+/* Preset Buttons */
+.bex-presets {
+  display: grid;
+  gap: var(--sp-2);
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* Bex Preset Btn */
+.bex-preset-btn {
+  padding: var(--sp-2) 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: normal;
+  color: var(--bone);
+  text-align: center;
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+.bex-preset-btn .katex {
+  font-size: 0.9em !important;
+}
+.bex-preset-btn:hover {
+  color: var(--ember);
+  border-color: var(--ember);
+}
+.bex-preset-btn.active {
+  font-weight: 700;
+  color: var(--ember);
+  background: var(--ember-10);
+  border-color: var(--ember);
+}
+
+/* Sliders */
+.bex-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* Bex Slider Row */
+.bex-slider-row {
+  display: grid;
+  align-items: center;
+  gap: var(--sp-2);
+  grid-template-columns: 120px 1fr 60px 16px;
+}
+
+/* Bex Slider Label */
+.bex-slider-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--ash);
+  white-space: nowrap;
+}
+
+/* Bex Angle Input */
+.bex-angle-input {
+  width: 100%;
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--bone);
+  text-align: right;
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--duration-fast);
+  outline: none;
+}
+.bex-angle-input:focus {
+  border-color: var(--ember);
+}
+
+/* Bex Unit */
+.bex-unit {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--smoke);
+}
+
+/* param-grid has a smaller bottom margin than the main gate grid */
+.bex-param-grid {
+  margin-top: var(--sp-1);
+  margin-bottom: var(--sp-3);
+}
+
+/* Parametric Gate Row */
+.bex-param-row {
+  display: grid;
+  align-items: center;
+  gap: var(--sp-2);
+  grid-template-columns: 56px 64px 16px 1fr;
+}
+
+/* Bex Param Select */
+.bex-param-select {
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--bone);
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  outline: none;
+}
+.bex-param-select:focus {
+  border-color: var(--ember);
+}
+
+/* Bex Apply Btn */
+.bex-apply-btn {
+  padding: var(--sp-1) var(--sp-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--on-accent);
+  background: var(--ember);
+  border: none;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.bex-apply-btn:hover {
+  background: var(--flame);
+}
+
+/* History Log */
+.bex-history {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  min-height: 28px;
+  margin-bottom: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+/* Bex History Empty */
+.bex-history-empty {
+  font-size: var(--text-sm);
+  color: var(--smoke);
+  font-style: italic;
+}
+
+/* Bex History Tag */
+.bex-history-tag {
+  padding: 2px var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ember);
+  background: var(--ember-10);
+  border: 1px solid var(--ember-25);
+  border-radius: var(--radius-sm);
+}
+
+/* Bex Reset Btn */
+.bex-reset-btn {
+  width: 100%;
+  padding: var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--ash);
+  background: none;
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast);
+  cursor: pointer;
+}
+.bex-reset-btn:hover {
+  color: var(--ember);
+  border-color: var(--ember);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .bex-layout {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  /* Bex Sphere Panel */
+  .bex-sphere-panel {
+    overflow-y: visible;
+    padding: var(--sp-4);
+    padding-bottom: 80px; /* Space for the FAB */
+  }
+
+  /* Bex Sphere Wrap */
+  .bex-sphere-wrap {
+    max-width: 320px;
+  }
+}

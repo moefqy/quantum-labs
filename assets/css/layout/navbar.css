@@ -1,0 +1,214 @@
+/* QUANTUM LABS — Navbar */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 var(--sp-6);
+  background: rgba(10, 10, 10, 0.85);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wire);
+}
+
+/* Nav Left */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+/* Nav Brand */
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav-brand .logo-mark {
+  width: 30px;
+  height: 30px;
+}
+.nav-brand .logo-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--bone);
+  letter-spacing: -0.02em;
+}
+.nav-brand .logo-text .accent {
+  color: var(--ember);
+}
+
+/* Nav Links */
+.nav-links {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-1);
+  list-style: none;
+  align-self: stretch;
+}
+.nav-links li {
+  position: relative;
+  z-index: var(--z-top);
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  margin-bottom: -1px;
+}
+
+/* Nav Link */
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-4) 8px var(--sp-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ash);
+  border: 1px solid transparent;
+  transition: all var(--duration-fast) var(--ease-out);
+  text-decoration: none;
+  border-bottom: none;
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+}
+.nav-link:hover {
+  color: var(--bone);
+}
+.nav-link.active {
+  font-weight: 700;
+  color: var(--ember);
+  background: var(--obsidian);
+  border-color: var(--wire);
+}
+.nav-link.active::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--obsidian);
+  content: '';
+}
+
+/* Nav Right */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  align-self: stretch;
+}
+
+/* Nav Cta */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--on-accent);
+  background: var(--ember);
+  border: none;
+  border-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+  text-decoration: none;
+}
+.nav-cta:hover {
+  color: var(--on-accent);
+  background: var(--flame);
+  box-shadow: var(--glow-ember);
+}
+.nav-cta svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Mobile hamburger */
+.nav-hamburger {
+  display: none;
+  padding: var(--sp-2);
+  color: var(--bone);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Nav Hamburger */
+.nav-hamburger svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 56px;
+    right: 0;
+    left: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-2);
+    padding: var(--sp-3);
+    background: var(--carbon);
+    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid var(--wire);
+  }
+
+  /* Nav Links */
+  .nav-links li {
+    width: 100%;
+    height: auto;
+    margin-bottom: 0;
+  }
+
+  /* Nav Link */
+  .nav-link {
+    width: 100%;
+    padding: var(--sp-3) var(--sp-4);
+    font-size: var(--text-md);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+  }
+  .nav-link.active {
+    color: var(--ember);
+    background: var(--ember-10);
+    border: none;
+  }
+  .nav-link.active::after {
+    display: none;
+  }
+
+  /* Nav Links */
+  .nav-links.open {
+    display: flex;
+  }
+
+  /* Nav Hamburger */
+  .nav-hamburger {
+    display: block;
+  }
+
+  /* Nav Cta */
+  .nav-cta {
+    display: none;
+  }
+}

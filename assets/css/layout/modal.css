@@ -1,0 +1,191 @@
+/* QUANTUM LABS — Tool Modal */
+
+.modal-overlay {
+  position: fixed;
+  z-index: var(--z-modal);
+  display: none;
+  align-items: stretch;
+  justify-content: stretch;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+  inset: 0;
+}
+
+/* Modal Overlay */
+.modal-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+.modal-overlay.entering {
+  opacity: 0;
+}
+
+/* Modal Container */
+.modal-container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 8px;
+  background: var(--obsidian);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-lg);
+  transform: scale(0.97) translateY(8px);
+  transition: transform var(--duration-slow) var(--ease-out);
+  overflow: hidden;
+}
+
+/* Modal Overlay */
+.modal-overlay.open .modal-container {
+  transform: scale(1) translateY(0);
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--carbon);
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+}
+
+/* Modal Title */
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.modal-title h2 {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--bone);
+}
+.modal-title .modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--ember);
+  background: var(--ember-15);
+  border-radius: var(--radius-sm);
+}
+.modal-title .modal-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Modal Close */
+.modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--ash);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  cursor: pointer;
+}
+.modal-close:hover {
+  color: var(--bone);
+  background: var(--white-06);
+  border-color: var(--wire);
+}
+.modal-close svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* Modal Body */
+.modal-body {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* When circuit builder is inside the modal */
+.modal-body .app-shell {
+  width: 100%;
+  height: 100%;
+}
+
+/* Modal Body */
+.modal-body .app-shell .toolbar {
+  border-radius: 0;
+}
+
+/* Bloch Explorer — fill modal-body, controls scroll internally */
+.modal-body .bex-layout {
+  width: 100%;
+  height: 100%;
+}
+
+/* Entanglement Tracker — fill modal-body, controls scroll internally */
+.modal-body .et-layout {
+  width: 100%;
+  height: 100%;
+}
+
+/* State Analyzer — fill modal-body, controls scroll internally */
+.modal-body .sa {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Mini Circuit Modal */
+#mini-circuit-modal .modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+}
+#mini-circuit-modal .modal-actions-left {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+#mini-circuit-modal .mini-circuit-label {
+  margin: 0;
+  white-space: nowrap;
+}
+#mini-circuit-modal .u2-name-input {
+  width: 200px;
+}
+#mini-circuit-modal .modal-actions-right {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  #mini-circuit-modal .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-3);
+  }
+
+  /* Mini Circuit Modal */
+  #mini-circuit-modal .modal-actions-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #mini-circuit-modal .u2-name-input {
+    width: 100%;
+  }
+  #mini-circuit-modal .modal-actions-right {
+    justify-content: flex-end;
+  }
+}
