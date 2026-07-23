@@ -168,109 +168,92 @@ export const EntanglementMath = (() => {
     return rho;
   }
 
-  // Eigenvalues of a 4x4 Hermitian matrix via power iteration + deflation.
-  // For density matrices this is numerically stable enough for 2 qubits.
+  // Deterministic Eigenvalues of a 4x4 Hermitian density matrix via Jacobi Rotation algorithm.
+  // Maps the 4x4 complex Hermitian matrix rho to an equivalent 8x8 real symmetric matrix K:
+  //   K = [[Re(rho), -Im(rho)], [Im(rho), Re(rho)]]
+  // Completely deterministic with zero random numbers, handling degenerate eigenvalues cleanly.
   function eigenvalues4x4(rho) {
-    // Build complex 4x4 matrix
-    const mat = [];
+    const N = 8;
+    const K = Array.from({ length: N }, () => new Float64Array(N));
+
     for (let r = 0; r < 4; r++) {
-      const row = [];
       for (let c = 0; c < 4; c++) {
-        row.push([rho[r * 4 + c][0], rho[r * 4 + c][1]]);
+        const re = rho[r * 4 + c][0];
+        const im = rho[r * 4 + c][1];
+        K[r][c] = re;
+        K[r + 4][c + 4] = re;
+        K[r][c + 4] = -im;
+        K[r + 4][c] = im;
       }
-      mat.push(row);
     }
 
-    const eigs = [];
-
-    for (let k = 0; k < 4; k++) {
-      // Start with a random complex vector
-      const v = [];
-      for (let i = 0; i < 4; i++) {
-        v.push([Math.random() || 0.1, Math.random() || 0.1]);
-      }
-
-      const initialNorm = Math.sqrt(
-        v.reduce((s, x) => s + x[0] * x[0] + x[1] * x[1], 0),
-      );
-      for (let i = 0; i < 4; i++) {
-        v[i][0] /= initialNorm;
-        v[i][1] /= initialNorm;
-      }
-
-      let lambda = 0;
-
-      for (let iter = 0; iter < 200; iter++) {
-        const mv = [
-          [0, 0],
-          [0, 0],
-          [0, 0],
-          [0, 0],
-        ];
-        for (let i = 0; i < 4; i++) {
-          for (let j = 0; j < 4; j++) {
-            const a = mat[i][j][0],
-              b = mat[i][j][1];
-            const c = v[j][0],
-              d = v[j][1];
-            mv[i][0] += a * c - b * d;
-            mv[i][1] += a * d + b * c;
+    // Classic Jacobi eigenvalue rotation algorithm
+    let iter = 0;
+    const maxIter = 100;
+    while (iter < maxIter) {
+      // Find largest off-diagonal element
+      let maxVal = 0;
+      let p = 0,
+        q = 1;
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const val = Math.abs(K[i][j]);
+          if (val > maxVal) {
+            maxVal = val;
+            p = i;
+            q = j;
           }
         }
-
-        const norm = Math.sqrt(
-          mv.reduce((s, x) => s + x[0] * x[0] + x[1] * x[1], 0),
-        );
-        if (norm < 1e-14) {
-          break;
-        }
-        lambda = norm;
-
-        for (let i = 0; i < 4; i++) {
-          v[i][0] = mv[i][0] / norm;
-          v[i][1] = mv[i][1] / norm;
-        }
       }
 
-      // Rayleigh quotient for final lambda (lambda = v^H * mat * v)
-      const mv = [
-        [0, 0],
-        [0, 0],
-        [0, 0],
-        [0, 0],
-      ];
-      for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-          const a = mat[i][j][0],
-            b = mat[i][j][1];
-          const c = v[j][0],
-            d = v[j][1];
-          mv[i][0] += a * c - b * d;
-          mv[i][1] += a * d + b * c;
+      if (maxVal < 1e-13) {
+        break;
+      }
+
+      const app = K[p][p];
+      const aqq = K[q][q];
+      const apq = K[p][q];
+
+      const phi = (aqq - app) / (2 * apq);
+      const t =
+        Math.sign(phi || 1) / (Math.abs(phi) + Math.sqrt(1 + phi * phi));
+      const c = 1 / Math.sqrt(1 + t * t);
+      const s = t * c;
+      const tau = s / (1 + c);
+
+      K[p][p] = app - t * apq;
+      K[q][q] = aqq + t * apq;
+      K[p][q] = 0;
+      K[q][p] = 0;
+
+      for (let i = 0; i < N; i++) {
+        if (i !== p && i !== q) {
+          const kip = K[i][p];
+          const kiq = K[i][q];
+          K[i][p] = kip - s * (kiq + tau * kip);
+          K[p][i] = K[i][p];
+          K[i][q] = kiq + s * (kip - tau * kiq);
+          K[q][i] = K[i][q];
         }
       }
 
-      lambda = 0;
-      for (let i = 0; i < 4; i++) {
-        lambda += v[i][0] * mv[i][0] + v[i][1] * mv[i][1];
-      }
-
-      eigs.push(Math.max(0, lambda));
-
-      // Deflate: mat = mat - lambda * v * v^H
-      for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-          const a = v[i][0],
-            b = v[i][1];
-          const c = v[j][0],
-            d = v[j][1];
-          mat[i][j][0] -= lambda * (a * c + b * d);
-          mat[i][j][1] -= lambda * (b * c - a * d);
-        }
-      }
+      iter++;
     }
 
-    return eigs;
+    // Extract sorted eigenvalues (appear as 4 pairs of identical values)
+    const allEigs = [];
+    for (let i = 0; i < N; i++) {
+      allEigs.push(Math.max(0, K[i][i]));
+    }
+    allEigs.sort((a, b) => b - a);
+
+    // Pick 4 unique eigenvalues by averaging each pair
+    return [
+      (allEigs[0] + allEigs[1]) / 2,
+      (allEigs[2] + allEigs[3]) / 2,
+      (allEigs[4] + allEigs[5]) / 2,
+      (allEigs[6] + allEigs[7]) / 2,
+    ];
   }
 
   // Von Neumann entropy for a 2-qubit subsystem
