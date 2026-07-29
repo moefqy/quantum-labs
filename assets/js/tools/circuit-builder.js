@@ -250,7 +250,7 @@ class CircuitBuilder extends UIComponent {
               <div class="statevector-table" id="probabilities-display">
                 <div class="empty-state">
                   ${Icons.play}
-                  <p>Run the circuit to see probabilities</p>
+                  <p>Run the circuit to see the probabilities</p>
                 </div>
               </div>
             </div>
@@ -258,7 +258,7 @@ class CircuitBuilder extends UIComponent {
               <div class="statevector-table" id="counts-display">
                 <div class="empty-state">
                   ${Icons.play}
-                  <p>Run the circuit to see measurement counts</p>
+                  <p>Run the circuit to see the measurement counts</p>
                 </div>
               </div>
             </div>
