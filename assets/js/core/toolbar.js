@@ -14,24 +14,6 @@ import { syncUrl } from "./url-manager.js";
 import { updateQubitDisplay } from "../circuit/circuit-display.js";
 
 // Positions a dropdown menu contextually beneath its triggering button.
-function positionMenu(btn, menu) {
-  if (!btn || !menu) {
-    return;
-  }
-  if (menu.parentNode !== document.body) {
-    document.body.appendChild(menu);
-  }
-  const rect = btn.getBoundingClientRect();
-  menu.style.top = `${rect.bottom + 4}px`;
-  let left = rect.left;
-  menu.classList.add("show");
-  const menuWidth = menu.offsetWidth;
-  if (left + menuWidth > window.innerWidth - 8) {
-    left = rect.right - menuWidth;
-  }
-  menu.style.left = `${left}px`;
-}
-
 // Attaches event listeners for all top toolbar actions.
 export function bindToolbar(runSimulation) {
   // Run simulation
@@ -145,11 +127,7 @@ export function bindToolbar(runSimulation) {
   presetBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
     exportMenu?.classList.remove("show");
-    if (presetMenu?.classList.contains("show")) {
-      presetMenu.classList.remove("show");
-    } else {
-      positionMenu(presetBtn, presetMenu);
-    }
+    presetMenu?.classList.toggle("show");
   });
 
   // Preset menu items
@@ -203,11 +181,7 @@ export function bindToolbar(runSimulation) {
   exportBtn?.addEventListener("click", (e) => {
     e.stopPropagation();
     presetMenu?.classList.remove("show");
-    if (exportMenu?.classList.contains("show")) {
-      exportMenu.classList.remove("show");
-    } else {
-      positionMenu(exportBtn, exportMenu);
-    }
+    exportMenu?.classList.toggle("show");
   });
 
   // Close menus on click outside

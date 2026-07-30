@@ -240,6 +240,7 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     flex: 1;
+    min-width: 0;
   }
 
   .toolbar-center > * {
