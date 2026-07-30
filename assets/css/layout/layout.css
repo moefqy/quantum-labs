@@ -29,6 +29,8 @@
   background: var(--carbon);
   grid-area: toolbar;
   border-bottom: 1px solid var(--wire);
+  height: var(--toolbar-height);
+  flex-shrink: 0;
 }
 
 /* Toolbar Left */
@@ -50,6 +52,59 @@
   display: flex;
   align-items: center;
   gap: var(--sp-2);
+}
+
+/* Toolbar Divider */
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 var(--sp-1);
+  background: var(--wire);
+}
+
+/* Form Inputs (Toolbar) */
+.toolbar-select,
+.toolbar-input {
+  height: 30px;
+  padding: 0 var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--bone);
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-out);
+  outline: none;
+}
+
+/* Toolbar Select */
+.toolbar-select:hover,
+.toolbar-input:hover,
+.toolbar-select:focus,
+.toolbar-input:focus {
+  background: var(--graphite);
+  border-color: var(--ember-40);
+}
+.toolbar-select {
+  padding-right: 24px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%2394A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+[data-theme="light"] .toolbar-select,
+[data-theme="light"] .toolbar-input {
+  color: var(--bone);
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+[data-theme="light"] .toolbar-select:hover,
+[data-theme="light"] .toolbar-input:hover,
+[data-theme="light"] .toolbar-select:focus,
+[data-theme="light"] .toolbar-input:focus {
+  border-color: var(--ember);
 }
 
 /* Sidebar (Gate Palette) */
@@ -162,11 +217,11 @@
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     flex-shrink: 0;
     flex-wrap: nowrap;
-    overflow-x: auto;
+    overflow: visible;
+    z-index: 10;
   }
 
-  /* Toolbar */
-  .toolbar::-webkit-scrollbar {
+  .toolbar-center::-webkit-scrollbar {
     display: none;
     /* Hide scrollbar for a cleaner look */
   }
@@ -183,6 +238,12 @@
     width: auto;
     /* Reset from 100% */
     flex-wrap: nowrap;
+    overflow-x: auto;
+    flex: 1;
+  }
+
+  .toolbar-center > * {
+    flex-shrink: 0;
   }
 
   /* Toolbar Right */

@@ -143,50 +143,7 @@
   border-color: var(--ash);
 }
 
-/* Form Inputs (Toolbar) */
-.toolbar-select,
-.toolbar-input {
-  height: 30px;
-  padding: 0 var(--sp-2);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--bone);
-  background: var(--carbon);
-  border: 1px solid var(--wire);
-  border-radius: var(--radius-sm);
-  transition: all var(--duration-fast) var(--ease-out);
-  outline: none;
-}
 
-/* Toolbar Select */
-.toolbar-select:hover,
-.toolbar-input:hover,
-.toolbar-select:focus,
-.toolbar-input:focus {
-  background: var(--graphite);
-  border-color: var(--ember-40);
-}
-.toolbar-select {
-  padding-right: 24px;
-  cursor: pointer;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%2394A3B8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-}
-[data-theme="light"] .toolbar-select,
-[data-theme="light"] .toolbar-input {
-  color: var(--bone);
-  background: var(--carbon);
-  border-color: var(--wire);
-}
-[data-theme="light"] .toolbar-select:hover,
-[data-theme="light"] .toolbar-input:hover,
-[data-theme="light"] .toolbar-select:focus,
-[data-theme="light"] .toolbar-input:focus {
-  border-color: var(--ember);
-}
 
 /* Tooltip */
 .tooltip {
@@ -311,6 +268,7 @@
 .ql-accordion {
   border-bottom: 1px solid var(--wire);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* Ql Accordion */
@@ -605,6 +563,56 @@
 [data-theme="light"] .segmented-control {
   background: var(--graphite);
   border-color: var(--wire);
+}
+
+/* Preset Dropdown */
+.preset-dropdown {
+  position: relative;
+}
+
+/* Preset Menu */
+.preset-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: var(--z-popover);
+  display: none;
+  min-width: 180px;
+  padding: var(--sp-1) 0;
+  background: var(--graphite);
+  border: 1px solid var(--wire-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.preset-menu.show {
+  display: block;
+}
+
+/* Preset Menu Item */
+.preset-menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--chalk);
+  text-align: left;
+  background: none;
+  border: none;
+  transition: background var(--duration-fast);
+  cursor: pointer;
+}
+.preset-menu-item:hover {
+  color: var(--bone);
+  background: var(--ember-15);
+}
+.preset-menu-item .preset-name {
+  font-weight: 500;
+}
+.preset-menu-item .preset-desc {
+  margin-top: 1px;
+  font-size: 10px;
+  color: var(--smoke);
 }
 
 /* Responsive */

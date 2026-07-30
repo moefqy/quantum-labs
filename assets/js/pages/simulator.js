@@ -8,6 +8,7 @@ import { renderBlochExplorer } from "../tools/bloch-explorer.js";
 import { renderCircuitBuilder } from "../tools/circuit-builder.js";
 import { renderEntanglementTracker } from "../tools/entanglement-tracker.js";
 import { renderStateAnalyzer } from "../tools/state-analyzer.js";
+import { renderQeccSimulator } from "../tools/qecc-simulator.js";
 
 export const SimulatorPage = (() => {
   "use strict";
@@ -46,6 +47,14 @@ export const SimulatorPage = (() => {
         return `Visualize Von Neumann entropy, quantum mutual information, and conditional entropy. Discover the quantum signature: ${GateMath.toHTML("S(q_i|q_j) < 0")}.`;
       },
       icon: Icons.moduleNetwork,
+      status: "ready",
+      statusLabel: "Available",
+    },
+    {
+      id: "qecc-simulator",
+      name: "QECC Simulator",
+      desc: "Design and analyze quantum error-correcting codes. Define stabilizer generators, visualize the full QECC pipeline, and verify single-qubit error correction.",
+      icon: Icons.moduleShield,
       status: "ready",
       statusLabel: "Available",
     },
@@ -116,6 +125,10 @@ export const SimulatorPage = (() => {
     } else if (toolId === "entanglement-tracker") {
       if (typeof renderEntanglementTracker === "function") {
         renderEntanglementTracker(body);
+      }
+    } else if (toolId === "qecc-simulator") {
+      if (typeof renderQeccSimulator === "function") {
+        renderQeccSimulator(body);
       }
     }
 

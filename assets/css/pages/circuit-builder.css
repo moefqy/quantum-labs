@@ -544,13 +544,6 @@
 
 /* Circuit Builder — UI Components */
 
-/* Toolbar Divider */
-.toolbar-divider {
-  width: 1px;
-  height: 20px;
-  margin: 0 var(--sp-1);
-  background: var(--wire);
-}
 
 /* Qubit Counter */
 .qubit-counter {
@@ -1101,53 +1094,6 @@
   background: var(--wire);
 }
 
-/* Preset Dropdown */
-.preset-dropdown {
-  position: relative;
-}
-
-/* Preset Menu */
-.preset-menu {
-  position: fixed;
-  z-index: var(--z-popover);
-  display: none;
-  min-width: 180px;
-  padding: var(--sp-1) 0;
-  background: var(--graphite);
-  border: 1px solid var(--wire-light);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-}
-.preset-menu.show {
-  display: block;
-}
-
-/* Preset Menu Item */
-.preset-menu-item {
-  display: block;
-  width: 100%;
-  padding: var(--sp-2) var(--sp-3);
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  color: var(--chalk);
-  text-align: left;
-  background: none;
-  border: none;
-  transition: background var(--duration-fast);
-  cursor: pointer;
-}
-.preset-menu-item:hover {
-  color: var(--bone);
-  background: var(--ember-15);
-}
-.preset-menu-item .preset-name {
-  font-weight: 500;
-}
-.preset-menu-item .preset-desc {
-  margin-top: 1px;
-  font-size: 10px;
-  color: var(--smoke);
-}
 
 /* Export Dialog */
 .export-overlay {

@@ -103,7 +103,8 @@
 
 /* Param popover (U1/Param Edit) & U2 Modal */
 [data-theme="light"] .param-popover,
-[data-theme="light"] #mini-circuit-modal .modal-container {
+[data-theme="light"] #mini-circuit-modal .modal-container,
+[data-theme="light"] #qecc-block-modal .modal-container {
   background: var(--carbon);
   border-color: var(--ember);
   box-shadow: var(--shadow-md);

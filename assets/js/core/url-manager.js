@@ -7,6 +7,9 @@ import { CircuitRenderer } from "../circuit/circuit-renderer.js";
 import { CircuitSerializer } from "../circuit/circuit-serializer.js";
 import { Router } from "../router.js";
 import { SimulatorPage } from "../pages/simulator.js";
+import { QECCSerializer } from "../tools/qecc-serializer.js";
+import { QECCMath } from "./qecc-math.js";
+import { qeccSimulatorInstance } from "../tools/qecc-simulator.js";
 
 // Silently updates the browser URL to reflect the current circuit state.
 export function syncUrl() {
@@ -23,8 +26,17 @@ export async function restoreFromUrl() {
     return;
   }
 
-  const result = CircuitModel.loadFromUrlParams(window.location.search);
-  if (!result) {
+  const searchParams = new URLSearchParams(window.location.search);
+
+  // Determine the target tool based on URL signatures
+  let targetTool = null;
+  if (searchParams.has('pcm') || searchParams.has('hx') || searchParams.has('hz')) {
+    targetTool = "qecc-simulator";
+  } else if (searchParams.has('qubits') || searchParams.has('gates')) {
+    targetTool = "circuit-builder";
+  }
+
+  if (!targetTool) {
     return;
   }
 
@@ -33,12 +45,30 @@ export async function restoreFromUrl() {
     await Router.navigate(`/simulator${window.location.search}`);
   }
 
-  // Open circuit builder so the DOM exists for rendering
-  SimulatorPage.openTool("circuit-builder");
+  // Open the target tool modal so the DOM exists for rendering
+  SimulatorPage.openTool(targetTool);
 
-  // Restore UI after DOM is mounted
-  setTimeout(() => {
-    AppState.restoreFromResult(result);
-    CircuitRenderer.render();
-  }, 60);
+  // Handle tool-specific restoration logic
+  switch (targetTool) {
+    case "qecc-simulator":
+      // Restore UI after DOM is mounted
+      setTimeout(() => {
+        if (qeccSimulatorInstance) {
+          QECCSerializer.initFromURL(qeccSimulatorInstance, QECCMath);
+        }
+      }, 60);
+      break;
+
+    case "circuit-builder": {
+      const result = CircuitModel.loadFromUrlParams(window.location.search);
+      if (result) {
+        // Restore UI after DOM is mounted
+        setTimeout(() => {
+          AppState.restoreFromResult(result);
+          CircuitRenderer.render();
+        }, 60);
+      }
+      break;
+    }
+  }
 }

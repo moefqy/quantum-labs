@@ -1,0 +1,1277 @@
+/* QUANTUM LABS — QECC Simulator */
+
+.app-shell {
+  --results-width: 380px;
+}
+/* Left: Controls */
+
+/* Code type grid */
+.qecc-type-btn {
+  height: 52px;
+  padding: var(--sp-1);
+}
+
+
+/* Matrix field */
+.qecc-matrix-field {
+  margin-bottom: var(--sp-3);
+}
+
+.qecc-matrix-field:last-child {
+  margin-bottom: 0;
+}
+
+/* Matrix hint & error */
+.qecc-matrix-hint {
+  font-size: var(--text-xs);
+  color: var(--ash);
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: var(--sp-1);
+}
+
+.qecc-matrix-hint.error {
+  color: var(--ember);
+}
+
+/* Matrix label */
+.qecc-matrix-label {
+  display: block;
+  margin-bottom: var(--sp-1);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ash);
+  letter-spacing: 0.05em;
+}
+
+
+/* Matrix textarea */
+.qecc-matrix-input {
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--bone);
+  background: var(--obsidian);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  transition: border-color var(--duration-fast) var(--ease-out);
+  box-sizing: border-box;
+  line-height: 1.6;
+}
+
+.qecc-matrix-input:focus {
+  outline: none;
+  border-color: var(--ember);
+  box-shadow: 0 0 0 2px var(--ember-15);
+}
+
+.qecc-matrix-input::placeholder {
+  color: var(--smoke);
+  font-family: var(--font-mono);
+}
+
+
+/* Locked Hz textarea (dual-containing CSS mode) */
+.qecc-matrix-input--locked {
+  color: var(--smoke);
+  background: var(--graphite);
+  border-color: var(--wire);
+  cursor: not-allowed;
+  opacity: 0.4;
+  filter: grayscale(100%);
+  pointer-events: none;
+  resize: none;
+}
+
+.qecc-matrix-input--locked::placeholder {
+  color: var(--smoke);
+  font-style: italic;
+}
+
+
+/* Format hint text */
+.qecc-format-hint {
+  margin-top: var(--sp-2);
+  font-size: var(--text-xs);
+  color: var(--ash);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+
+/* Center: Pipeline & Summary */
+
+.qecc-center {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-4) var(--sp-5);
+  position: relative; /* anchor for .qecc-params-block */
+}
+
+/* Section title (mirrors et-center-title) */
+.qecc-center-title {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--ash);
+  letter-spacing: 0.5px;
+  margin-bottom: var(--sp-4);
+}
+
+/* Pipeline Diagram (Paper Style) */
+
+.paper-pipeline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  font-family: var(--font-mono);
+  overflow-x: auto;
+  padding-bottom: var(--sp-6);
+  min-width: fit-content;
+}
+
+.paper-row {
+  display: flex;
+  align-items: center;
+}
+
+/* Paper Blocks (Clickable) and Static */
+.qecc-pipe-block, .qecc-pipe-block-static {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 120px;
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: 0; /* Sharp corners */
+  color: var(--chalk);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  text-align: center;
+  padding: var(--sp-2);
+}
+
+.qecc-pipe-block {
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.qecc-pipe-block:not(:disabled):hover {
+  background: var(--white-03);
+  border-color: var(--bone);
+  color: var(--bone);
+}
+
+.qecc-pipe-block:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.qecc-pipe-block-static.disabled {
+  opacity: 0.5;
+}
+
+.qecc-pipe-block.active {
+  background: var(--ember-08);
+  border-color: var(--ember);
+  color: var(--ember);
+}
+
+/* Wire routing */
+.paper-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
+  margin-right: var(--sp-1);
+}
+
+.paper-wire {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--ash);
+  font-size: var(--text-sm);
+}
+
+.paper-wire > span {
+  width: 40px;
+  text-align: right;
+  display: inline-block;
+}
+
+.paper-arrow {
+  width: 32px;
+  height: 1px;
+  background: var(--wire-light);
+  position: relative;
+}
+
+.paper-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -3px;
+  border-left: 4px solid var(--wire-light);
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+
+.paper-dots {
+  text-align: right;
+  width: 40px;
+  color: var(--ash);
+  display: inline-block;
+}
+
+.paper-wire-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  position: relative;
+}
+
+.paper-label {
+  position: absolute;
+  bottom: 8px; /* Position above the wire */
+  color: var(--ash);
+  font-size: var(--text-sm);
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.paper-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.paper-line .paper-arrow {
+  width: 100%;
+}
+
+.paper-wire-out {
+  width: auto;
+}
+
+.paper-wire-out .paper-line {
+  width: 40px;
+}
+
+.paper-wire-out .paper-label {
+  position: relative;
+  bottom: auto;
+  margin-left: var(--sp-2);
+  color: var(--ember);
+  font-weight: 600;
+}
+
+/* Stabilizer & Syndrome Vertical bus */
+.paper-stabilizer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.paper-vertical-bus {
+  position: absolute;
+  top: 100%;
+  display: flex;
+  justify-content: space-between;
+  width: 40px;
+  height: 60px; /* distance to syndrome processing */
+}
+
+.v-wire {
+  width: 1px;
+  height: 100%;
+  background: var(--wire-light);
+  position: relative;
+}
+
+.v-arrow {
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  border-top: 4px solid var(--wire-light);
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+.v-dots {
+  color: var(--ash);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Syndrome row layout */
+.paper-row-syndrome {
+  margin-top: 60px; /* same as height of vertical bus */
+}
+
+.paper-spacer {
+  /* Distance to push inputs to align correctly under the layout */
+  /* inputs(~70) + block(110) + wire(60) + block(110) + wire(60) = 410px - inputs(~70) = 340px */
+  width: 340px; 
+  flex-shrink: 0;
+}
+
+/* Syndrome Feedback Loop */
+.paper-correction-col {
+  position: relative;
+}
+
+.paper-feedback-route {
+  display: flex;
+  align-items: center;
+  height: 120px; /* Height of the block */
+  width: 115px; /* Reaches exact center of Error Correction block */
+  position: relative;
+}
+
+.route-label {
+  position: absolute;
+  bottom: calc(50% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--ash);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.route-line-h {
+  flex-grow: 1;
+  height: 1px;
+  background: var(--wire-light);
+}
+
+.route-corner {
+  height: 120px; /* reach up to bottom edge of error correction */
+  width: 1px;
+  background: var(--wire-light);
+  position: relative;
+  align-self: flex-end;
+  margin-bottom: 60px; /* Lift it up to middle of syndrome block */
+  flex-shrink: 0;
+}
+
+.route-arrow-up {
+  position: absolute;
+  top: 0;
+  left: -3px;
+  border-bottom: 4px solid var(--wire-light);
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+}
+
+/* Code Params Block */
+.qecc-center-bottom {
+  position: absolute;
+  bottom: var(--sp-4);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+
+.qecc-params-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  pointer-events: none;
+  user-select: none;
+}
+
+.qecc-params-title {
+  color: var(--bone);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-1);
+}
+
+.qecc-params-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--sp-6);
+}
+
+.qecc-param-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.qecc-param-label {
+  color: var(--smoke);
+}
+
+.qecc-param-val {
+  color: var(--bone);
+}
+
+/* Results Tab Strip */
+
+.qecc-results-tabs {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  background: var(--carbon);
+  z-index: var(--z-elevated);
+}
+
+.qecc-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-3) var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--smoke);
+  text-align: center;
+  letter-spacing: 0.04em;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  margin-bottom: -1px;
+}
+
+.qecc-tab:hover {
+  color: var(--chalk);
+  background: var(--white-02);
+}
+
+.qecc-tab.active {
+  color: var(--ember);
+  border-bottom-color: var(--ember);
+}
+
+/* Tab body content container */
+.qecc-tab-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: var(--sp-3);
+  display: flex;
+  flex-direction: column;
+}
+
+.qecc-tab-body:not(.hidden) {
+  animation: slideIn 0.2s var(--ease-out);
+}
+
+/* Empty State */
+.qecc-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--sp-8);
+  color: var(--smoke);
+  text-align: center;
+}
+
+.qecc-empty-state svg {
+  width: 48px;
+  height: 48px;
+}
+
+.qecc-empty-state p {
+  max-width: 200px;
+  font-family: var(--font-mono); /* Emulates .statevector-table wrapping */
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+/* Emulate the theme.css light mode override */
+[data-theme="light"] .qecc-empty-state {
+  color: var(--ash);
+}
+
+[data-theme="light"] .qecc-tab {
+  color: var(--ash);
+}
+
+[data-theme="light"] .qecc-tab:hover {
+  background: var(--white-03);
+}
+
+/* Circuit-Builder List */
+
+.qecc-list {
+  padding: 0;
+}
+
+.qecc-list-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast);
+}
+
+.qecc-list-row:hover {
+  background: var(--white-03);
+}
+
+.qecc-list-idx {
+  min-width: 24px;
+  margin-right: var(--sp-1);
+  font-size: 0.9em;
+  color: var(--smoke);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Syndrome string / Generator label (ember color, like sv-basis) */
+.qecc-list-syndrome,
+.qecc-list-gen-label {
+  min-width: 50px;
+  font-weight: 600;
+  color: var(--ember);
+}
+
+/* Error string (chalk color, like sv-amplitude) */
+.qecc-list-error {
+  flex: 1;
+  color: var(--chalk);
+  letter-spacing: 0.06em;
+  text-align: right;
+}
+
+.qecc-list-status {
+  width: 120px;
+  text-align: right;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.qecc-status--non-degenerate {
+  color: var(--success);
+}
+
+.qecc-status--degenerate {
+  color: var(--danger);
+}
+
+
+
+/* Verdict badge */
+.qecc-verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.qecc-verdict--pass {
+  color: var(--success);
+  background: var(--success-15);
+  border: 1px solid var(--success-30);
+}
+
+.qecc-verdict--fail {
+  color: var(--danger);
+  background: var(--danger-15);
+  border: 1px solid var(--danger-30);
+}
+
+/* Right: Syndrome LUT */
+
+.qecc-results {
+  display: block;
+  background: var(--carbon);
+  overflow-y: auto;
+}
+
+
+/* Syndrome LUT table */
+.qecc-syndrome-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.qecc-syndrome-table th {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ash);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--wire);
+}
+
+.qecc-syndrome-table td {
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--wire);
+  vertical-align: middle;
+}
+
+/* Syndrome bit string */
+.qecc-syndrome-bits {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ash);
+  letter-spacing: 0.08em;
+  background: var(--graphite);
+  padding: 1px var(--sp-1);
+  border-radius: var(--radius-sm);
+}
+
+/* Pauli Labels */
+
+.qecc-pauli {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 1px var(--sp-1);
+  border-radius: var(--radius-sm);
+}
+
+/* X → danger (red) */
+.qecc-pauli--x {
+  color: var(--danger);
+  background: var(--danger-08);
+}
+
+/* Y → success (green) */
+.qecc-pauli--y {
+  color: var(--success);
+  background: var(--success-15);
+}
+
+/* Z → info (blue) */
+.qecc-pauli--z {
+  color: var(--info);
+  background: var(--info-10);
+}
+
+/* I → muted */
+.qecc-pauli--i {
+  color: var(--ash);
+}
+
+/* QECC Block Sub-Modal */
+
+/* Override shared modal-overlay — centre-align, identical to U2 mini-circuit modal */
+#qecc-block-modal {
+  align-items: center;
+  justify-content: center;
+}
+
+#qecc-block-modal .modal-container {
+  max-width: 500px;
+  width: calc(100% - 32px);
+  min-width: 0;
+  max-height: 90vh;
+  height: auto;
+  flex: none;
+  background: var(--graphite);
+  border: 1px solid var(--ember);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glow-ember), var(--shadow-lg);
+  padding: 0;
+  transform: translateY(8px) scale(0.98);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+#qecc-block-modal.modal-overlay.open .modal-container {
+  transform: translateY(0) scale(1);
+}
+
+#qecc-block-modal .modal-body {
+  padding: var(--sp-3);
+  background: transparent;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--sp-3);
+  min-height: 0;
+}
+
+#qecc-block-modal .modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+}
+
+#qecc-block-modal .modal-actions-right {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+
+
+/* Sub-modal container */
+.qecc-submodal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  max-height: 78vh;
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  transform: translateY(8px) scale(0.98);
+  transition: transform var(--duration-normal) var(--ease-out);
+}
+
+.qecc-submodal-overlay.open .qecc-submodal {
+  transform: translateY(0) scale(1);
+}
+
+/* Sub-modal header */
+.qecc-submodal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+  background: var(--graphite);
+}
+
+.qecc-submodal-title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--bone);
+}
+
+/* Close button */
+.qecc-submodal-close {
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--ash);
+}
+
+.qecc-submodal-close:hover {
+  color: var(--bone);
+}
+
+/* Sub-modal body */
+.qecc-submodal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  min-height: 0;
+}
+
+/* Modal Content Styles */
+
+/* Section wrapper */
+.qecc-modal-section {
+  margin-bottom: var(--sp-4);
+}
+
+.qecc-modal-section:last-child {
+  margin-bottom: 0;
+}
+
+.qecc-modal-section--center-scroll {
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.qecc-modal-section--table-scroll {
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+/* Description text */
+.qecc-modal-desc {
+  font-size: var(--text-sm);
+  color: var(--ash);
+  line-height: 1.6;
+  margin-bottom: var(--sp-3);
+}
+
+.qecc-modal-desc--center {
+  text-align: center;
+  margin-bottom: var(--sp-6);
+}
+
+.qecc-modal-desc--center-4 {
+  text-align: center;
+  margin-bottom: var(--sp-4);
+}
+
+.qecc-modal-math-block {
+  margin: var(--sp-4) 0;
+  text-align: center;
+  font-size: var(--text-sm);
+}
+
+.qecc-modal-math-list {
+  list-style-type: none;
+  margin: var(--sp-2) 0 var(--sp-6) 0;
+  padding: 0;
+  color: var(--text-200);
+  line-height: 2;
+  font-size: var(--text-sm);
+}
+
+.qecc-modal-math-term {
+  display: inline-block;
+  width: 42px;
+  text-align: left;
+  margin-right: var(--sp-1);
+}
+
+.qecc-modal-math-mapping {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 0 var(--sp-5);
+  color: var(--text-200);
+  line-height: 2.2;
+  font-size: var(--text-sm);
+}
+
+.mt-sp6 {
+  margin-top: var(--sp-6);
+}
+
+/* Inline badge (used in modal descriptions) */
+.qecc-badge {
+  display: inline-block;
+  padding: 1px var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ember);
+  background: var(--ember-08);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--ember-20);
+}
+
+/* Subsection label */
+.qecc-modal-subsection-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ash);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--sp-2);
+  padding-bottom: var(--sp-1);
+  border-bottom: 1px solid var(--wire);
+}
+
+/* Qubit legend */
+.qecc-modal-qubit-legend {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  margin-top: var(--sp-2);
+}
+
+.qecc-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-xs);
+  color: var(--ash);
+}
+
+.qecc-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.qecc-dot--data    { background: var(--ember); }
+.qecc-dot--ancilla { background: var(--success); }
+
+/* Modal empty state */
+.qecc-modal-empty {
+  padding: var(--sp-8) 0;
+  text-align: center;
+  color: var(--smoke);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+/* Gate Phase Blocks */
+
+.qecc-modal-phase {
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--sp-2);
+}
+
+.qecc-modal-phase:last-child {
+  margin-bottom: 0;
+}
+
+.qecc-phase-label {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--ash);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--wire);
+  background: var(--steel);
+}
+
+.qecc-phase-empty {
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-sm);
+  color: var(--smoke);
+  font-style: italic;
+}
+
+/* Gate list row */
+.qecc-gate-list {
+  padding: var(--sp-2) var(--sp-3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+}
+
+.qecc-gate-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--radius-sm) var(--sp-2);
+  background: var(--obsidian);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+}
+
+.qecc-gate-desc {
+  font-family: var(--font-mono);
+  color: var(--ash);
+}
+
+/* Gate type tags */
+.qecc-gate-tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 1px var(--sp-1);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.02em;
+}
+
+.qecc-gate-tag--h  { color: #a78bfa; background: rgba(167, 139, 250, 0.15); } /* purple — no design token */
+.qecc-gate-tag--cx { color: var(--danger); background: var(--danger-15); }
+.qecc-gate-tag--cz { color: var(--info); background: var(--info-10); }
+.qecc-gate-tag--cy { color: var(--success); background: var(--success-15); }
+
+/* Phase group sub-sections */
+.qecc-phase-groups {
+  padding: var(--sp-2) var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.qecc-phase-group-label {
+  font-size: var(--text-xs);
+  color: var(--ash);
+  margin-bottom: var(--sp-1);
+}
+
+/* Generator List */
+
+.qecc-generator-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.qecc-generator-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+}
+
+.qecc-generator-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--ash);
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+/* Pauli string (colored per-character) */
+.qecc-pauli-string {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  display: flex;
+}
+
+.qecc-pauli-char {
+  display: inline-block;
+  font-weight: 700;
+  width: 14px;
+  text-align: center;
+}
+
+/* Matrix Table */
+
+.qecc-matrix-wrap {
+  overflow-x: auto;
+}
+
+.qecc-matrix-table {
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.qecc-matrix-table td {
+  width: 22px;
+  height: 22px;
+  text-align: center;
+  border: 1px solid var(--wire);
+}
+
+.qecc-matrix-one {
+  color: var(--ember) !important;
+  font-weight: 700;
+  background: var(--ember-08);
+}
+
+.qecc-matrix-zero {
+  color: var(--smoke) !important;
+}
+
+/* Error Grid */
+
+.qecc-error-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.qecc-error-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-1) var(--sp-2);
+  background: var(--graphite);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+}
+
+.qecc-qubit-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--ash);
+  min-width: 26px;
+  flex-shrink: 0;
+}
+
+/* Modal Syndrome Table */
+
+.qecc-syndrome-table--modal th {
+  background: var(--steel);
+}
+
+.qecc-status {
+  display: inline-block;
+  padding: 1px var(--sp-1);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
+}
+
+.qecc-status--ok {
+  color: var(--success);
+  background: var(--success-15);
+}
+
+.qecc-status--error {
+  color: var(--danger);
+  background: var(--danger-15);
+}
+
+/* Block Modal Overrides */
+
+.sc-grid {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  margin: 0 auto;
+}
+
+.sc-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ash);
+  padding: 0 var(--sp-2);
+  height: 100%;
+}
+.sc-label .katex {
+  font-size: var(--text-md);
+}
+
+.sc-brace {
+  width: 10px;
+  align-self: stretch;
+  margin-top: 14px;
+  margin-bottom: 14px;
+  color: var(--wire);
+}
+.sc-brace svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.sc-bottom-brace {
+  justify-self: stretch;
+  color: var(--wire);
+}
+
+.sc-header {
+  color: var(--ash);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 12px;
+  height: 100%;
+}
+
+.sc-h-wire {
+  justify-self: stretch;
+  height: 1px;
+  background: var(--wire-light);
+  margin: 0 10px;
+}
+
+.sc-v-wire {
+  align-self: stretch;
+  width: 1px;
+  background: var(--wire-light);
+  margin: 10px 0;
+}
+
+.sc-node {
+  width: 24px;
+  height: 24px;
+  background: var(--carbon);
+  color: var(--chalk);
+  border: 1px solid var(--wire);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-xs);
+  z-index: var(--z-top);
+  position: relative;
+}
+
+.sc-top-brace {
+  justify-self: stretch;
+  color: var(--wire);
+}
+
+.sc-control {
+  width: 6px;
+  height: 6px;
+  background: var(--chalk);
+  border-radius: 50%;
+  z-index: var(--z-top);
+  position: relative;
+}
+
+.sc-classical-wire {
+  align-self: center;
+  justify-self: stretch;
+  height: 3px;
+  border-top: 1px solid var(--wire-light);
+  border-bottom: 1px solid var(--wire-light);
+  background: var(--carbon);
+  margin-left: -6px;
+  z-index: var(--z-top);
+}
+
+
+/* Light Theme Overrides */
+
+[data-theme="light"] .qecc-matrix-input {
+  color: var(--bone);
+  background: var(--carbon);
+  border-color: var(--wire);
+}
+
+[data-theme="light"] .qecc-matrix-input:focus {
+  border-color: var(--ember);
+  box-shadow: 0 0 0 2px var(--ember-10);
+}
+
+[data-theme="light"] .qecc-syndrome-bits {
+  background: var(--steel);
+}
+
+[data-theme="light"] .qecc-gate-item {
+  background: var(--graphite);
+}
+
+
+/* Notes */
+
+.qecc-note {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-top: var(--sp-4);
+  margin-bottom: var(--sp-2);
+  max-width: 500px;
+  text-align: center;
+  line-height: 1.4;
+}
+
