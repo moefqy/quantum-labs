@@ -13,6 +13,7 @@ export const DocumentationPage = (() => {
     { id: "multi-qubit", label: "Multi-Qubit Gates" },
     { id: "custom-gates", label: "Custom Gates" },
     { id: "simulation", label: "Simulation" },
+    { id: "qecc-simulator", label: "QECC Simulator" },
     { id: "saving-sharing", label: "Saving & Sharing" },
     { id: "shortcuts", label: "Keyboard Shortcuts" },
   ];
@@ -44,12 +45,13 @@ export const DocumentationPage = (() => {
               <h3>Opening the Quantum Tools</h3>
               <ol>
                 <li>Navigate to the <strong>Simulator</strong> page</li>
-                <li>Choose from three interactive tools:
+                <li>Choose from interactive tools:
                   <ul>
                     <li><strong>Circuit Builder</strong>: Drag-and-drop circuit designer.</li>
                     <li><strong>Bloch Sphere Explorer</strong>: Interactive 3D visualization of single-qubit transformations.</li>
                     <li><strong>State & Matrix Analyzer</strong>: Step-by-step mathematical playground for tensor products and matrices.</li>
                     <li><strong>Entanglement Tracker</strong>: Visualize Von Neumann entropy, quantum mutual information, and conditional entropy.</li>
+                    <li><strong>QECC Simulator</strong>: Explore quantum error correction codes visually and mathematically.</li>
                   </ul>
                 </li>
                 <li>The selected tool opens in a full-screen modal</li>
@@ -305,6 +307,31 @@ export const DocumentationPage = (() => {
                 <li><strong>Probabilities</strong> — Bar chart of measurement probabilities for each basis state</li>
                 <li><strong>State Vector</strong> — Shows all basis state amplitudes (real + imaginary) and probabilities</li>
               </ul>
+            </div>
+
+            <!-- QECC Simulator -->
+            <div class="docs-section" id="doc-qecc-simulator">
+              <h2>QECC Simulator</h2>
+              <p>The <strong>QECC Simulator</strong> is a powerful visual and mathematical tool for exploring Quantum Error Correction Codes (QECC). Rather than manually building circuits, the simulator automatically generates the necessary encoder and stabilizer measurement circuits directly from the code's underlying matrix definitions.</p>
+              
+              <h3>Features</h3>
+              <ul>
+                <li><strong>Presets</strong>: Instantly load canonical stabilizer codes (e.g., the 3-qubit bit-flip code, Shor's 9-qubit code, or the 5-qubit perfect code).</li>
+                <li><strong>Error Space Evaluation</strong>: Automatically evaluates the entire single-qubit error space (${GateMath.toHTML("3n + 1")} possible errors) against the code.</li>
+                <li><strong>Dynamic Circuit Generation</strong>: Automatically generates visual circuits for the Encoder and Stabilizer Measurement blocks purely from the code's stabilizer matrix representation.</li>
+                <li><strong>Syndrome & Correction Tables</strong>: Automatically calculates the full syndrome look-up table mapping every possible single-qubit error to its syndrome, seamlessly resolving and categorizing degenerate and non-degenerate cases.</li>
+                <li><strong>Mathematical Breakdown</strong>: Clicking on blocks in the pipeline opens detailed modals containing the exact underlying mathematics, symplectic vector mappings, or circuit diagrams.</li>
+              </ul>
+              
+              <h3>How to use</h3>
+              <ol>
+                <li>Open the <strong>QECC Simulator</strong> from the Tools menu.</li>
+                <li>Select a preset code from the toolbar (e.g., <code>[[7,1,3]] Steane Code</code>) or enter your own custom parity-check matrices.</li>
+                <li>The tool will automatically evaluate the code against all possible single-qubit errors and generate the complete syndrome lookup table.</li>
+                <li>Click on the <strong>Encoder</strong> or <strong>Stabilizer</strong> blocks in the pipeline to view the automatically generated quantum circuits.</li>
+                <li>Click on the <strong>Quantum Channels</strong> block to see the mathematical definition of the evaluated error space.</li>
+                <li>Explore the <strong>Syndrome</strong> and <strong>Generator</strong> tabs in the right panel to view the generated look-up table and stabilizer operations.</li>
+              </ol>
             </div>
 
             <!-- Saving & Sharing -->
