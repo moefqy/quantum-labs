@@ -225,6 +225,13 @@ export const ExamplesPage = (() => {
       tags: ["Non-Dual CSS", "15 Qubits", "Distance 3"],
     },
     {
+      name: "[[16,6,4]] Tesseract Color Codes",
+      url: "?pcm=gf4&type=custom&h=1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1%0A0+1+0+1+0+1+0+1+0+1+0+1+0+1+0+1%0A0+0+1+1+0+0+1+1+0+0+1+1+0+0+1+1%0A0+0+0+0+1+1+1+1+0+0+0+0+1+1+1+1%0A0+0+0+0+0+0+0+0+1+1+1+1+1+1+1+1%0Aw+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w%0A0+w+0+w+0+w+0+w+0+w+0+w+0+w+0+w%0A0+0+w+w+0+0+w+w+0+0+w+w+0+0+w+w%0A0+0+0+0+w+w+w+w+0+0+0+0+w+w+w+w%0A0+0+0+0+0+0+0+0+w+w+w+w+w+w+w+w",
+      desc: () => "A self-dual 4D color code defined on a tesseract, featuring both types of stabilizer generators on each cube. Two of its logical qubits can also be utilized as gauge qubits to adapt it into a tesseract subsystem code.",
+      preview: "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n       \\vdots       \n0 0 0 0 w w w w 0 0 0 0 w w w w\n0 0 0 0 0 0 0 0 w w w w w w w w",
+      tags: ["Custom", "16 Qubits", "Distance 4"],
+    },
+    {
       name: "[[5,1,3]] Quaternary Hamming Codes",
       url: "?pcm=gf4&type=custom&h=1+w2+w2+1+0%0Aw2+w2+1+0+1%0Aw+1+1+w+0%0A1+1+w+0+w",
       desc: () => `A quantum error-correcting code derived from a classical quaternary [5,3] Hamming code. Its stabilizer matrix is constructed by stacking the classical parity-check matrix ${GateMath.toHTML("\\mathbf{H}_C")} with its scalar multiple ${GateMath.toHTML("\\omega \\mathbf{H}_C")}.`,
