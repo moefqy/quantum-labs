@@ -469,6 +469,7 @@
 /* Tab body content container */
 .qecc-tab-body {
   overflow-y: auto;
+  overflow-x: auto;
   flex: 1;
   padding: var(--sp-3);
   display: flex;
@@ -520,6 +521,7 @@
 
 .qecc-list {
   padding: 0;
+  min-width: max-content;
 }
 
 .qecc-list-row {
