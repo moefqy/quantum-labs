@@ -1,5 +1,77 @@
 /* QUANTUM LABS — Examples Page */
 
+/* Example Tabs */
+.examples-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-1);
+  margin-top: var(--sp-8);
+  margin-bottom: var(--sp-6);
+  padding-left: var(--sp-4);
+  border-bottom: 1px solid var(--wire);
+}
+
+.examples-tab-btn {
+  position: relative;
+  z-index: var(--z-top);
+  display: flex;
+  align-items: center;
+  background: none;
+  color: var(--ash);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  padding: 0 var(--sp-4) var(--sp-2) var(--sp-4);
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  transition: all var(--duration-fast) var(--ease-out);
+  height: 40px;
+  margin-bottom: -1px;
+}
+
+.examples-tab-btn:hover {
+  color: var(--bone);
+}
+
+.examples-tab-btn.active {
+  font-weight: 700;
+  color: var(--ember);
+  background: var(--obsidian);
+  border-color: var(--wire);
+}
+
+.examples-tab-btn.active::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--obsidian);
+  content: '';
+}
+
+/* Example Matrix Preview */
+.example-matrix-preview {
+  position: relative;
+  z-index: var(--z-elevated);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+  transform: scale(0.7);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--bone);
+  white-space: pre;
+  text-align: center;
+}
+
 .example-card-visual {
   position: relative;
   display: flex;
@@ -25,9 +97,13 @@
 .example-circuit-preview {
   position: relative;
   z-index: var(--z-elevated);
+  --wire-h: 28px;
+  --wire-gap: 12px;
+  --wire-step: calc(var(--wire-h) + var(--wire-gap));
+
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--wire-gap);
   padding: 16px;
   transform: scale(0.8);
 }
@@ -47,7 +123,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 28px;
+  height: var(--wire-h);
 }
 
 /* Example Wire Line */
@@ -221,6 +297,7 @@
 .example-connector-line {
   position: absolute;
   width: 1px;
+  height: calc(var(--steps, 1) * var(--wire-step));
   background: var(--wire);
   left: 50%;
   top: 50%;

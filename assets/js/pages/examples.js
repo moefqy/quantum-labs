@@ -2,17 +2,17 @@
 // Controller logic for the Examples page.
 
 import { AppState } from "../core/app-state.js";
-import { CircuitModel } from "../circuit/circuit-model.js";
 import { GateMath } from "../core/math-renderer.js";
 import { Icons } from "../core/ui-icons.js";
-import { Router } from "../router.js";
-import { SimulatorPage } from "./simulator.js";
 import { UI } from "../core/ui-helpers.js";
+import { restoreFromUrl } from "../core/url-manager.js";
 
 export const ExamplesPage = (() => {
   "use strict";
 
-  const EXAMPLES = [
+  let activeTab = "circuit";
+
+  const CIRCUIT_EXAMPLES = [
     {
       name: "Bell State",
       url: "?qubits=2&cbits=0&steps=8&mode=exact&shots=0&gates=0:0:H:;1:0,1:CNOT:",
@@ -167,17 +167,98 @@ export const ExamplesPage = (() => {
     },
   ];
 
-  // Injects the Examples page HTML, generating circuit previews and loading capabilities.
+  const QECC_EXAMPLES = [
+    {
+      name: "[[3,1,1]] Bit-flip Codes",
+      url: "?pcm=gf2&type=non-css&hx=0+0+0%0A0+0+0&hz=1+1+0%0A0+1+1",
+      desc: () => "A foundational quantum error-correcting code that protects quantum information from bit-flip errors. It functions as a repetition code to independently correct these errors, helping to simulate a noiseless qubit channel from a noisy one.",
+      preview: "0 0 0\n0 0 0\n\n1 1 0\n0 1 1",
+      tags: ["Non-CSS", "3 Qubits", "Distance 1"],
+    },
+    {
+      name: "[[7,1,3]] Steane Codes",
+      url: "?pcm=gf2&type=dual-css&hx=1+0+0+1+0+1+1%0A0+1+0+1+1+0+1%0A0+0+1+0+1+1+1",
+      desc: () => "Introduced by Andrew Steane in 1996, this CSS (Calderbank-Shor-Steane) code uses the classical binary [7,4,3] Hamming code to correct for both qubit flip errors and phase flip errors. It encodes one logical qubit into seven physical qubits to correct arbitrary single-qubit errors.",
+      preview: "1 0 0 1 0 1 1\n0 1 0 1 1 0 1\n0 0 1 0 1 1 1",
+      tags: ["Dual CSS", "7 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[9,1,3]] Shor Codes",
+      url: "?pcm=gf2&type=nondual-css&hx=1+1+1+1+1+1+0+0+0%0A0+0+0+1+1+1+1+1+1&hz=1+1+0+0+0+0+0+0+0%0A0+1+1+0+0+0+0+0+0%0A0+0+0+1+1+0+0+0+0%0A0+0+0+0+1+1+0+0+0%0A0+0+0+0+0+0+1+1+0%0A0+0+0+0+0+0+0+1+1",
+      desc: () => "Introduced by Peter Shor in 1995, this was the first quantum error-correcting code. It encodes a single logical qubit into a system of nine physical qubits, allowing for the simultaneous correction of bit-flip, phase-flip, or joint errors on any single physical qubit.",
+      preview: "1 1 1 1 1 1 0 0 0\n0 0 0 1 1 1 1 1 1\n\n1 1 0 0 0 0 0 0 0\n0 1 1 0 0 0 0 0 0\n    \\vdots    \n0 0 0 0 0 0 1 1 0\n0 0 0 0 0 0 0 1 1",
+      tags: ["Non-Dual CSS", "9 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[5,1,3]] Perfect Codes",
+      url: "?pcm=gf4&type=custom&h=1+w+w+1+0%0A0+1+w+w+1%0A1+0+1+w+w%0Aw+1+0+1+w",
+      desc: () => "Also known as the Laflamme–Miquel–Paz–Zurek code, this is the smallest quantum error-correcting code capable of protecting a logical qubit from any arbitrary single-qubit error. It uses exactly five physical qubits to encode one logical qubit.",
+      preview: "1 w w 1 0\n0 1 w w 1\n1 0 1 w w\nw 1 0 1 w",
+      tags: ["Custom", "5 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[8,3,3]] Gottesman Codes",
+      url: "?pcm=gf4&type=custom&h=1+w2+w2+1+w+0+0+w%0Aw+1+0+w+1+0+w+w%0A1+w+w+0+0+1+w+w%0Aw2+0+w2+w+0+w+1+w%0Aw2+w+1+0+w+w+0+w2",
+      desc: () => "A non-degenerate quantum stabilizer code that efficiently encodes three logical qubits into eight physical qubits. It is uniquely built using a modified CSS construction derived from the classical [8,4,4] extended Hamming code.",
+      preview: "1 w2 w2 1 w 0 0 w\nw 1 0 w 1 0 w w\n1 w w 0 0 1 w w\nw2 0 w2 w 0 w 1 w\nw2 w 1 0 w w 0 w2",
+      tags: ["Custom", "8 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[4,2,2]] Quantum Codes",
+      url: "?pcm=gf2&type=dual-css&hx=1+1+1+1",
+      desc: () => "The smallest quantum error-detecting code. While it cannot correct arbitrary single-qubit errors, it can reliably detect them, making it a foundational building block in fault-tolerant state preparation protocols.",
+      preview: "1 1 1 1",
+      tags: ["Dual CSS", "4 Qubits", "Distance 2"],
+    },
+    {
+      name: "[[15,7,3]] Quantum BCH Codes",
+      url: "?pcm=gf2&type=dual-css&hx=0+0+0+0+0+0+0+1+1+1+1+1+1+1+1%0A0+0+0+1+1+1+1+0+0+0+0+1+1+1+1%0A0+1+1+0+0+1+1+0+0+1+1+0+0+1+1%0A1+0+1+0+1+0+1+0+1+0+1+0+1+0+1",
+      desc: () => "The smallest example of the Quantum BCH family, constructed by applying the CSS framework to classical BCH codes. Its stabilizer generators can be systematically constructed to guarantee a predetermined minimum distance.",
+      preview: "0 0 0 0 0 0 0 1 1 1 1 1 1 1 1\n0 0 0 1 1 1 1 0 0 0 0 1 1 1 1\n0 1 1 0 0 1 1 0 0 1 1 0 0 1 1\n1 0 1 0 1 0 1 0 1 0 1 0 1 0 1",
+      tags: ["Dual CSS", "15 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[15,1,3]] Quantum Reed-Muller Codes",
+      url: "?pcm=gf2&type=nondual-css&hx=0+0+0+0+0+0+0+1+1+1+1+1+1+1+1%0A0+0+0+1+1+1+1+0+0+0+0+1+1+1+1%0A0+1+1+0+0+1+1+0+0+1+1+0+0+1+1%0A1+0+1+0+1+0+1+0+1+0+1+0+1+0+1&hz=1+1+0+1+0+0+1+0+0+0+0+0+0+0+0%0A1+1+0+0+0+0+0+1+0+0+1+0+0+0+0%0A1+0+0+1+0+0+0+1+0+0+0+0+1+0+0%0A0+1+0+1+0+0+0+1+0+0+0+0+0+1+0%0A0+1+1+1+1+0+0+0+0+0+0+0+0+0+0%0A1+0+1+1+0+1+0+0+0+0+0+0+0+0+0%0A0+1+1+0+0+0+0+1+1+0+0+0+0+0+0%0A1+0+1+0+0+0+0+1+0+1+0+0+0+0+0%0A1+1+1+1+0+0+0+1+0+0+0+1+0+0+0%0A0+0+1+1+0+0+0+1+0+0+0+0+0+0+1",
+      desc: () => "A famous CSS code heavily studied in fault-tolerant quantum computing because its algebraic structure natively supports a transversal T gate, a crucial requirement for universal quantum computation.",
+      preview: "0 0 0 0 0 0 0 1 1 1 1 1 1 1 1\n       \\vdots       \n1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n\n1 1 0 1 0 0 1 0 0 0 0 0 0 0 0\n       \\vdots       \n0 0 1 1 0 0 0 1 0 0 0 0 0 0 1",
+      tags: ["Non-Dual CSS", "15 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[5,1,3]] Quaternary Hamming Codes",
+      url: "?pcm=gf4&type=custom&h=1+w2+w2+1+0%0Aw2+w2+1+0+1%0Aw+1+1+w+0%0A1+1+w+0+w",
+      desc: () => `A quantum error-correcting code derived from a classical quaternary [5,3] Hamming code. Its stabilizer matrix is constructed by stacking the classical parity-check matrix ${GateMath.toHTML("\\mathbf{H}_C")} with its scalar multiple ${GateMath.toHTML("\\omega \\mathbf{H}_C")}.`,
+      preview: "1 w2 w2 1 0\nw2 w2 1 0 1\n\nw 1 1 w 0\n1 1 w 0 w",
+      tags: ["Custom", "5 Qubits", "Distance 3"],
+    },
+    {
+      name: "[[10,2,3]] Expanded Quantum Codes",
+      url: "?pcm=gf4&type=custom&h=1+w2+w2+1+0+0+0+0+0+0%0Aw2+w2+1+0+0+0+0+0+1+0%0Aw+1+1+w+0+0+0+0+0+0%0A1+1+w+0+0+0+0+0+w+0%0A0+0+0+0+1+1+w2+w2+0+0%0A0+0+0+0+0+w2+w2+1+0+1%0A0+0+0+0+w+w+1+1+0+0%0A0+0+0+0+0+1+1+w+0+w",
+      desc: () => `An expanded code built upon the [[5,1,3]] quaternary Hamming code. It uses a block-diagonal expansion structurally formulated as ${GateMath.toHTML("[\\mathbf{H}_Q\\ \\mathbf{0};\\ \\mathbf{0}\\ \\mathbf{H}_Q]")}, which increases logical capacity while guaranteeing orthogonality.`,
+      preview: "\\mathbf{H}_Q\\ \\mathbf{0}\n\\mathbf{0} \\mathbf{H}_Q",
+      tags: ["Custom", "10 Qubits", "Distance 3"],
+    }
+  ];
+
   function render(container) {
+    const listToRender = activeTab === "circuit" ? CIRCUIT_EXAMPLES : QECC_EXAMPLES;
+
     container.innerHTML = `
       <section class="section">
-        <h2 class="section-title">Circuit Examples</h2>
-        <p class="section-desc">Pre-built quantum circuits you can load into the simulator and experiment with.</p>
+        <h2 class="section-title">Examples</h2>
+        <p class="section-desc">Pre-built quantum circuits and QECC matrices you can load into the simulators and experiment with.</p>
+        
+        <div class="examples-tabs">
+          <button class="examples-tab-btn ${activeTab === "circuit" ? "active" : ""}" data-tab="circuit">Circuit Example</button>
+          <button class="examples-tab-btn ${activeTab === "qecc" ? "active" : ""}" data-tab="qecc">QECC Example</button>
+        </div>
+
         <div class="ui-grid">
-          ${EXAMPLES.map(
+          ${listToRender.map(
             (ex) => `
             <div class="ui-card interactive example-card-container">
               <div class="example-card-visual">
+                ${activeTab === "circuit" ? `
                 <div class="example-circuit-preview">
                     ${Array.from(
                       { length: Math.min(ex.qubits, 3) },
@@ -212,8 +293,8 @@ export const ExamplesPage = (() => {
                                 }
                                 // Only draw the line from the top-most involved qubit in this column
                                 if (q === minRow && maxRow > minRow) {
-                                  const height = (maxRow - minRow) * 40; // 28px wire height + 12px gap = 40px
-                                  lineHtml = `<div class="example-connector-line" style="height: ${height}px;"></div>`;
+                                  const steps = maxRow - minRow;
+                                  lineHtml = `<div class="example-connector-line" style="--steps: ${steps};"></div>`;
                                 }
                               }
 
@@ -249,7 +330,17 @@ export const ExamplesPage = (() => {
                     </div>
                   `,
                     ).join("")}
+                </div>` : `
+                <div class="example-matrix-preview">
+                    ${(() => {
+                      let tex = ex.preview.replace(/w2/g, "\\omega^2").replace(/w/g, "\\omega");
+                      tex = tex.replace(/ /g, " & ");
+                      tex = tex.replace(/\n\n/g, " \\\\[0.8em] ");
+                      tex = tex.replace(/\n/g, " \\\\ ");
+                      return GateMath.toHTML(`\\begin{matrix} ${tex} \\end{matrix}`);
+                    })()}
                 </div>
+                `}
               </div>
               <div class="example-card-body">
                 <h3>${ex.name}</h3>
@@ -268,6 +359,7 @@ export const ExamplesPage = (() => {
             </div>
           `,
           ).join("")}
+          ${activeTab === "circuit" ? `
           <div class="ui-card interactive example-card-container saved-circuits-card">
               <div class="example-card-visual">
                 <!-- Blank preview area -->
@@ -286,6 +378,7 @@ export const ExamplesPage = (() => {
                 </div>
               </div>
             </div>
+          ` : ""}
         </div>
       </section>
 
@@ -465,13 +558,23 @@ export const ExamplesPage = (() => {
     container.querySelectorAll(".example-card-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const url = btn.dataset.url;
-        const result = CircuitModel.loadFromUrlParams(url);
-        Router.navigate("/simulator");
-        // Open circuit builder after navigation
-        setTimeout(() => {
-          SimulatorPage.openTool("circuit-builder");
-          AppState.restoreFromResult(result);
-        }, 400);
+        
+        // Temporarily set the URL search params so the URL manager can read them
+        window.history.replaceState({}, "", "/simulator" + url);
+        
+        // Let the URL manager handle navigation, tool opening, and state restoration
+        restoreFromUrl();
+      });
+    });
+
+    // Bind tab switchers
+    container.querySelectorAll(".examples-tab-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const newTab = e.currentTarget.dataset.tab;
+        if (newTab !== activeTab) {
+          activeTab = newTab;
+          render(container);
+        }
       });
     });
   }
