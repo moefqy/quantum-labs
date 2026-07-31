@@ -503,6 +503,14 @@ class CircuitBuilder extends UIComponent {
     if (!el) {
       return;
     }
+    
+    // Prevent double-click toggle bug caused by native + synthetic click firing simultaneously
+    const now = Date.now();
+    if (el._lastClick && now - el._lastClick < 150) {
+      return;
+    }
+    el._lastClick = now;
+
     const step = parseInt(el.dataset.step);
     const qubit = parseInt(el.dataset.qubit);
     const cell = CircuitModel.getGrid()[step]?.[qubit];

@@ -356,7 +356,7 @@ export const CircuitEditor = (() => {
           gateEl.style.opacity = ""; // restore opacity
 
           if (!state.dragging) {
-            // Was just a click. Dispatch synthetic click so param popover or selection works.
+            // Was just a click. Dispatch synthetic click so param popover or selection works on touch devices.
             const clickEvent = new MouseEvent("click", {
               bubbles: true,
               cancelable: true,
