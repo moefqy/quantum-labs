@@ -3,15 +3,15 @@
 // Run, Step, Reset, Clear, Undo/Redo, Register controls,
 // Shots slider, Mode toggle, Presets, Save, Copy Link, Export.
 
-import { AppState } from "./app-state.js";
-import { CircuitModel } from "../circuit/circuit-model.js";
-import { CircuitRenderer } from "../circuit/circuit-renderer.js";
-import { CircuitSerializer } from "../circuit/circuit-serializer.js";
-import { EventBus } from "./event-bus.js";
-import { ExportManager } from "../circuit/circuit-export.js";
+import { AppState } from "../core/app-state.js";
+import { CircuitModel } from "../tools/circuit-builder/circuit-model.js";
+import { CircuitRenderer } from "../tools/circuit-builder/circuit-renderer.js";
+import { CircuitSerializer } from "../tools/circuit-builder/circuit-serializer.js";
+import { EventBus } from "../core/event-bus.js";
+import { ExportManager } from "../tools/circuit-builder/circuit-export.js";
 import { UI } from "./ui-helpers.js";
-import { syncUrl } from "./url-manager.js";
-import { updateQubitDisplay } from "../circuit/circuit-display.js";
+import { syncUrl } from "../core/url-manager.js";
+import { updateQubitDisplay } from "../tools/circuit-builder/circuit-display.js";
 
 // Positions a dropdown menu contextually beneath its triggering button.
 // Attaches event listeners for all top toolbar actions.

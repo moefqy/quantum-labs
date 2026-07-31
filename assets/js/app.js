@@ -5,11 +5,11 @@
 import { AppState } from "./core/app-state.js";
 import { EventBus } from "./core/event-bus.js";
 import { GateMath } from "./core/math-renderer.js";
-import { Icons } from "./core/ui-icons.js";
+import { Icons } from "./ui/ui-icons.js";
 import { bindKeyboard } from "./core/keyboard.js";
-import { UI } from "./core/ui-helpers.js";
-import { bindToolbar } from "./core/toolbar.js";
-import { ParamPopover } from "./core/param-popover.js";
+import { UI } from "./ui/ui-helpers.js";
+import { bindToolbar } from "./ui/toolbar.js";
+import { ParamPopover } from "./ui/param-popover.js";
 import { syncUrl, restoreFromUrl } from "./core/url-manager.js";
 
 // Page modules
@@ -20,10 +20,10 @@ import { HomePage } from "./pages/home.js";
 import { SimulatorPage } from "./pages/simulator.js";
 
 // Circuit modules
-import { CircuitModel } from "./circuit/circuit-model.js";
-import { CircuitRenderer } from "./circuit/circuit-renderer.js";
+import { CircuitModel } from "./tools/circuit-builder/circuit-model.js";
+import { CircuitRenderer } from "./tools/circuit-builder/circuit-renderer.js";
 import { EngineProxy } from "./core/engine-proxy.js";
-import { ResultsPanel } from "./circuit/results-panel.js";
+import { ResultsPanel } from "./tools/circuit-builder/results-panel.js";
 import { Router } from "./router.js";
 import { QuantumGates } from "./core/quantum-gates.js";
 

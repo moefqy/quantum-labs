@@ -1,7 +1,7 @@
 // QUANTUM LABS — Home
 // Controller logic for the Home page.
 
-import { Icons } from "../core/ui-icons.js";
+import { Icons } from "../ui/ui-icons.js";
 
 export const HomePage = (() => {
   "use strict";

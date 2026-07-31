@@ -2,13 +2,13 @@
 // Interactive tool for designing and analyzing quantum error-correcting codes.
 // Supports Dual-CSS, Non-dual CSS, and Non-CSS stabilizer codes (k=1).
 
-import { QECCMath } from "../core/qecc-math.js";
+import { QECCMath } from "./qecc-math.js";
 import { QECCBlockModal } from "./qecc-block-modal.js";
 import { QECCSerializer } from "./qecc-serializer.js";
-import { UI } from "../core/ui-helpers.js";
-import { Icons } from "../core/ui-icons.js";
-import { UIComponent } from "../core/ui-component.js";
-import { GateMath } from "../core/math-renderer.js";
+import { UI } from "../../ui/ui-helpers.js";
+import { Icons } from "../../ui/ui-icons.js";
+import { UIComponent } from "../../ui/ui-component.js";
+import { GateMath } from "../../core/math-renderer.js";
 
 // Handles the main QECC simulator view, managing input formatting, matrix parsing, and delegating computation to the math engine.
 class QECCSimulator extends UIComponent {

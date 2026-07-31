@@ -1,9 +1,9 @@
 // QUANTUM LABS — Results Panel
 // Displays state vector, probability chart, and coordinates with the Bloch sphere.
 
-import { EventBus } from "../core/event-bus.js";
-import { EntanglementMath } from "../core/entanglement-math.js";
-import { Icons } from "../core/ui-icons.js";
+import { EventBus } from "../../core/event-bus.js";
+import { EntanglementMath } from "../entanglement-tracker/entanglement-math.js";
+import { Icons } from "../../ui/ui-icons.js";
 
 export const ResultsPanel = (() => {
   "use strict";

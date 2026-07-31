@@ -2,14 +2,14 @@
 // Handles silent URL syncing and circuit restoration from URL parameters on page load.
 
 import { AppState } from "./app-state.js";
-import { CircuitModel } from "../circuit/circuit-model.js";
-import { CircuitRenderer } from "../circuit/circuit-renderer.js";
-import { CircuitSerializer } from "../circuit/circuit-serializer.js";
+import { CircuitModel } from "../tools/circuit-builder/circuit-model.js";
+import { CircuitRenderer } from "../tools/circuit-builder/circuit-renderer.js";
+import { CircuitSerializer } from "../tools/circuit-builder/circuit-serializer.js";
 import { Router } from "../router.js";
 import { SimulatorPage } from "../pages/simulator.js";
-import { QECCSerializer } from "../tools/qecc-serializer.js";
-import { QECCMath } from "./qecc-math.js";
-import { qeccSimulatorInstance } from "../tools/qecc-simulator.js";
+import { QECCSerializer } from "../tools/qecc-simulator/qecc-serializer.js";
+import { QECCMath } from "../tools/qecc-simulator/qecc-math.js";
+import { qeccSimulatorInstance } from "../tools/qecc-simulator/qecc-simulator.js";
 
 // Silently updates the browser URL to reflect the current circuit state.
 export function syncUrl() {

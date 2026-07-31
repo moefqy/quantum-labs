@@ -3,7 +3,7 @@
 // disables gate palette buttons that require more qubits than available.
 
 import { CircuitModel } from "./circuit-model.js";
-import { QuantumGates } from "../core/quantum-gates.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
 
 // Synchronizes the UI wire count displays and selectively disables unsupported gates.
 export function updateQubitDisplay() {

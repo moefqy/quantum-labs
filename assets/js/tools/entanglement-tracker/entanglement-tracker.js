@@ -2,15 +2,15 @@
 // Interactive tool to visualize Von Neumann entropy, quantum mutual
 // information, and conditional entropy for a multi-qubit circuit.
 
-import { CircuitEditor } from "../circuit/circuit-editor.js";
-import { EntanglementMath } from "../core/entanglement-math.js";
-import { GateMath } from "../core/math-renderer.js";
-import { EngineProxy } from "../core/engine-proxy.js";
-import { QuantumGates } from "../core/quantum-gates.js";
-import { UI } from "../core/ui-helpers.js";
-import { MiniCircuitRenderer } from "../circuit/mini-circuit-renderer.js";
-import { Icons } from "../core/ui-icons.js";
-import { UIComponent } from "../core/ui-component.js";
+import { CircuitEditor } from "../circuit-builder/circuit-editor.js";
+import { EntanglementMath } from "./entanglement-math.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { EngineProxy } from "../../core/engine-proxy.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { UI } from "../../ui/ui-helpers.js";
+import { MiniCircuitRenderer } from "../../ui/mini-circuit/mini-circuit-renderer.js";
+import { Icons } from "../../ui/ui-icons.js";
+import { UIComponent } from "../../ui/ui-component.js";
 
 // Available gates in the entanglement tracker
 const ET_GATES = ["H", "X", "Y", "Z", "S", "T", "CNOT", "CZ", "SWAP"];

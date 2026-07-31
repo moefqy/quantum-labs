@@ -1,10 +1,10 @@
 // QUANTUM LABS — Keyboard
 // Global keyboard handler for the circuit builder modal.
 
-import { CircuitModel } from "../circuit/circuit-model.js";
-import { CircuitRenderer } from "../circuit/circuit-renderer.js";
+import { CircuitModel } from "../tools/circuit-builder/circuit-model.js";
+import { CircuitRenderer } from "../tools/circuit-builder/circuit-renderer.js";
 import { SimulatorPage } from "../pages/simulator.js";
-import { updateQubitDisplay } from "../circuit/circuit-display.js";
+import { updateQubitDisplay } from "../tools/circuit-builder/circuit-display.js";
 import { EventBus } from "./event-bus.js";
 
 // Sets up global keyboard shortcuts for the simulation (e.g., Undo, Redo, Delete, Run).

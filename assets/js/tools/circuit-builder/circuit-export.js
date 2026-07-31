@@ -3,9 +3,9 @@
 
 import { CircuitModel } from "./circuit-model.js";
 
-import { QuantumGates } from "../core/quantum-gates.js";
-import { Icons } from "../core/ui-icons.js";
-import { UI } from "../core/ui-helpers.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { Icons } from "../../ui/ui-icons.js";
+import { UI } from "../../ui/ui-helpers.js";
 
 export const ExportManager = (function () {
   // Creates and displays a custom modal overlay for showing exported code.

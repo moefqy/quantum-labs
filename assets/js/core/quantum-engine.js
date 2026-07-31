@@ -4,7 +4,7 @@
 
 import { QuantumGates } from "./quantum-gates.js";
 import { QuantumMath } from "./quantum-math.js";
-import { AnalyzerMath } from "./analyzer-math.js";
+import { AnalyzerMath } from "../tools/state-analyzer/analyzer-math.js";
 
 export const QuantumEngine = (() => {
   "use strict";

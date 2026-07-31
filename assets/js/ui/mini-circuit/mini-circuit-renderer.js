@@ -1,10 +1,10 @@
 // QUANTUM LABS — Mini Circuit Renderer
 // Renders a compact, interactive mini-circuit grid for modals.
 
-import { GateMath } from "../core/math-renderer.js";
-import { QuantumGates } from "../core/quantum-gates.js";
-import { CircuitRenderer } from "./circuit-renderer.js";
-import { Icons } from "../core/ui-icons.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { CircuitRenderer } from "../../tools/circuit-builder/circuit-renderer.js";
+import { Icons } from "../ui-icons.js";
 
 export const MiniCircuitRenderer = (() => {
   "use strict";

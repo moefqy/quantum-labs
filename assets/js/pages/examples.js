@@ -3,8 +3,8 @@
 
 import { AppState } from "../core/app-state.js";
 import { GateMath } from "../core/math-renderer.js";
-import { Icons } from "../core/ui-icons.js";
-import { UI } from "../core/ui-helpers.js";
+import { Icons } from "../ui/ui-icons.js";
+import { UI } from "../ui/ui-helpers.js";
 import { restoreFromUrl } from "../core/url-manager.js";
 
 export const ExamplesPage = (() => {

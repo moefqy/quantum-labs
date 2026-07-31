@@ -1,13 +1,13 @@
 // QUANTUM LABS — Mini Circuit Modal
 // Controls the modal interface for composing custom sub-circuits.
 
-import { GateMath } from "../core/math-renderer.js";
-import { QuantumGates } from "../core/quantum-gates.js";
-import { CircuitEditor } from "./circuit-editor.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { CircuitEditor } from "../../tools/circuit-builder/circuit-editor.js";
 import { MiniCircuitRenderer } from "./mini-circuit-renderer.js";
-import { ParamPopover } from "../core/param-popover.js";
-import { CircuitSerializer } from "./circuit-serializer.js";
-import { UI } from "../core/ui-helpers.js";
+import { ParamPopover } from "../param-popover.js";
+import { CircuitSerializer } from "../../tools/circuit-builder/circuit-serializer.js";
+import { UI } from "../ui-helpers.js";
 
 // Ensure this matches the available gates in the builder
 export const U2_PALETTE_GATES = [

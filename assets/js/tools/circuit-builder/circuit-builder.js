@@ -1,19 +1,19 @@
 // QUANTUM LABS — Circuit Builder
 // Interactive drag-and-drop circuit editor template.
 
-import { App } from "../app.js";
-import { EventBus } from "../core/event-bus.js";
-import { CircuitEditor } from "../circuit/circuit-editor.js";
-import { QuantumGates } from "../core/quantum-gates.js";
-import { CircuitModel } from "../circuit/circuit-model.js";
-import { CircuitRenderer } from "../circuit/circuit-renderer.js";
-import { GateMath } from "../core/math-renderer.js";
-import { ResultsPanel } from "../circuit/results-panel.js";
-import { UI } from "../core/ui-helpers.js";
-import { ParamPopover } from "../core/param-popover.js";
-import { Icons } from "../core/ui-icons.js";
-import { UIComponent } from "../core/ui-component.js";
-import { MiniCircuitModal } from "../circuit/mini-circuit-modal.js";
+import { App } from "../../app.js";
+import { EventBus } from "../../core/event-bus.js";
+import { CircuitEditor } from "./circuit-editor.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { CircuitModel } from "./circuit-model.js";
+import { CircuitRenderer } from "./circuit-renderer.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { ResultsPanel } from "./results-panel.js";
+import { UI } from "../../ui/ui-helpers.js";
+import { ParamPopover } from "../../ui/param-popover.js";
+import { Icons } from "../../ui/ui-icons.js";
+import { UIComponent } from "../../ui/ui-component.js";
+import { MiniCircuitModal } from "../../ui/mini-circuit/mini-circuit-modal.js";
 
 // All available gates in the circuit builder
 const CB_GATES = [

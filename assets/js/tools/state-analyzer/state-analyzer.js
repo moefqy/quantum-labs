@@ -2,12 +2,12 @@
 // Interactive step-by-step playground for computing tensor products,
 // visualizing unitary matrices, and analyzing state vectors.
 
-import { GateMath } from "../core/math-renderer.js";
-import { QuantumMath } from "../core/quantum-math.js";
-import { QuantumGates } from "../core/quantum-gates.js";
-import { UI } from "../core/ui-helpers.js";
-import { Icons } from "../core/ui-icons.js";
-import { UIComponent } from "../core/ui-component.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { QuantumMath } from "../../core/quantum-math.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { UI } from "../../ui/ui-helpers.js";
+import { Icons } from "../../ui/ui-icons.js";
+import { UIComponent } from "../../ui/ui-component.js";
 
 // Available gates in the state analyzer
 const SA_SINGLE_GATES = ["I", "H", "X", "Y", "Z", "S", "Sdg", "T", "Tdg"];

@@ -2,10 +2,10 @@
 // Renders the circuit board from the CircuitModel data.
 
 import { CircuitModel } from "./circuit-model.js";
-import { EventBus } from "../core/event-bus.js";
-import { GateMath } from "../core/math-renderer.js";
-import { QuantumGates } from "../core/quantum-gates.js";
-import { Icons } from "../core/ui-icons.js";
+import { EventBus } from "../../core/event-bus.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
+import { Icons } from "../../ui/ui-icons.js";
 
 export const CircuitRenderer = (() => {
   "use strict";

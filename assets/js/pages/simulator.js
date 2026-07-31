@@ -3,12 +3,12 @@
 
 import { Router } from "../router.js";
 import { GateMath } from "../core/math-renderer.js";
-import { Icons } from "../core/ui-icons.js";
-import { renderBlochExplorer } from "../tools/bloch-explorer.js";
-import { renderCircuitBuilder } from "../tools/circuit-builder.js";
-import { renderEntanglementTracker } from "../tools/entanglement-tracker.js";
-import { renderStateAnalyzer } from "../tools/state-analyzer.js";
-import { renderQeccSimulator } from "../tools/qecc-simulator.js";
+import { Icons } from "../ui/ui-icons.js";
+import { renderBlochExplorer } from "../tools/bloch-explorer/bloch-explorer.js";
+import { renderCircuitBuilder } from "../tools/circuit-builder/circuit-builder.js";
+import { renderEntanglementTracker } from "../tools/entanglement-tracker/entanglement-tracker.js";
+import { renderStateAnalyzer } from "../tools/state-analyzer/state-analyzer.js";
+import { renderQeccSimulator } from "../tools/qecc-simulator/qecc-simulator.js";
 
 export const SimulatorPage = (() => {
   "use strict";

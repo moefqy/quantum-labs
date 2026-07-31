@@ -1,7 +1,7 @@
 // QUANTUM LABS — Param Popover
 // Manages the UI popover for editing parametric quantum gates.
 
-import { GateMath } from "./math-renderer.js";
+import { GateMath } from "../core/math-renderer.js";
 
 export const ParamPopover = (() => {
   "use strict";

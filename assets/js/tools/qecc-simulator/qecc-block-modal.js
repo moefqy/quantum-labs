@@ -3,7 +3,7 @@
 // Each pipeline block click calls QECCBlockModal.open(blockId, data).
 // Pattern follows mini-circuit-modal.js (separate dedicated modal file).
 
-import { GateMath } from "../core/math-renderer.js";
+import { GateMath } from "../../core/math-renderer.js";
 
 export const QECCBlockModal = (() => {
   "use strict";

@@ -2,7 +2,7 @@
 // Data structure representing the quantum circuit.
 // Manages qubits, steps (columns), and gate placements.
 
-import { QuantumGates } from "../core/quantum-gates.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
 import { CircuitSerializer } from "./circuit-serializer.js";
 
 // Note: EntanglementTracker is accessed via global namespace to avoid circular dependencies

@@ -2,9 +2,9 @@
 // Interactive 3D Bloch sphere rendered on Canvas 2D.
 // Operates as a standalone state engine with its own qubit state.
 
-import { BlochMath } from "../core/bloch-math.js";
-import { GateMath } from "../core/math-renderer.js";
-import { QuantumGates } from "../core/quantum-gates.js";
+import { BlochMath } from "./bloch-math.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
 
 export const BlochSphere = (() => {
   "use strict";

@@ -3,7 +3,7 @@
 // All functions are pure computations over arbitrary M×N matrices.
 // Follows the standard form derivation for symplectic Gram-Schmidt.
 
-import { GateMath } from "./math-renderer.js";
+import { GateMath } from "../../core/math-renderer.js";
 
 export const QECCMath = (() => {
   "use strict";

@@ -2,12 +2,12 @@
 // Interactive 3D Bloch sphere visualization template.
 
 import { BlochSphere } from "./bloch-renderer.js";
-import { GateMath } from "../core/math-renderer.js";
-import { UI } from "../core/ui-helpers.js";
-import { ParamPopover } from "../core/param-popover.js";
-import { Icons } from "../core/ui-icons.js";
-import { UIComponent } from "../core/ui-component.js";
-import { QuantumGates } from "../core/quantum-gates.js";
+import { GateMath } from "../../core/math-renderer.js";
+import { UI } from "../../ui/ui-helpers.js";
+import { ParamPopover } from "../../ui/param-popover.js";
+import { Icons } from "../../ui/ui-icons.js";
+import { UIComponent } from "../../ui/ui-component.js";
+import { QuantumGates } from "../../core/quantum-gates.js";
 
 const BEX_BASIC_GATES = ["H", "X", "Y", "Z", "S", "T", "Sdg", "Tdg"];
 const BEX_PARAM_GATES = ["Rx", "Ry", "Rz"];
