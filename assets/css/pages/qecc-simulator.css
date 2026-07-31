@@ -808,8 +808,6 @@
 
 .qecc-modal-section--center-scroll {
   overflow-x: auto;
-  display: flex;
-  justify-content: center;
   padding: 20px 0;
 }
 
