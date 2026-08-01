@@ -115,7 +115,7 @@ export const QECCBlockModal = (() => {
     // Left Labels (0..r-1 are |0>, r..n-1 are |\psi>)
     for (let i = 0; i < n; i++) {
       const label = i < r ? "|0\\rangle" : "|\\psi\\rangle";
-      html += `<div class="sc-label" style="grid-column: 1; grid-row: ${i + 2}; justify-self: end; padding-right: 12px;">${GateMath.toHTML(label)}</div>`;
+      html += `<div class="sc-label" style="grid-column: 1; grid-row: ${i + 2};">${GateMath.toHTML(label)}</div>`;
     }
 
     // Right Brace & Label
@@ -130,7 +130,7 @@ export const QECCBlockModal = (() => {
 
     // Horizontal Wires
     for (let i = 0; i < n; i++) {
-      html += `<div class="sc-h-wire" style="grid-column: 2 / ${numCols + 4}; grid-row: ${i + 2};"></div>`;
+      html += `<div class="sc-h-wire sc-h-wire--flush" style="grid-column: 2 / ${numCols + 4}; grid-row: ${i + 2};"></div>`;
     }
 
     // Gates
@@ -224,9 +224,10 @@ export const QECCBlockModal = (() => {
     const r = Hx.length;
     let html = `
       <div class="qecc-modal-section qecc-modal-section--center-scroll">
-        <div class="sc-grid" style="grid-template-columns: auto 10px 20px repeat(${r}, 40px) 20px 10px auto; grid-template-rows: 36px repeat(${n}, 28px) 20px 20px auto;">
+        <!-- --sc-col-width: 40px drives brace margin in CSS -->
+        <div class="sc-grid" style="grid-template-columns: auto 10px 20px repeat(${r}, 40px) 20px 10px auto; grid-template-rows: 36px repeat(${n}, 28px) 10px 10px auto; --sc-col-width: 40px;">
           
-          <!-- Left Label & Brace -->
+          <!-- left brace & label -->
           <div class="sc-label" style="grid-column: 1; grid-row: 2 / ${n + 2};">${GateMath.toHTML("|\\psi_R\\rangle")}</div>
           <div class="sc-brace" style="grid-column: 2; grid-row: 2 / ${n + 2};">
             <svg preserveAspectRatio="none" viewBox="0 0 10 100">
@@ -234,7 +235,7 @@ export const QECCBlockModal = (() => {
             </svg>
           </div>
           
-          <!-- Right Label & Brace -->
+          <!-- right brace: col r+5, label: col r+6 -->
           <div class="sc-brace" style="grid-column: ${r + 5}; grid-row: 2 / ${n + 2};">
             <svg preserveAspectRatio="none" viewBox="0 0 10 100">
               <path d="M 0,0 C 2,0 5,2 5,15 L 5,35 C 5,48 8,50 10,50 C 8,50 5,52 5,65 L 5,85 C 5,98 2,100 0,100" fill="none" stroke="currentColor"/>
@@ -242,23 +243,23 @@ export const QECCBlockModal = (() => {
           </div>
           <div class="sc-label" style="grid-column: ${r + 6}; grid-row: 2 / ${n + 2};">${GateMath.toHTML("|\\psi_R\\rangle")}</div>
           
-          <!-- Bottom Brace & Label -->
-          <div class="sc-bottom-brace" style="grid-column: 4 / ${r + 4}; grid-row: ${n + 3}; margin: 0 20px;">
-            <svg preserveAspectRatio="none" viewBox="0 0 100 10" style="width: 100%; height: 100%; display: block; overflow: visible;">
+          <!-- bottom brace -->
+          <div class="sc-bottom-brace" style="grid-column: 4 / ${r + 4}; grid-row: ${n + 3};">
+            <svg preserveAspectRatio="none" viewBox="0 0 100 10">
               <path d="M 0,0 C 0,2 2,5 15,5 L 35,5 C 48,5 50,8 50,10 C 50,8 52,5 65,5 L 85,5 C 98,5 100,2 100,0" fill="none" stroke="currentColor"/>
             </svg>
           </div>
-          <div class="sc-label" style="grid-column: 4 / ${r + 4}; grid-row: ${n + 4}; padding-top: 4px;">${GateMath.toHTML("\\LARGE \\cdot")}</div>
+          <div class="sc-label sc-label--dot" style="grid-column: 4 / ${r + 4}; grid-row: ${n + 4};">${GateMath.toHTML("\\LARGE \\cdot")}</div>
     `;
 
     // Headers
     for (let j = 0; j < r; j++) {
-      html += `<div class="sc-header" style="grid-column: ${j + 4}; grid-row: 1; align-self: flex-end; margin-bottom: 8px;">${GateMath.toHTML("g_{" + (j + 1) + "}")}</div>`;
+      html += `<div class="sc-header sc-header--bottom" style="grid-column: ${j + 4}; grid-row: 1;">${GateMath.toHTML(`g_{${j + 1}}`)}</div>`;
     }
 
     // Horizontal Wires
     for (let i = 0; i < n; i++) {
-      html += `<div class="sc-h-wire" style="grid-column: 3 / ${r + 5}; grid-row: ${i + 2};"></div>`;
+      html += `<div class="sc-h-wire sc-h-wire--flush" style="grid-column: 3 / ${r + 5}; grid-row: ${i + 2};"></div>`;
     }
 
     // Vertical Wires and Pauli Nodes
@@ -282,8 +283,8 @@ export const QECCBlockModal = (() => {
       }
 
       if (nodesForGen !== "") {
-        // Vertical wire (first qubit → bottom gap row)
-        html += `<div class="sc-v-wire" style="grid-column: ${j + 4}; grid-row: ${firstQubit + 2} / ${n + 3};"></div>`;
+        // v-wire: ends at brace tails, 8px gap from arm
+        html += `<div class="sc-v-wire sc-v-wire--flush-end" style="grid-column: ${j + 4}; grid-row: ${firstQubit + 2} / ${n + 3};"></div>`;
       }
       
       nodesHtml += nodesForGen;
@@ -325,13 +326,13 @@ export const QECCBlockModal = (() => {
     const COL_M      = 5 + r; // Measurement for ancillas
     const COL_CW     = 6 + r; // Classical double wire
     const COL_SJ     = 7 + r; // S_j labels
-
     let html = `
       <div class="qecc-modal-section qecc-modal-section--center-scroll">
+        <!-- --sc-col-width: 28px drives brace margin in CSS -->
         <div class="sc-grid" style="
-          grid-template-columns: 24px 16px 36px repeat(${r}, 28px) 36px 36px 24px auto;
+          grid-template-columns: 24px 24px 36px repeat(${r}, 28px) 36px 36px 24px auto;
           grid-template-rows: 36px 10px 10px repeat(${r}, 28px);
-          align-items: center; justify-items: center;
+          --sc-col-width: 28px;
         ">
     `;
 
@@ -342,11 +343,12 @@ export const QECCBlockModal = (() => {
     else if (r === 3) labelText = `g_1, g_2, g_3`;
     
     html += `
-      <div class="sc-label" style="grid-column: ${COL_G_BASE} / ${COL_G_BASE + r}; grid-row: ${ROW_LABEL}; justify-content: center; align-self: flex-end; font-size: 16px; margin-bottom: 8px;">
+      <div class="sc-label sc-label--group" style="grid-column: ${COL_G_BASE} / ${COL_G_BASE + r}; grid-row: ${ROW_LABEL};">
         ${GateMath.toHTML(labelText)}
       </div>
-      <div class="sc-top-brace" style="grid-column: ${COL_G_BASE} / ${COL_G_BASE + r}; grid-row: ${ROW_BRACE}; align-self: flex-end; justify-self: center; width: calc(100% - 28px);">
-        <svg preserveAspectRatio="none" viewBox="0 0 100 10" width="100%" height="10px">
+      <!-- top brace -->
+      <div class="sc-top-brace" style="grid-column: ${COL_G_BASE} / ${COL_G_BASE + r}; grid-row: ${ROW_BRACE};">
+        <svg preserveAspectRatio="none" viewBox="0 0 100 10">
           <path d="M 0,10 C 0,8 2,5 15,5 L 35,5 C 48,5 50,2 50,0 C 50,2 52,5 65,5 L 85,5 C 98,5 100,8 100,10" fill="none" stroke="currentColor"/>
         </svg>
       </div>
@@ -357,18 +359,16 @@ export const QECCBlockModal = (() => {
       const col = COL_G_BASE + j;
 
       // |0> label
-      html += `<div class="sc-label" style="grid-column: ${COL_QLABEL}; grid-row: ${row}; justify-content: center; font-size: 11px; color: var(--ash);">${GateMath.toHTML("|0\\rangle")}</div>`;
+      html += `<div class="sc-label sc-label--small-ash sc-label--input" style="grid-column: ${COL_QLABEL}; grid-row: ${row};">${GateMath.toHTML("|0\\rangle")}</div>`;
 
       // Horizontal wire for ancilla - starts after |0> label
-      html += `<div class="sc-h-wire" style="grid-column: ${COL_L_SP} / ${COL_M + 1}; grid-row: ${row}; margin: 0; z-index: 1;"></div>`;
+      html += `<div class="sc-h-wire sc-h-wire--flush" style="grid-column: ${COL_L_SP} / ${COL_M + 1}; grid-row: ${row};"></div>`;
 
       // H1 gate
       html += `<div class="sc-node" style="grid-column: ${COL_H1}; grid-row: ${row};"><span>H</span></div>`;
 
-      // Vertical wire (top gap → above this row)
-      html += `<div class="sc-v-wire" style="grid-column: ${col}; grid-row: ${ROW_TOP_GAP} / ${row}; margin: 0; z-index: 1; align-self: stretch; height: 100%;"></div>`;
-      // Half-height wire to center of control dot
-      html += `<div class="sc-v-wire" style="grid-column: ${col}; grid-row: ${row}; margin: 0; z-index: 1; height: 50%; align-self: flex-start;"></div>`;
+      // v-wire: starts at brace tails, 8px gap from arm
+      html += `<div class="sc-v-wire sc-v-wire--flush-start" style="grid-column: ${col}; grid-row: ${ROW_TOP_GAP} / ${row + 1};"></div>`;
 
       // Control dot on the ancilla wire
       html += `<div class="sc-control" style="grid-column: ${col}; grid-row: ${row};"></div>`;
@@ -383,7 +383,7 @@ export const QECCBlockModal = (() => {
       html += `<div class="sc-classical-wire" style="grid-column: ${COL_CW}; grid-row: ${row};"></div>`;
 
       // s_j output label
-      html += `<div class="sc-label" style="grid-column: ${COL_SJ}; grid-row: ${row}; justify-content: flex-start; padding-left: var(--sp-2); font-size: 16px;">${GateMath.toHTML(`s_{${j + 1}}`)}</div>`;
+      html += `<div class="sc-label sc-label--output" style="grid-column: ${COL_SJ}; grid-row: ${row};">${GateMath.toHTML(`s_{${j + 1}}`)}</div>`;
     }
 
     html += `        </div>

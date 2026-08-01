@@ -216,7 +216,8 @@
   content: "";
   position: absolute;
   right: 0;
-  top: -3px;
+  top: 50%;
+  transform: translateY(-50%);
   border-left: 4px solid var(--wire-light);
   border-top: 3px solid transparent;
   border-bottom: 3px solid transparent;
@@ -298,7 +299,8 @@
 .v-arrow {
   position: absolute;
   bottom: 0;
-  left: -3px;
+  left: 50%;
+  transform: translateX(-50%);
   border-top: 4px solid var(--wire-light);
   border-left: 3px solid transparent;
   border-right: 3px solid transparent;
@@ -365,7 +367,8 @@
 .route-arrow-up {
   position: absolute;
   top: 0;
-  left: -3px;
+  left: 50%;
+  transform: translateX(-50%);
   border-bottom: 4px solid var(--wire-light);
   border-left: 3px solid transparent;
   border-right: 3px solid transparent;
@@ -808,6 +811,7 @@
 
 .qecc-modal-section--center-scroll {
   overflow-x: auto;
+  text-align: center;
   padding: 20px 0;
 }
 
@@ -1138,10 +1142,10 @@
 /* Block Modal Overrides */
 
 .sc-grid {
-  display: grid;
+  display: inline-grid;
   align-items: center;
   justify-items: center;
-  margin: 0 auto;
+  text-align: left;
 }
 
 .sc-label {
@@ -1156,25 +1160,69 @@
   font-size: var(--text-md);
 }
 
+.sc-label--center {
+  justify-content: center;
+}
+
+.sc-label--input {
+  justify-content: flex-end;
+  padding-right: var(--sp-2);
+}
+
+.sc-label--output {
+  justify-content: flex-start;
+  padding-left: var(--sp-2);
+}
+
+.sc-label--small-ash {
+  font-size: 11px;
+  color: var(--ash);
+}
+
+.sc-label--group {
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
+
+.sc-label--dot {
+  padding-top: 4px;
+}
+
+/* side braces, left and right */
 .sc-brace {
   width: 10px;
   align-self: stretch;
-  margin-top: 14px;
-  margin-bottom: 14px;
+  margin: 14px 0; /* tips align with wire centers in 28px rows */
   color: var(--wire);
 }
-.sc-brace svg {
+
+/* top and bottom braces, margin = col_width/2 via --sc-col-width set on the grid */
+.sc-top-brace {
+  justify-self: stretch;
+  align-self: stretch; /* force fill 10px row, overrides sc-grid align-items:center */
+  margin: 0 calc(var(--sc-col-width, 28px) / 2);
+  color: var(--wire);
+}
+
+.sc-bottom-brace {
+  justify-self: stretch;
+  align-self: stretch;
+  margin: 0 calc(var(--sc-col-width, 40px) / 2);
+  color: var(--wire);
+}
+
+/* all brace SVGs fill their container */
+.sc-brace svg,
+.sc-top-brace svg,
+.sc-bottom-brace svg {
   width: 100%;
   height: 100%;
   display: block;
   overflow: visible;
 }
 
-.sc-bottom-brace {
-  justify-self: stretch;
-  color: var(--wire);
-}
 
+/* column headers g1, g2 ... */
 .sc-header {
   color: var(--ash);
   font-weight: 600;
@@ -1185,18 +1233,42 @@
   height: 100%;
 }
 
+.sc-header--bottom {
+  align-self: flex-end;
+  margin-bottom: 8px;
+}
+
+/* horizontal wires */
 .sc-h-wire {
   justify-self: stretch;
   height: 1px;
   background: var(--wire-light);
   margin: 0 10px;
+  z-index: var(--z-wire);
 }
 
+/* stops 8px inside the gap col, total 13px from brace arm */
+.sc-h-wire--flush {
+  margin: 0 8px;
+}
+
+/* vertical wires */
 .sc-v-wire {
   align-self: stretch;
   width: 1px;
   background: var(--wire-light);
-  margin: 10px 0;
+  margin: 14px 0; /* hides behind first/last node */
+  z-index: var(--z-wire);
+}
+
+/* top brace wire: starts 8px below brace tails, 13px total gap from arm */
+.sc-v-wire--flush-start {
+  margin-top: 8px;
+}
+
+/* bottom brace wire: ends 8px above brace tails, 13px total gap from arm */
+.sc-v-wire--flush-end {
+  margin-bottom: 8px;
 }
 
 .sc-node {
@@ -1213,11 +1285,6 @@
   font-size: var(--text-xs);
   z-index: var(--z-top);
   position: relative;
-}
-
-.sc-top-brace {
-  justify-self: stretch;
-  color: var(--wire);
 }
 
 .sc-control {
@@ -1274,4 +1341,5 @@
   text-align: center;
   line-height: 1.4;
 }
+
 
