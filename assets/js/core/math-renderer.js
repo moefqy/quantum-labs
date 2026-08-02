@@ -126,11 +126,32 @@ export const GateMath = (() => {
     return `${s} \\end{bmatrix}`;
   }
 
+  // Formats gate parameter angles into readable LaTeX strings (e.g. pi/2 -> \pi/2)
+  function formatParam(param) {
+    if (typeof param === "number") {
+      const ratio = param / Math.PI;
+      if (Math.abs(ratio - Math.round(ratio)) < 0.01) {
+        const n = Math.round(ratio);
+        return n === 1 ? "\\pi" : n === -1 ? "-\\pi" : `${n}\\pi`;
+      }
+      return param.toFixed(2);
+    }
+    let s = String(param).trim();
+    s = s.replace(/π/g, "pi");
+    s = s.replace(/(^|[^\\])pi/gi, "$1\\pi");
+    s = s.replace(/[\r\n]+/g, "");
+    if (s.length > 15 && !s.includes("\\pi")) {
+      s = s.substring(0, 5);
+    }
+    return s;
+  }
+
   return {
     renderLatex,
     toHTML,
     formatComplex,
     formatCoef,
+    formatParam,
     matrixToLatex,
     vectorToLatex,
   };

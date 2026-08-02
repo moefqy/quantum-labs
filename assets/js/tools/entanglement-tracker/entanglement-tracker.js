@@ -11,6 +11,7 @@ import { UI } from "../../ui/ui-helpers.js";
 import { MiniCircuitRenderer } from "../../ui/mini-circuit/mini-circuit-renderer.js";
 import { Icons } from "../../ui/ui-icons.js";
 import { UIComponent } from "../../ui/ui-component.js";
+import { App } from "../../app.js";
 
 // Available gates in the entanglement tracker
 const ET_GATES = ["H", "X", "Y", "Z", "S", "T", "CNOT", "CZ", "SWAP"];
@@ -22,6 +23,7 @@ const ET_PALETTE_GATES = ET_GATES.map((key) => {
     gate: key,
     label: g.palette.label,
     name: g.name,
+    desc: g.palette.desc || "",
     multi: g.type === "multi",
   };
 });
@@ -83,7 +85,7 @@ class EntanglementTracker extends UIComponent {
               <div class="et-palette" id="et-palette">
                 ${ET_PALETTE_GATES.map(
                   (g) => `
-                  <button class="ql-gate-btn et-palette-btn ${g.multi ? "et-multi" : ""}" data-gate="${g.gate}" title="${g.name}">
+                  <button class="ql-gate-btn et-palette-btn ${g.multi ? "et-multi" : ""}" data-gate="${g.gate}"${g.desc ? ` data-desc="${g.desc}"` : ""}>
                     <span class="ql-gate-sym">${GateMath.toHTML(g.label)}</span>
                     <span class="ql-gate-label">${g.name}</span>
                   </button>`,
@@ -215,6 +217,7 @@ class EntanglementTracker extends UIComponent {
   bindEvents() {
     UI.bindMobileToggle(".et-controls");
     UI.bindAccordions(this.container);
+    App.bindTooltips();
 
     this.elements.qubitBtns.forEach((btn) => {
       btn.addEventListener("click", () => {

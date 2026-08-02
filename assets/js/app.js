@@ -144,7 +144,8 @@ export const App = (() => {
 
     let hoverTimeout = null;
 
-    document.querySelectorAll(".ql-gate-btn[data-desc]").forEach((item) => {
+    document.querySelectorAll(".ql-gate-btn[data-desc]:not([data-tooltip-bound])").forEach((item) => {
+      item.dataset.tooltipBound = "1";
       item.addEventListener("mouseenter", () => {
         clearTimeout(hoverTimeout);
         hoverTimeout = setTimeout(() => {

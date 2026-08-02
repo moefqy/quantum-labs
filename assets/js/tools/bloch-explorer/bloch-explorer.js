@@ -8,6 +8,7 @@ import { ParamPopover } from "../../ui/param-popover.js";
 import { Icons } from "../../ui/ui-icons.js";
 import { UIComponent } from "../../ui/ui-component.js";
 import { QuantumGates } from "../../core/quantum-gates.js";
+import { App } from "../../app.js";
 
 const BEX_BASIC_GATES = ["H", "X", "Y", "Z", "S", "T", "Sdg", "Tdg"];
 const BEX_PARAM_GATES = ["Rx", "Ry", "Rz"];
@@ -95,6 +96,8 @@ class BlochExplorer extends UIComponent {
                     id,
                     GateMath.toHTML(g.palette.label),
                     g.name,
+                    "",
+                    g.palette.desc ? `data-desc="${g.palette.desc}"` : "",
                   );
                 }).join("")}
               </div>
@@ -106,6 +109,7 @@ class BlochExplorer extends UIComponent {
                     GateMath.toHTML(g.palette.label),
                     g.name,
                     "param-gate-btn",
+                    g.palette.desc ? `data-desc="${g.palette.desc}"` : "",
                   );
                 }).join("")}
               </div>
@@ -198,6 +202,7 @@ class BlochExplorer extends UIComponent {
       }
 
       UI.bindMobileToggle(".bex-controls");
+      App.bindTooltips();
       UI.bindAccordions(this.container);
     }, 50);
   }

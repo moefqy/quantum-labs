@@ -8,6 +8,7 @@ import { QuantumGates } from "../../core/quantum-gates.js";
 import { UI } from "../../ui/ui-helpers.js";
 import { Icons } from "../../ui/ui-icons.js";
 import { UIComponent } from "../../ui/ui-component.js";
+import { App } from "../../app.js";
 
 // Available gates in the state analyzer
 const SA_SINGLE_GATES = ["I", "H", "X", "Y", "Z", "S", "Sdg", "T", "Tdg"];
@@ -53,7 +54,7 @@ class StateAnalyzer extends UIComponent {
                 ${SA_SINGLE_GATES.map((id) => {
                   const g = QuantumGates.get(id);
                   return `
-                    <div class="ql-gate-btn sa-gate-btn-q0" data-gate="${id}" data-qubit="0">
+                    <div class="ql-gate-btn sa-gate-btn-q0" data-gate="${id}" data-qubit="0"${g.palette?.desc ? ` data-desc="${g.palette.desc}"` : ""}>
                       <span class="ql-gate-sym">${GateMath.toHTML(g.palette ? g.palette.label : `\\mathbf{${id}}`)}</span>
                       <span class="ql-gate-label">${g.name}</span>
                     </div>
@@ -77,7 +78,7 @@ class StateAnalyzer extends UIComponent {
                   ${SA_SINGLE_GATES.map((id) => {
                     const g = QuantumGates.get(id);
                     return `
-                      <div class="ql-gate-btn sa-gate-btn-q1" data-gate="${id}" data-qubit="1">
+                      <div class="ql-gate-btn sa-gate-btn-q1" data-gate="${id}" data-qubit="1"${g.palette?.desc ? ` data-desc="${g.palette.desc}"` : ""}>
                         <span class="ql-gate-sym">${GateMath.toHTML(g.palette ? g.palette.label : `\\mathbf{${id}}`)}</span>
                         <span class="ql-gate-label">${g.name}</span>
                       </div>
@@ -217,6 +218,7 @@ class StateAnalyzer extends UIComponent {
     });
     UI.bindAccordions(this.container);
     UI.bindMobileToggle(".sa-controls");
+    App.bindTooltips();
   }
 
   // Render the component into the DOM

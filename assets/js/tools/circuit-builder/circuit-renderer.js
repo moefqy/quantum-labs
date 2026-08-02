@@ -5,6 +5,7 @@ import { CircuitModel } from "./circuit-model.js";
 import { EventBus } from "../../core/event-bus.js";
 import { GateMath } from "../../core/math-renderer.js";
 import { QuantumGates } from "../../core/quantum-gates.js";
+import { GateSymbolRenderer } from "../../core/gate-symbol-renderer.js";
 import { Icons } from "../../ui/ui-icons.js";
 
 export const CircuitRenderer = (() => {
@@ -115,41 +116,47 @@ export const CircuitRenderer = (() => {
         return el;
       }
 
-      // Fully dynamic rendering via gateDef.render
-      const renderDef = info.render;
-      if (renderDef) {
-        el.innerHTML = "";
-        const symbolKey =
-          cell.role === "control" ? renderDef.control : renderDef.target;
+      // Resolve symbol via shared gate-symbol-renderer
+      const symbol = GateSymbolRenderer.resolveGateSymbol(info, cell.role);
+      el.innerHTML = "";
 
-        if (symbolKey === "meter") {
-          // Quantum side of M gate — measurement box
+      switch (symbol.kind) {
+        case "meter":
           el.classList.remove("multi-gate");
           el.classList.add("measure-gate");
           el.innerHTML = GateMath.toHTML("\\mathcal{M}");
-        } else if (symbolKey === "cbit-dot") {
-          // Classical bit slot (target of M, or control of c-X/c-Z)
+          break;
+        case "cbit-dot": {
           el.classList.add("cbit-result-slot");
           const dot = document.createElement("div");
           dot.className = "classical-control-dot";
           el.appendChild(dot);
-        } else if (symbolKey === "dot") {
+          break;
+        }
+        case "dot": {
           const dot = document.createElement("div");
           dot.className = "control-dot";
           el.appendChild(dot);
-        } else if (symbolKey === "cross") {
+          break;
+        }
+        case "cross": {
           const target = document.createElement("div");
           target.className = "target-symbol";
           el.appendChild(target);
-        } else if (symbolKey === "swap") {
+          break;
+        }
+        case "swap": {
           const cross = document.createElement("div");
           cross.className = "swap-symbol";
           el.appendChild(cross);
-        } else if (symbolKey) {
-          // Generic box target — raw KaTeX string (e.g. '\mathbf{Y}')
-          el.classList.remove("multi-gate");
-          el.innerHTML = GateMath.toHTML(symbolKey);
+          break;
         }
+        case "box-label":
+          el.classList.remove("multi-gate");
+          el.innerHTML = GateMath.toHTML(symbol.label);
+          break;
+        default:
+          break;
       }
     } else {
       // Single qubit gate — use palette.label from registry for correct TeX symbol
@@ -173,7 +180,7 @@ export const CircuitRenderer = (() => {
           badge.textContent = "U₁";
         }
       } else {
-        badge.innerHTML = GateMath.toHTML(formatParam(cell.param));
+        badge.innerHTML = GateMath.toHTML(GateMath.formatParam(cell.param));
       }
       el.appendChild(badge);
     }
@@ -190,34 +197,7 @@ export const CircuitRenderer = (() => {
     return el;
   }
 
-  // Formats gate parameter angles into readable LaTeX strings (e.g. pi/2 -> \pi/2).
-  function formatParam(param) {
-    if (typeof param === "number") {
-      // Try to express as fraction of π
-      const ratio = param / Math.PI;
-      if (Math.abs(ratio - Math.round(ratio)) < 0.01) {
-        const n = Math.round(ratio);
-        return n === 1 ? "\\pi" : n === -1 ? "-\\pi" : `${n}\\pi`;
-      }
-      return param.toFixed(2);
-    }
-    // String — convert pi/π to \pi
-    let s = String(param).trim();
 
-    // Normalize unicode π to 'pi' so we have a standard starting point
-    s = s.replace(/π/g, "pi");
-
-    // Convert any 'pi' that isn't already escaped into '\pi'
-    s = s.replace(/(^|[^\\])pi/gi, "$1\\pi");
-
-    // Remove newlines
-    s = s.replace(/[\r\n]+/g, "");
-
-    if (s.length > 15 && !s.includes("\\pi")) {
-      s = s.substring(0, 5);
-    }
-    return s;
-  }
 
   // Draws vertical connecting lines between qubits for multi-qubit gates (like CNOT).
   function renderConnectors() {
@@ -315,14 +295,14 @@ export const CircuitRenderer = (() => {
             connector.classList.add("classical");
           }
           connector.dataset.step = s;
-          connector.style.top =
-            `${topRect.top + topRect.height / 2 - boardRect.top}px`;
-          connector.style.height =
-            `${bottomRect.top +
-            bottomRect.height / 2 -
-            topRect.top -
-            topRect.height / 2 
-            }px`;
+          const span = GateSymbolRenderer.computeConnectorSpan({
+            mode: "measured",
+            topRect,
+            bottomRect,
+            boardRect,
+          });
+          connector.style.top = `${span.top}px`;
+          connector.style.height = `${span.height}px`;
           connector.style.left =
             `${topRect.left + topRect.width / 2 - boardRect.left}px`;
 
@@ -345,6 +325,5 @@ export const CircuitRenderer = (() => {
     render,
     animateSimulation,
     renderConnectors,
-    formatParam,
   };
 })();

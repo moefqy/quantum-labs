@@ -3,7 +3,7 @@
 
 import { GateMath } from "../../core/math-renderer.js";
 import { QuantumGates } from "../../core/quantum-gates.js";
-import { CircuitRenderer } from "../../tools/circuit-builder/circuit-renderer.js";
+import { GateSymbolRenderer } from "../../core/gate-symbol-renderer.js";
 import { Icons } from "../ui-icons.js";
 
 export const MiniCircuitRenderer = (() => {
@@ -57,55 +57,40 @@ export const MiniCircuitRenderer = (() => {
           const minQ = Math.min(...cell.linkedQubits);
           if (q === minQ) {
             const maxQ = Math.max(...cell.linkedQubits);
-            
-            const minCell = steps[s][minQ];
-            const maxCell = steps[s][maxQ];
-            
-            const isBoxTarget = (c) => {
-              if (c && c.role === "target") {
-                const gDef = QuantumGates.get(c.gate);
-                const sym = gDef?.render?.target;
-                return sym && sym !== "cross" && sym !== "swap" && sym !== "dot";
-              }
-              return false;
-            };
-            
-            let topOffset = 15;
-            let height = (maxQ - minQ) * 34;
-            
-            if (isBoxTarget(minCell)) {
-               topOffset = 30;
-               height -= 15;
-            }
-            if (isBoxTarget(maxCell)) {
-               height -= 15;
-            }
-            
-            html += `<div class="et-connector" style="top:${topOffset}px;height:${height}px;"></div>`;
+            const span = GateSymbolRenderer.computeConnectorSpan({
+              mode: "fixed",
+              minQubit: minQ,
+              maxQubit: maxQ,
+              rowHeight: GateSymbolRenderer.MINI_ROW_PITCH,
+              baseOffset: GateSymbolRenderer.CONNECTOR_BASE_OFFSET,
+              boxShrink: GateSymbolRenderer.BOX_TARGET_SHRINK,
+              topIsBoxTarget: GateSymbolRenderer.isBoxTargetCell(steps[s][minQ], QuantumGates.get),
+              bottomIsBoxTarget: GateSymbolRenderer.isBoxTargetCell(steps[s][maxQ], QuantumGates.get),
+            });
+            html += `<div class="et-connector" style="top:${span.top}px;height:${span.height}px;"></div>`;
           }
         }
 
         // if it is a control gate, render the control symbol
-        if (isControl) {
+        if (isControl || isTarget) {
           const gateDef = QuantumGates.get(cell.gate);
-          const controlSymbol = gateDef?.render?.control;
-          if (controlSymbol === "swap") {
-            html += "<div class=\"et-swap-x\"></div>";
-          } else {
-            html += "<div class=\"et-ctrl-dot\"></div>";
-          }
-        // if the cell is a target gate, render the target symbol
-        } else if (isTarget) {
-          const gateDef = QuantumGates.get(cell.gate);
-          const targetSymbol = gateDef?.render?.target;
-          if (targetSymbol === "cross") {
-            html += "<div class=\"et-targ-circle\"><div class=\"et-targ-cross\"></div></div>";
-          } else if (targetSymbol === "swap") {
-            html += "<div class=\"et-swap-x\"></div>";
-          } else if (targetSymbol === "dot") {
-            html += "<div class=\"et-ctrl-dot\"></div>";
-          } else if (targetSymbol) {
-            html += `<div class="box-target"><div class="et-cell-label">${GateMath.toHTML(targetSymbol)}</div></div>`;
+          const symbol = GateSymbolRenderer.resolveGateSymbol(gateDef, cell.role);
+
+          switch (symbol.kind) {
+            case "dot":
+              html += "<div class=\"et-ctrl-dot\"></div>";
+              break;
+            case "swap":
+              html += "<div class=\"et-swap-x\"></div>";
+              break;
+            case "cross":
+              html += "<div class=\"et-targ-circle\"><div class=\"et-targ-cross\"></div></div>";
+              break;
+            case "box-label":
+              html += `<div class="box-target"><div class="et-cell-label">${GateMath.toHTML(symbol.label)}</div></div>`;
+              break;
+            default:
+              break;
           }
         // if it is a single gate, render the gate symbol
         } else if (hasGate && cell.role === "single") {
@@ -123,7 +108,7 @@ export const MiniCircuitRenderer = (() => {
                 badgeText = "U₁";
               }
             } else {
-              badgeText = GateMath.toHTML(CircuitRenderer.formatParam(cell.param));
+              badgeText = GateMath.toHTML(GateMath.formatParam(cell.param));
             }
             html += `<span class="param-badge">${badgeText}</span>`;
           }

@@ -8,6 +8,7 @@ import { MiniCircuitRenderer } from "./mini-circuit-renderer.js";
 import { ParamPopover } from "../param-popover.js";
 import { CircuitSerializer } from "../../tools/circuit-builder/circuit-serializer.js";
 import { UI } from "../ui-helpers.js";
+import { App } from "../../app.js";
 
 // Ensure this matches the available gates in the builder
 export const U2_PALETTE_GATES = [
@@ -66,7 +67,7 @@ export const MiniCircuitModal = (() => {
       if (!g || !g.palette) {
         return;
       }
-      allGatesHtml += `<button class="ql-gate-btn et-palette-btn ${g.type === "multi" ? "et-multi" : ""}" data-gate="${id}" title="${g.name}">
+      allGatesHtml += `<button class="ql-gate-btn et-palette-btn ${g.type === "multi" ? "et-multi" : ""}" data-gate="${id}"${g.palette.desc ? ` data-desc="${g.palette.desc}"` : ""}>
                   <span class="ql-gate-sym">${GateMath?.toHTML(g.palette.label) || id}</span>
                 </button>`;
     });
@@ -121,6 +122,7 @@ export const MiniCircuitModal = (() => {
       nameInput.value = initialName || "";
       u2Label.innerHTML = GateMath.toHTML("\\mathbf{U}_2") + (isNew ? " Custom Gate Creation" : " Edit Custom Gate");
       renderPalette();
+      App.bindTooltips();
       modalEl.classList.add("open");
 
       // Render the component into the DOM
