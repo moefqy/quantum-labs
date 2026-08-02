@@ -3,7 +3,7 @@
 .bex-layout {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 340px 1fr;
   height: 100%;
   min-height: 0;
   overflow: hidden;
@@ -19,7 +19,7 @@
   gap: var(--sp-4);
   padding: var(--sp-6);
   background: var(--obsidian);
-  border-right: 1px solid var(--wire);
+  border-left: 1px solid var(--wire);
 }
 
 /* Bex Sphere Wrap */
@@ -76,7 +76,7 @@
   display: block;
   background: var(--carbon);
   overflow-y: auto;
-  border-left: 1px solid var(--wire);
+  border-right: 1px solid var(--wire);
 }
 
 /* Preset Buttons */

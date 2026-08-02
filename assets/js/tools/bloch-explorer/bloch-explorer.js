@@ -26,26 +26,7 @@ class BlochExplorer extends UIComponent {
   template() {
     return `
       <div class="bex-layout">
-        <!-- LEFT: 3D Bloch Sphere Canvas -->
-        <div class="bex-sphere-panel">
-          <div class="bex-sphere-wrap">
-            <canvas id="bloch-canvas"></canvas>
-          </div>
-          <div class="bex-state-readout">
-            <div class="bex-ket" id="bex-ket">${GateMath.toHTML("|0\\rangle")}</div>
-            <div class="bex-coords">
-              <span>x = <strong id="bex-x">0.000</strong></span>
-              <span>y = <strong id="bex-y">0.000</strong></span>
-              <span>z = <strong id="bex-z">1.000</strong></span>
-            </div>
-            <div class="bex-probs">
-              <span>P(${GateMath.toHTML("|0\\rangle")}) = <strong id="bex-p0">100.0%</strong></span>
-              <span>P(${GateMath.toHTML("|1\\rangle")}) = <strong id="bex-p1">0.0%</strong></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: Controls -->
+        <!-- LEFT: Controls -->
         <div class="bex-controls ql-bottom-sheet">
           ${UI.groupHeader("INITIAL STATE")}
           ${UI.accordion(
@@ -127,6 +108,25 @@ class BlochExplorer extends UIComponent {
               <button class="bex-reset-btn" id="bex-reset">Reset to |0⟩</button>
           `,
           )}
+        </div>
+
+        <!-- RIGHT: 3D Bloch Sphere Canvas -->
+        <div class="bex-sphere-panel">
+          <div class="bex-sphere-wrap">
+            <canvas id="bloch-canvas"></canvas>
+          </div>
+          <div class="bex-state-readout">
+            <div class="bex-ket" id="bex-ket">${GateMath.toHTML("|0\\rangle")}</div>
+            <div class="bex-coords">
+              <span>x = <strong id="bex-x">0.000</strong></span>
+              <span>y = <strong id="bex-y">0.000</strong></span>
+              <span>z = <strong id="bex-z">1.000</strong></span>
+            </div>
+            <div class="bex-probs">
+              <span>P(${GateMath.toHTML("|0\\rangle")}) = <strong id="bex-p0">100.0%</strong></span>
+              <span>P(${GateMath.toHTML("|1\\rangle")}) = <strong id="bex-p1">0.0%</strong></span>
+            </div>
+          </div>
         </div>
 
         <!-- Mobile Toggle Button -->
