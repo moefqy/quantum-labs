@@ -49,6 +49,8 @@ export function bindKeyboard(runSimulation) {
       if (CircuitModel.undo()) {
         CircuitRenderer.render();
         updateQubitDisplay();
+      } else {
+        UI.showToast("Nothing to undo", "error");
       }
     // Redo: Cmd+Y or Cmd+Z+Shift
     } else if (
@@ -59,6 +61,8 @@ export function bindKeyboard(runSimulation) {
       if (CircuitModel.redo()) {
         CircuitRenderer.render();
         updateQubitDisplay();
+      } else {
+        UI.showToast("Nothing to redo", "error");
       }
     // Run: Cmd+Enter
     } else if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {

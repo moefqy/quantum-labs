@@ -47,6 +47,8 @@ export function bindToolbar(runSimulation) {
     if (CircuitModel.undo()) {
       CircuitRenderer.render();
       updateQubitDisplay();
+    } else {
+      UI.showToast("Nothing to undo", "error");
     }
   });
 
@@ -55,6 +57,8 @@ export function bindToolbar(runSimulation) {
     if (CircuitModel.redo()) {
       CircuitRenderer.render();
       updateQubitDisplay();
+    } else {
+      UI.showToast("Nothing to redo", "error");
     }
   });
 

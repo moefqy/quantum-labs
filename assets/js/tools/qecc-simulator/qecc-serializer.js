@@ -45,7 +45,7 @@ export const QECCSerializer = {
     }
 
     if (shouldAnalyze) {
-      setTimeout(() => simulator.handleAnalyze(), 50);
+      setTimeout(() => simulator.handleAnalyze(false), 50);
     }
   },
 

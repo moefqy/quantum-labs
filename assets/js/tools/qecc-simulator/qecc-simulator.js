@@ -336,7 +336,7 @@ class QECCSimulator extends UIComponent {
     UI.bindMobileToggle("#cb-controls-wrapper");
 
     // Actions
-    this.elements.analyzeBtn?.addEventListener("click", this.handleAnalyze);
+    this.elements.analyzeBtn?.addEventListener("click", () => this.handleAnalyze(true));
     this.elements.clearBtn?.addEventListener("click", this.handleClear);
 
     // GF format toggle
@@ -354,6 +354,16 @@ class QECCSimulator extends UIComponent {
 
     // Hx input — sync to Hz when dual-css
     this.elements.hxInput?.addEventListener("input", this.handleHxInput);
+
+    // Ctrl+Enter on matrix inputs to trigger analyze
+    [this.elements.hInput, this.elements.hxInput, this.elements.hzInput].forEach((input) => {
+      input?.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+          e.preventDefault();
+          this.handleAnalyze();
+        }
+      });
+    });
 
     // Pipeline block clicks
     this.container.querySelectorAll(".qecc-pipe-block").forEach((btn) => {
@@ -527,6 +537,7 @@ class QECCSimulator extends UIComponent {
     // Push the URL state and re-initialize
     window.history.replaceState({}, '', `${window.location.pathname}?${preset.query}`);
     QECCSerializer.initFromURL(this, QECCMath);
+    UI.showToast(`Loaded preset: ${preset.name}`);
   }
 
   // Clears the input fields, results, and URL state.
@@ -536,11 +547,13 @@ class QECCSimulator extends UIComponent {
     if (this.elements.hzInput) this.elements.hzInput.value = "";
     this.state.analysisResult = null;
     this._clearResults();
+    this._clearError();
     window.history.replaceState({}, '', window.location.pathname);
+    UI.showToast("Inputs cleared");
   }
 
   // Parses the input matrices and triggers the quantum error correction analysis pipeline.
-  handleAnalyze() {
+  handleAnalyze(showToast = true) {
     this._clearError();
 
     if (!this.state.codeType) {
@@ -654,6 +667,9 @@ class QECCSimulator extends UIComponent {
     this.state.analysisResult = { Hx, Hz, n, k, r, d, encoderCircuit, stabCircuit, lut, hasDegeneracy, canCorrect, xBar, zBar };
     this._renderResults();
     this._updateURL();
+    if (showToast !== false) {
+      UI.showToast(`Analyzed [[${n}, ${k}, ${d}]] code`);
+    }
   }
 
   // Opens the sub-modal for a specific pipeline block.
@@ -885,6 +901,8 @@ class QECCSimulator extends UIComponent {
       this.elements.hintEl.innerHTML = msg;
       this.elements.hintEl.classList.add("error");
     }
+    const plain = this.elements.hintEl?.textContent?.trim() || "Analysis failed";
+    UI.showToast(plain, "error");
   }
 
   // Hides and clears the tool's error panel.
