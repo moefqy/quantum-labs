@@ -91,7 +91,7 @@ export const QuantumMath = (() => {
     }
   }
 
-  // Apply CZ
+  // Apply CZ (Controlled-Z)
   function applyCZ(state, controlQubit, targetQubit) {
     const n = state.numQubits;
     const controlBit = n - 1 - controlQubit;
@@ -103,6 +103,29 @@ export const QuantumMath = (() => {
       if (i & controlMask && i & targetMask) {
         state.real[i] = -state.real[i];
         state.imag[i] = -state.imag[i];
+      }
+    }
+  }
+
+  // Apply CY (Controlled-Y)
+  function applyCY(state, controlQubit, targetQubit) {
+    const n = state.numQubits;
+    const controlBit = n - 1 - controlQubit;
+    const targetBit = n - 1 - targetQubit;
+    const controlMask = 1 << controlBit;
+    const targetMask = 1 << targetBit;
+
+    for (let i = 0; i < state.size; i++) {
+      if (i & controlMask && !(i & targetMask)) {
+        const j = i | targetMask;
+        const irOld = state.real[i];
+        const iiOld = state.imag[i];
+        const jrOld = state.real[j];
+        const jiOld = state.imag[j];
+        state.real[j] = -iiOld;
+        state.imag[j] = irOld;
+        state.real[i] = jiOld;
+        state.imag[i] = -jrOld;
       }
     }
   }
@@ -308,6 +331,7 @@ export const QuantumMath = (() => {
   return {
     apply2x2Matrix,
     applyCNOT,
+    applyCY,
     applyCZ,
     applySWAP,
     applyCSWAP,

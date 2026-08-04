@@ -489,7 +489,8 @@ export const QuantumGates = (() => {
       targets: 2,
       param: false,
       latex: {
-        matrix: null,
+        matrix:
+          "\\begin{pmatrix} 1&0&0&0 \\\\ 0&1&0&0 \\\\ 0&0&0&-i \\\\ 0&0&i&0 \\end{pmatrix}",
         symbol: "\\mathbf{CY}",
         ket: "|c,t\\rangle \\to |c, Y_t\\rangle",
       },
@@ -502,7 +503,7 @@ export const QuantumGates = (() => {
       },
       render: { control: "dot", target: "\\mathbf{Y}", connector: true },
       execute: (state, qubits, _p, { QuantumMath }) =>
-        QuantumMath.applyCNOT(state, qubits[0], qubits[1]), // replace with applyCY once implemented
+        QuantumMath.applyCY(state, qubits[0], qubits[1]),
     },
     // SWAP gate
     SWAP: {
