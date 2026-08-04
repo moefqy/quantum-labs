@@ -294,10 +294,15 @@ export const ResultsPanel = (() => {
     const { counts } = result;
     container.innerHTML = "";
 
-    if (!counts || Object.keys(counts).length === 0) {
+    const keys = counts ? Object.keys(counts) : [];
+    
+    // Detect no-measurement circuit
+    if (keys.length === 0 || (keys.length === 1 && /^0*$/.test(keys[0]))) {
       container.innerHTML = `
-        <div class="empty-state">
-          <p>No classical bits to measure.</p>
+        <div class="empty-state error">
+          ${Icons.errorCircle}
+          <p class="title">No Measurement</p>
+          <p>Add a measurement gate to a qubit to see shot results.</p>
         </div>
       `;
       return;
