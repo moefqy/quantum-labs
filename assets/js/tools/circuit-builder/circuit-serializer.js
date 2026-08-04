@@ -140,11 +140,12 @@ export const CircuitSerializer = (() => {
           const p = cell.param ? encodeURIComponent(cell.param) : "";
           ops.push(`${s}:${q}:${cell.gate}:${p}`);
         } else if (cell.role === "control") {
-          // Serialize only at the control to prevent duplicates
-          // The targets are the control and partner qubits
+          // Serialize only at the FIRST control to prevent duplicates
+          if (cell.linkedQubits && cell.linkedQubits[0] !== q) {
+            continue;
+          }
           const p = cell.param ? encodeURIComponent(cell.param) : "";
-          // Determine ordered targets so it works natively like "q1,q2"
-          const targetStr = `${Math.min(q, cell.partnerQubit)},${Math.max(q, cell.partnerQubit)}`;
+          const targetStr = cell.linkedQubits.join(",");
           ops.push(`${s}:${targetStr}:${cell.gate}:${p}`);
         }
       }
@@ -175,14 +176,21 @@ export const CircuitSerializer = (() => {
 
     for (const op of parsedOps) {
       if (op.qubits.length === 1) {
-        stepsData[op.step][op.qubits[0]] = { gate: op.gate, role: "single", param: op.param };
+        stepsData[op.step][op.qubits[0]] = { gate: op.gate, role: "single", linkedQubits: [...op.qubits], param: op.param };
       } else {
         const minQ = Math.min(...op.qubits);
         const maxQ = Math.max(...op.qubits);
-        stepsData[op.step][minQ] = { gate: op.gate, role: "control", partnerQubit: maxQ, param: op.param };
-        stepsData[op.step][maxQ] = { gate: op.gate, role: "target", partnerQubit: minQ, param: op.param };
-        for (let i = minQ + 1; i < maxQ; i++) {
-          stepsData[op.step][i] = { gate: op.gate, role: "wire", partnerQubit: maxQ, param: op.param };
+        
+        for (let i = minQ; i <= maxQ; i++) {
+          stepsData[op.step][i] = { gate: op.gate, role: "wire", linkedQubits: [...op.qubits], param: op.param };
+        }
+        
+        // Target is the last element in linkedQubits
+        stepsData[op.step][op.qubits[op.qubits.length - 1]].role = "target";
+        
+        // Controls are all other elements
+        for (let i = 0; i < op.qubits.length - 1; i++) {
+          stepsData[op.step][op.qubits[i]].role = "control";
         }
       }
     }

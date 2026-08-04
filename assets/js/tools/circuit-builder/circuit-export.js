@@ -1,10 +1,14 @@
 // QUANTUM LABS — Circuit Export
-// Handles exporting the quantum circuit to PNG, LaTeX, Qiskit, and Cirq.
+// UI coordinator for circuit export: modal overlay, copy-to-clipboard, and PNG capture.
+// Code generation is delegated to core exporter modules.
 
 import { CircuitModel } from "./circuit-model.js";
 
-import { QuantumGates } from "../../core/quantum-gates.js";
+import { exportQiskit } from "../../core/exporters/qiskit-exporter.js";
+import { exportCirq } from "../../core/exporters/cirq-exporter.js";
+import { exportLatex } from "../../core/exporters/latex-exporter.js";
 import { Icons } from "../../ui/ui-icons.js";
+import { AppState } from "../../core/app-state.js";
 import { UI } from "../../ui/ui-helpers.js";
 
 export const ExportManager = (function () {
@@ -94,10 +98,7 @@ export const ExportManager = (function () {
     board.style.minWidth = "max-content";
 
     html2canvas(board, {
-      backgroundColor:
-        document.documentElement.getAttribute("data-theme") === "light"
-          ? "#FFFFFF"
-          : "#0A0A0A",
+      backgroundColor: getComputedStyle(document.body).getPropertyValue("--obsidian").trim(),
       scale: 2,
       useCORS: true,
     })
@@ -120,220 +121,35 @@ export const ExportManager = (function () {
       });
   }
 
-  // Safely convert a param value to a display string
-  function _paramToStr(param) {
-    if (param == null) {
-      return "";
-    }
-    return String(param);
+  // Read current circuit state from CircuitModel and AppState
+  function getCircuitData() {
+    return {
+      numQubits: CircuitModel.getNumQubits(),
+      numCbits: CircuitModel.getNumCbits(),
+      numSteps: CircuitModel.getNumSteps(),
+      grid: CircuitModel.getGrid(),
+      operations: CircuitModel.toOperations(),
+      mode: AppState.getMode(),
+      shots: AppState.getShots(),
+    };
   }
 
-  // Generates and displays LaTeX code using the Qcircuit package for the current circuit.
+  // Generates and displays LaTeX code for the current circuit.
   function exportToLatex() {
-    const numQubits = CircuitModel.getNumQubits();
-    const numSteps = CircuitModel.getNumSteps();
-    const grid = CircuitModel.getGrid();
-
-    const lines = [];
-    lines.push("\\documentclass{article}");
-    lines.push("\\usepackage{qcircuit}");
-    lines.push("\\usepackage{braket}");
-    lines.push("\\begin{document}");
-    lines.push("");
-    lines.push("\\Qcircuit @C=1em @R=.7em {");
-
-    for (let q = 0; q < numQubits; q++) {
-      const parts = [`  \\lstick{\\ket{q_{${q}}}}`];
-      for (let s = 0; s < numSteps; s++) {
-        const cell = grid[s][q];
-        if (!cell) {
-          parts.push("\\qw");
-          continue;
-        }
-
-        const gate = cell.gate;
-        if (cell.linkedQubits) {
-          if (gate === "CNOT" || gate === "CZ") {
-            const isControl = cell.linkedQubits[0] === q;
-            const targetQ = cell.linkedQubits[1];
-            if (isControl) {
-              parts.push(`\\ctrl{${targetQ - q}}`);
-            } else {
-              parts.push(gate === "CNOT" ? "\\targ" : "\\gate{Z}");
-            }
-          } else if (gate === "SWAP") {
-            const otherQ =
-              cell.linkedQubits[0] === q
-                ? cell.linkedQubits[1]
-                : cell.linkedQubits[0];
-            parts.push(`\\qswap \\qwx[${otherQ - q}]`);
-          } else {
-            parts.push(`\\gate{${gate}}`);
-          }
-        } else {
-          const pStr = _paramToStr(cell.param);
-          const label = pStr ? `${gate}(${pStr})` : gate;
-          parts.push(`\\gate{${label}}`);
-        }
-      }
-      parts.push("\\qw");
-      lines.push(`${parts.join(" & ")} \\\\`);
-    }
-
-    lines.push("}");
-    lines.push("");
-    lines.push("\\end{document}");
-
-    showExportModal("LaTeX (Qcircuit)", lines.join("\n"));
+    const code = exportLatex(getCircuitData());
+    showExportModal("LaTeX (Qcircuit)", code);
   }
 
-  // Generates and displays Python code using the Qiskit library for the current circuit.
+  // Generates and displays Qiskit Python code for the current circuit.
   function exportToQiskit() {
-    const numQubits = CircuitModel.getNumQubits();
-    const numSteps = CircuitModel.getNumSteps();
-    const grid = CircuitModel.getGrid();
-
-    const lines = [];
-    lines.push("from qiskit import QuantumCircuit");
-    lines.push("import numpy as np");
-    lines.push("");
-    lines.push(`qc = QuantumCircuit(${numQubits})`);
-    lines.push("");
-
-    for (let s = 0; s < numSteps; s++) {
-      const processed = new Set();
-      for (let q = 0; q < numQubits; q++) {
-        const cell = grid[s][q];
-        if (!cell || processed.has(q)) {
-          continue;
-        }
-
-        const gate = cell.gate;
-        const gateInfo = QuantumGates.get(gate);
-
-        if (cell.linkedQubits) {
-          cell.linkedQubits.forEach((lq) => processed.add(lq));
-          const qargs = cell.linkedQubits.join(", ");
-
-          if (gateInfo && gateInfo.qiskit) {
-            if (gateInfo.param) {
-              const param = _paramToStr(cell.param);
-              const paramQiskit = param.replace(/π|pi/gi, "np.pi");
-              lines.push(
-                `qc.${gateInfo.qiskit}(${paramQiskit || "0"}, ${qargs})`,
-              );
-            } else {
-              lines.push(`qc.${gateInfo.qiskit}(${qargs})`);
-            }
-          }
-        } else {
-          processed.add(q);
-          const param = _paramToStr(cell.param);
-          const paramQiskit = param.replace(/π|pi/gi, "np.pi");
-
-          if (gate === "M") {
-            // Skip measurement for now — would need classical register
-            lines.push(`# qc.measure(${q}, ${q})`);
-          } else if (gateInfo && gateInfo.qiskit) {
-            if (gateInfo.param) {
-              lines.push(`qc.${gateInfo.qiskit}(${paramQiskit || "0"}, ${q})`);
-            } else {
-              lines.push(`qc.${gateInfo.qiskit}(${q})`);
-            }
-          }
-        }
-      }
-    }
-
-    lines.push("");
-    lines.push("print(qc.draw())");
-
-    showExportModal("Qiskit Python Code", lines.join("\n"));
+    const code = exportQiskit(getCircuitData());
+    showExportModal("Qiskit Python Code", code);
   }
 
-  // Generates and displays Python code using the Google Cirq library for the current circuit.
+  // Generates and displays Cirq Python code for the current circuit.
   function exportToCirq() {
-    const numQubits = CircuitModel.getNumQubits();
-    const numSteps = CircuitModel.getNumSteps();
-    const grid = CircuitModel.getGrid();
-
-    const lines = [];
-    lines.push("import cirq");
-    lines.push("import numpy as np");
-    lines.push("");
-    lines.push(`qubits = cirq.LineQubit.range(${numQubits})`);
-    lines.push("circuit = cirq.Circuit()");
-    lines.push("");
-
-    for (let s = 0; s < numSteps; s++) {
-      const processed = new Set();
-      const stepOps = [];
-
-      for (let q = 0; q < numQubits; q++) {
-        const cell = grid[s][q];
-        if (!cell || processed.has(q)) {
-          continue;
-        }
-
-        const gate = cell.gate;
-        const gateInfo = QuantumGates.get(gate);
-
-        if (cell.linkedQubits) {
-          cell.linkedQubits.forEach((lq) => processed.add(lq));
-          const qargs = cell.linkedQubits
-            .map((lq) => `qubits[${lq}]`)
-            .join(", ");
-
-          if (gateInfo && gateInfo.cirq) {
-            if (gateInfo.param) {
-              const param = _paramToStr(cell.param);
-              const paramCirq = param.replace(/π|pi/gi, "np.pi");
-              // Use cphase or similar functions that accept (theta)(qubits...)
-              const cirqGateName =
-                gateInfo.cirq === "CZPowGate" ? "cphase" : gateInfo.cirq;
-              stepOps.push(
-                `cirq.${cirqGateName}(${paramCirq || "0"})(${qargs})`,
-              );
-            } else {
-              stepOps.push(`cirq.${gateInfo.cirq}(${qargs})`);
-            }
-          }
-        } else {
-          processed.add(q);
-          const param = _paramToStr(cell.param);
-          const paramCirq = param.replace(/π|pi/gi, "np.pi");
-
-          if (gate === "M") {
-            stepOps.push(`cirq.measure(qubits[${q}], key='m${q}')`);
-          } else if (gateInfo && gateInfo.cirq) {
-            if (gateInfo.param) {
-              stepOps.push(
-                `cirq.${gateInfo.cirq}(${paramCirq || "0"})(qubits[${q}])`,
-              );
-            } else {
-              stepOps.push(`cirq.${gateInfo.cirq}(qubits[${q}])`);
-            }
-          }
-        }
-      }
-
-      if (stepOps.length > 0) {
-        if (stepOps.length === 1) {
-          lines.push(`circuit.append(${stepOps[0]})`);
-        } else {
-          lines.push("circuit.append([");
-          stepOps.forEach((op, i) => {
-            lines.push(`    ${op}${i < stepOps.length - 1 ? "," : ""}`);
-          });
-          lines.push("])");
-        }
-      }
-    }
-
-    lines.push("");
-    lines.push("print(circuit)");
-
-    showExportModal("Cirq Python Code", lines.join("\n"));
+    const code = exportCirq(getCircuitData());
+    showExportModal("Cirq Python Code", code);
   }
 
   return {

@@ -4,6 +4,7 @@
 import { EventBus } from "../../core/event-bus.js";
 import { EntanglementMath } from "../entanglement-tracker/entanglement-math.js";
 import { Icons } from "../../ui/ui-icons.js";
+import { CircuitModel } from "./circuit-model.js";
 
 export const ResultsPanel = (() => {
   "use strict";
@@ -296,8 +297,9 @@ export const ResultsPanel = (() => {
 
     const keys = counts ? Object.keys(counts) : [];
     
-    // Detect no-measurement circuit
-    if (keys.length === 0 || (keys.length === 1 && /^0*$/.test(keys[0]))) {
+    // Detect no-measurement circuit explicitly via CircuitModel
+    const hasMeasurements = CircuitModel.toOperations().some(op => op.gate === "M");
+    if (!hasMeasurements) {
       container.innerHTML = `
         <div class="empty-state error">
           ${Icons.errorCircle}

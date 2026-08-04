@@ -337,36 +337,25 @@ export const CircuitModel = (() => {
                   continue;
                 }
                 
-                if (slot.role === "single") {
-                  let subParam = null;
-                  if (slot.param != null) {
-                    const info = QuantumGates.get(slot.gate);
-                    if (info && info.paramType === "u1") {
-                      subParam = slot.param;
-                    } else {
-                      subParam = QuantumGates.parseAngle(slot.param);
-                    }
+                let subParam = null;
+                let rawSubParam = null;
+                if (slot.param != null) {
+                  rawSubParam = slot.param;
+                  const info = QuantumGates.get(slot.gate);
+                  if (info && info.paramType === "u1") {
+                    subParam = slot.param;
+                  } else {
+                    subParam = QuantumGates.parseAngle(slot.param);
                   }
-                  
+                }
+                
+                if (slot.linkedQubits) {
+                  slot.linkedQubits.forEach(q => subProcessed.add(q));
                   ops.push({
                     gate: slot.gate,
-                    qubits: [minQ + subQ],
+                    qubits: slot.linkedQubits.map(q => minQ + q),
                     param: subParam,
-                    step: s + (subS / 100)
-                  });
-                  subProcessed.add(subQ);
-                } else if (slot.role === "control" || slot.role === "target") {
-                  const partner = slot.partnerQubit;
-                  subProcessed.add(subQ);
-                  subProcessed.add(partner);
-                  
-                  const controlQ = slot.role === "control" ? subQ : partner;
-                  const targetQ = slot.role === "target" ? subQ : partner;
-                  
-                  ops.push({
-                    gate: slot.gate,
-                    qubits: [minQ + controlQ, minQ + targetQ],
-                    param: null,
+                    rawParam: rawSubParam,
                     step: s + (subS / 100)
                   });
                 }
@@ -380,7 +369,9 @@ export const CircuitModel = (() => {
 
         const info = QuantumGates.get(cell.gate);
         let finalParam = null;
+        let rawParam = null;
         if (gateParam != null) {
+          rawParam = gateParam;
           if (info && info.paramType === "u1") {
             finalParam = gateParam;
           } else {
@@ -392,6 +383,7 @@ export const CircuitModel = (() => {
           gate: cell.gate,
           qubits: cell.linkedQubits || [q],
           param: finalParam,
+          rawParam: rawParam,
           step: s,
         });
       }

@@ -315,9 +315,8 @@ class EntanglementTracker extends UIComponent {
           const deltaQ = newQubit - oldQubit;
           let qubits;
           
-          if (gateData.role === "control" || gateData.role === "target") {
-            const partnerQ = gateData.partnerQubit;
-            qubits = oldQubit < partnerQ ? [oldQubit, partnerQ] : [partnerQ, oldQubit];
+          if (gateData.linkedQubits) {
+            qubits = [...gateData.linkedQubits];
           } else {
             qubits = [oldQubit];
           }
@@ -341,8 +340,8 @@ class EntanglementTracker extends UIComponent {
             newSteps[newStep][newQubits[0]] = { gate: gateData.gate, role: "single" };
           } else {
             const [controlQ, targetQ] = newQubits;
-            newSteps[newStep][controlQ] = { gate: gateData.gate, role: "control", partnerQubit: targetQ, linkedQubits: [...newQubits] };
-            newSteps[newStep][targetQ] = { gate: gateData.gate, role: "target", partnerQubit: controlQ, linkedQubits: [...newQubits] };
+            newSteps[newStep][controlQ] = { gate: gateData.gate, role: "control", linkedQubits: [...newQubits] };
+            newSteps[newStep][targetQ] = { gate: gateData.gate, role: "target", linkedQubits: [...newQubits] };
           }
           
           this.setState({ steps: newSteps });
@@ -358,13 +357,11 @@ class EntanglementTracker extends UIComponent {
             newSteps[step][controlQ] = {
               gate,
               role: "control",
-              partnerQubit: targetQ,
               linkedQubits: [...qubits],
             };
             newSteps[step][targetQ] = {
               gate,
               role: "target",
-              partnerQubit: controlQ,
               linkedQubits: [...qubits],
             };
           }
@@ -424,8 +421,8 @@ class EntanglementTracker extends UIComponent {
     const newSteps = [...steps];
     newSteps[step] = [...newSteps[step]];
 
-    if (cell.partnerQubit !== undefined) {
-      newSteps[step][cell.partnerQubit] = null;
+    if (cell.linkedQubits) {
+      cell.linkedQubits.forEach(q => { newSteps[step][q] = null; });
     }
     newSteps[step][qubit] = null;
     this.setState({ steps: newSteps });
@@ -449,7 +446,7 @@ class EntanglementTracker extends UIComponent {
         if (cell.role === "single") {
           ops.push({ gate: cell.gate, qubits: [q] });
         } else if (cell.role === "control") {
-          ops.push({ gate: cell.gate, qubits: [q, cell.partnerQubit] });
+          ops.push({ gate: cell.gate, qubits: [...cell.linkedQubits] });
         }
       }
     }

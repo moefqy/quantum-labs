@@ -5,6 +5,7 @@
 import { runGatesTests } from "./gates.test.js";
 import { runEngineTests } from "./engine.test.js";
 import { runQECCTests } from "./qecc.test.js";
+import { runExportTests } from "./export.test.js";
 
 process.env.NODE_ENV = "test-runner";
 
@@ -17,16 +18,17 @@ const startTime = performance.now();
 const gatesResult = runGatesTests();
 const engineResult = runEngineTests();
 const qeccResult = runQECCTests();
+const exportResult = runExportTests();
 
 const totalPassed =
-  gatesResult.passed + engineResult.passed + qeccResult.passed;
+  gatesResult.passed + engineResult.passed + qeccResult.passed + exportResult.passed;
 const totalFailed =
-  gatesResult.failed + engineResult.failed + qeccResult.failed;
+  gatesResult.failed + engineResult.failed + qeccResult.failed + exportResult.failed;
 const elapsedMs = (performance.now() - startTime).toFixed(2);
 
 console.log("\n" + "█".repeat(60));
 console.log(`  ALL SUITES FINISHED in ${elapsedMs}ms`);
-console.log(`  Summary: ${totalPassed} passed, ${totalFailed} failed across 3 test suites`);
+console.log(`  Summary: ${totalPassed} passed, ${totalFailed} failed across 4 test suites`);
 console.log("█".repeat(60) + "\n");
 
 if (totalFailed > 0) {
