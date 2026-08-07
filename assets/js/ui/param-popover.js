@@ -2,6 +2,7 @@
 // Manages the UI popover for editing parametric quantum gates.
 
 import { GateMath } from "../core/math-renderer.js";
+import { MatrixPopover } from "./matrix-popover.js";
 
 export const ParamPopover = (() => {
   "use strict";
@@ -196,24 +197,24 @@ export const ParamPopover = (() => {
     };
   }
 
-  // Show u1 param popover
-  function showU1(gate, referenceEl, onOkCallback, currentParam, onCancelCallback) {
-    const popover = document.getElementById("u1-popover");
-    const nameIn = document.getElementById("u1-name");
-    const thetaIn = document.getElementById("u1-theta");
-    const phiIn = document.getElementById("u1-phi");
-    const lambdaIn = document.getElementById("u1-lambda");
-    const thetaSl = document.getElementById("u1-theta-slider");
-    const phiSl = document.getElementById("u1-phi-slider");
-    const lambdaSl = document.getElementById("u1-lambda-slider");
-    const okBtn = document.getElementById("u1-ok");
-    const cancelBtn = document.getElementById("u1-cancel");
+  // Show triple angle param popover
+  function showTripleAngle(gate, referenceEl, onOkCallback, currentParam, onCancelCallback) {
+    const popover = document.getElementById("triple-angle-popover");
+    const nameIn = document.getElementById("triple-angle-name");
+    const thetaIn = document.getElementById("triple-angle-theta");
+    const phiIn = document.getElementById("triple-angle-phi");
+    const lambdaIn = document.getElementById("triple-angle-lambda");
+    const thetaSl = document.getElementById("triple-angle-theta-slider");
+    const phiSl = document.getElementById("triple-angle-phi-slider");
+    const lambdaSl = document.getElementById("triple-angle-lambda-slider");
+    const okBtn = document.getElementById("triple-angle-ok");
+    const cancelBtn = document.getElementById("triple-angle-cancel");
 
-    document.getElementById("u1-label").innerHTML =
-      `${GateMath.toHTML("\\mathbf{U}_1")} Angle`;
+    document.getElementById("triple-angle-label").innerHTML =
+      `${GateMath.toHTML("\\mathbf{U}")} Angle`;
 
     let currentUnit = "rad";
-    const toggleBtns = document.querySelectorAll(".u1-toggle-btn");
+    const toggleBtns = document.querySelectorAll(".triple-angle-toggle-btn");
     const updateUnit = (unit) => {
       currentUnit = unit;
       toggleBtns.forEach((b) =>
@@ -376,7 +377,7 @@ export const ParamPopover = (() => {
         }
       }
       const paramStr = [
-        nameIn.value.trim() || "U₁",
+        nameIn.value.trim() || gate || "U",
         tVal,
         pVal,
         lVal
@@ -395,8 +396,10 @@ export const ParamPopover = (() => {
 
   // Show param popover
   function show(gate, referenceEl, onOkCallback, currentParam = null, onCancelCallback = null) {
-    if (gate === "U1") {
-      showU1(gate, referenceEl, onOkCallback, currentParam, onCancelCallback);
+    if (gate === "U") {
+      showTripleAngle(gate, referenceEl, onOkCallback, currentParam, onCancelCallback);
+    } else if (gate === "U_mat") {
+      MatrixPopover.show(gate, referenceEl, onOkCallback, currentParam, onCancelCallback);
     } else {
       showSingleAngle(gate, referenceEl, onOkCallback, currentParam, onCancelCallback);
     }

@@ -113,8 +113,13 @@ export function exportQiskit(circuitData) {
     const gate = op.gate;
     const gateInfo = QuantumGates.get(gate);
 
-    if (gate === "U1") {
-      lines.push(formatU1Qiskit(op.qubits[0], op.rawParam || op.param));
+    if (gate === "U_mat") {
+      lines.push(formatUMatQiskit(op.qubits[0], op.rawParam || op.param));
+      continue;
+    }
+
+    if (gate === "U") {
+      lines.push(formatUQiskit(op.qubits[0], op.rawParam || op.param));
       continue;
     }
 
@@ -211,8 +216,8 @@ export function exportQiskit(circuitData) {
   return lines.join("\n");
 }
 
-// Format a U1 gate call: qc.u(theta, phi, lam, qubit)
-function formatU1Qiskit(qubit, param) {
+// Format a U gate call: qc.u(theta, phi, lam, qubit)
+function formatUQiskit(qubit, param) {
   let theta = "0", phi = "0", lam = "0";
   try {
     let p = {};
@@ -230,4 +235,30 @@ function formatU1Qiskit(qubit, param) {
     // Default to identity
   }
   return `qc.u(${theta}, ${phi}, ${lam}, ${qubit})`;
+}
+
+function formatComplexPython(c) {
+  const r = Math.abs(c[0]) < 1e-7 ? 0 : c[0];
+  const i = Math.abs(c[1]) < 1e-7 ? 0 : c[1];
+  if (i === 0) return `${r}`;
+  if (r === 0) return `${i}j`;
+  return `(${r}${i >= 0 ? "+" : ""}${i}j)`;
+}
+
+// Format a U_mat gate call: qc.unitary(np.array(...), [qubit])
+function formatUMatQiskit(qubit, param) {
+  try {
+    const raw = paramToStr(param);
+    let p = {};
+    if (raw.startsWith("{")) {
+      p = JSON.parse(raw);
+    }
+    if (Array.isArray(p.matrix) && p.matrix.length === 4) {
+      const row0 = `[${formatComplexPython(p.matrix[0])}, ${formatComplexPython(p.matrix[1])}]`;
+      const row1 = `[${formatComplexPython(p.matrix[2])}, ${formatComplexPython(p.matrix[3])}]`;
+      const label = p.name ? `, label="${p.name}"` : "";
+      return `qc.unitary(np.array([${row0}, ${row1}]), [${qubit}]${label})`;
+    }
+  } catch {}
+  return `qc.unitary(np.eye(2), [${qubit}])`;
 }

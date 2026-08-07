@@ -115,7 +115,7 @@ export function bindToolbar(runSimulation) {
   });
 
   // Simulation mode segmented buttons
-  document.querySelectorAll(".segmented-btn").forEach((btn) => {
+  document.querySelectorAll(".segmented-btn[data-mode]").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const mode = e.currentTarget.dataset.mode;
       AppState.setMode(mode);

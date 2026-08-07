@@ -198,38 +198,71 @@
     </div>
   </div>
 
-  <!-- U1 Gate Popover (name + 3-angle: θ, φ, λ) -->
-  <div class="param-popover" id="u1-popover">
+  <!-- Triple Angle Popover (name + 3-angle: θ, φ, λ) -->
+  <div class="param-popover" id="triple-angle-popover">
     <div class="param-header">
-      <label id="u1-label">U₁ Gate Parameters</label>
+      <label id="triple-angle-label">U Gate Parameters</label>
       <div class="param-toggle">
-        <button class="u1-toggle-btn active" data-unit="rad">rad</button>
-        <button class="u1-toggle-btn" data-unit="deg">deg</button>
+        <button class="triple-angle-toggle-btn active" data-unit="rad">rad</button>
+        <button class="triple-angle-toggle-btn" data-unit="deg">deg</button>
       </div>
     </div>
-    <div class="u1-angle-section">Gate Name</div>
-    <input type="text" id="u1-name" placeholder="e.g. MyGate">
+    <div class="triple-angle-section">Gate Name</div>
+    <input type="text" id="triple-angle-name" placeholder="e.g. MyGate">
     
-    <div class="u1-angle-section">θ (theta)</div>
-    <input type="text" id="u1-theta" placeholder="e.g. π/2">
+    <div class="triple-angle-section">θ (theta)</div>
+    <input type="text" id="triple-angle-theta" placeholder="e.g. π/2">
     <div class="param-slider-wrap">
-      <input type="range" id="u1-theta-slider" min="-2" max="2" step="0.125" value="0">
+      <input type="range" id="triple-angle-theta-slider" min="-2" max="2" step="0.125" value="0">
     </div>
     
-    <div class="u1-angle-section">φ (phi)</div>
-    <input type="text" id="u1-phi" placeholder="e.g. π/4">
+    <div class="triple-angle-section">φ (phi)</div>
+    <input type="text" id="triple-angle-phi" placeholder="e.g. π/4">
     <div class="param-slider-wrap">
-      <input type="range" id="u1-phi-slider" min="-2" max="2" step="0.125" value="0">
+      <input type="range" id="triple-angle-phi-slider" min="-2" max="2" step="0.125" value="0">
     </div>
     
-    <div class="u1-angle-section">λ (lambda)</div>
-    <input type="text" id="u1-lambda" placeholder="e.g. 0">
+    <div class="triple-angle-section">λ (lambda)</div>
+    <input type="text" id="triple-angle-lambda" placeholder="e.g. 0">
     <div class="param-slider-wrap">
-      <input type="range" id="u1-lambda-slider" min="-2" max="2" step="0.125" value="0">
+      <input type="range" id="triple-angle-lambda-slider" min="-2" max="2" step="0.125" value="0">
     </div>
     <div class="param-actions">
-      <button class="btn btn-primary" id="u1-ok">OK</button>
-      <button class="btn" id="u1-cancel">Cancel</button>
+      <button class="btn btn-primary" id="triple-angle-ok">OK</button>
+      <button class="btn" id="triple-angle-cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Matrix Popover (U_mat custom 2x2 unitary matrix) -->
+  <div class="param-popover matrix-popover" id="matrix-popover">
+    <div class="param-header">
+      <label id="matrix-popover-label">U_mat Gate Parameters</label>
+    </div>
+    <div class="matrix-popover-section">Gate Name</div>
+    <input type="text" id="matrix-popover-name" placeholder="e.g. MyGate">
+
+    <div class="matrix-popover-section">Enter Matrix</div>
+    <div class="matrix-grid-inputs">
+      <input type="text" id="matrix-m00" placeholder="0">
+      <input type="text" id="matrix-m01" placeholder="0">
+      <input type="text" id="matrix-m10" placeholder="0">
+      <input type="text" id="matrix-m11" placeholder="0">
+    </div>
+
+    <div class="matrix-popover-section">Unitary Projection Method</div>
+    <div class="segmented-control" id="matrix-method-toggle-container">
+      <button type="button" class="segmented-btn active" id="matrix-method-polar" data-method="polar">Polar</button>
+      <button type="button" class="segmented-btn" id="matrix-method-qr" data-method="qr">QR</button>
+    </div>
+    <div class="matrix-unitary-status" id="matrix-unitary-status">✓ Matrix is unitary</div>
+
+    <div class="matrix-popover-section">Matrix Result</div>
+    <div class="matrix-result-box" id="matrix-result-preview"></div>
+    <div class="matrix-decomp-text" id="matrix-decomp-text">—</div>
+
+    <div class="param-actions">
+      <button class="btn btn-primary" id="matrix-popover-ok">OK</button>
+      <button class="btn" id="matrix-popover-cancel">Cancel</button>
     </div>
   </div>
 

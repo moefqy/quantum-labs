@@ -20,7 +20,7 @@ const CB_GATES = [
   "H", "X", "Y", "Z", "S", "T", "Sdg", "Tdg", "Rx", "Ry", "Rz",
   "CNOT", "CZ", "CY", "SWAP", "Toffoli", "MCX", "CSWAP", "CP", "c-X", "c-Z",
   "M",
-  "U1", "U2",
+  "U",  "U_mat", "f(x)",
 ];
 
 class CircuitBuilder extends UIComponent {
@@ -366,7 +366,7 @@ class CircuitBuilder extends UIComponent {
       onPlace: (step, gate, qubits, _param) => {
         const info = QuantumGates.get(gate);
         
-        if (gate === "U2") {
+        if (gate === "f(x)") {
           (async () => {
             const result = await MiniCircuitModal.prompt({
               initialName: "",
@@ -455,7 +455,7 @@ class CircuitBuilder extends UIComponent {
           `.gate-slot[data-step="${step}"][data-qubit="${qubit}"]`,
         );
         
-        if (cell.gate === "U2") {
+        if (cell.gate === "f(x)") {
           let initialSteps = null;
           let initialName = "";
           if (cell.param) {
@@ -519,7 +519,7 @@ class CircuitBuilder extends UIComponent {
     if (e.target.closest(".edit-param-btn")) {
       e.stopPropagation(); // prevent selection logic
       const slot = document.querySelector(`.gate-slot[data-step="${step}"][data-qubit="${qubit}"]`);
-      if (cell.gate === "U2") {
+      if (cell.gate === "f(x)") {
         let initialSteps = null;
         let initialName = "";
         if (cell.param) {

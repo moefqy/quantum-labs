@@ -123,7 +123,7 @@ export const CircuitSerializer = (() => {
     return { mode, shots };
   }
 
-  // Mini-Grid (U2 Custom Gates)
+  // Mini-Grid (f(x) Custom Gates)
   function encodeMiniGrid(stepsData) {
     const ops = [];
     for (let s = 0; s < stepsData.length; s++) {

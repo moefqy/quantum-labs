@@ -244,14 +244,24 @@ export function runExportTests() {
     expect(code.includes("qc.mcx([0, 1, 2], 3)")).toBe(true);
   });
 
-  // U1 general unitary
-  console.log("\n§ Qiskit U1 General Unitary");
+  // U general unitary
+  console.log("\n§ Qiskit U General Unitary");
 
-  test("U1 → qc.u(theta, phi, lam, q)", () => {
+  test("U → qc.u(theta, phi, lam, q)", () => {
     const param = JSON.stringify({ theta: "π/2", phi: "0", lambda: "π" });
-    const data = makeCircuit(1, 0, [{ 0: { gate: "U1", param } }]);
+    const data = makeCircuit(1, 0, [{ 0: { gate: "U", param } }]);
     const code = exportQiskit(data);
     expect(code.includes("qc.u(np.pi / 2, 0, np.pi, 0)")).toBe(true);
+  });
+
+  test("U_mat → qc.unitary(np.array(...), [0])", () => {
+    const param = JSON.stringify({
+      name: "CustomGate",
+      matrix: [[0, 0], [1, 0], [1, 0], [0, 0]],
+    });
+    const data = makeCircuit(1, 0, [{ 0: { gate: "U_mat", param } }]);
+    const code = exportQiskit(data);
+    expect(code.includes("qc.unitary(np.array([[0, 1], [1, 0]]), [0], label=\"CustomGate\")")).toBe(true);
   });
 
   // Measurement and classical bits
@@ -368,6 +378,16 @@ export function runExportTests() {
     }]);
     const code = exportCirq(data);
     expect(code.includes("cirq.X.controlled(num_controls=2)")).toBe(true);
+  });
+
+  test("Cirq U_mat → cirq.MatrixGate(np.array(...))(qubits[0])", () => {
+    const param = JSON.stringify({
+      name: "CustomGate",
+      matrix: [[0, 0], [1, 0], [1, 0], [0, 0]],
+    });
+    const data = makeCircuit(1, 0, [{ 0: { gate: "U_mat", param } }]);
+    const code = exportCirq(data);
+    expect(code.includes("cirq.MatrixGate(np.array([[0, 1], [1, 0]]))(qubits[0])")).toBe(true);
   });
 
   test("Cirq Statevector block with no measurements", () => {

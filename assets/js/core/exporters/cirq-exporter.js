@@ -20,9 +20,9 @@ export function exportCirq(circuitData) {
   lines.push("import numpy as np");
   lines.push("");
 
-  const hasU1 = circuitData.operations.some(op => op.gate === "U1");
-  if (hasU1) {
-    lines.push("# Helper for Qiskit's general U(theta, phi, lambda) gate");
+  const hasU = circuitData.operations.some(op => op.gate === "U");
+  if (hasU) {
+    lines.push("# Helper for general U(theta, phi, lambda) gate");
     lines.push("def u_gate(theta, phi, lam, q):");
     lines.push("    yield cirq.global_phase_operation(np.exp(1j * (phi + lam) / 2))");
     lines.push("    yield cirq.rz(lam)(q)");
@@ -71,10 +71,17 @@ export function exportCirq(circuitData) {
       continue;
     }
 
-    // U1 — general unitary via MatrixGate
-    if (gate === "U1") {
+    // U_mat — custom unitary matrix
+    if (gate === "U_mat") {
       const activeParam = op.rawParam !== null ? op.rawParam : op.param;
-      lines.push(`circuit.append(${formatU1Cirq(op.qubits[0], activeParam)})`);
+      lines.push(`circuit.append(${formatUMatCirq(op.qubits[0], activeParam)})`);
+      continue;
+    }
+
+    // U — general unitary via MatrixGate
+    if (gate === "U") {
+      const activeParam = op.rawParam !== null ? op.rawParam : op.param;
+      lines.push(`circuit.append(${formatUCirq(op.qubits[0], activeParam)})`);
       continue;
     }
 
@@ -140,8 +147,8 @@ export function exportCirq(circuitData) {
   return lines.join("\n");
 }
 
-// Format U1 gate as a Cirq MatrixGate using numpy
-function formatU1Cirq(qubit, param) {
+// Format U gate as a Cirq MatrixGate using numpy
+function formatUCirq(qubit, param) {
   let theta = "0", phi = "0", lam = "0";
   try {
     let p = {};
@@ -160,4 +167,29 @@ function formatU1Cirq(qubit, param) {
   }
   // Build unitary from U(theta, phi, lambda) via decomposed helper
   return `u_gate(${theta}, ${phi}, ${lam}, qubits[${qubit}])`;
+}
+
+function formatComplexPython(c) {
+  const r = Math.abs(c[0]) < 1e-7 ? 0 : c[0];
+  const i = Math.abs(c[1]) < 1e-7 ? 0 : c[1];
+  if (i === 0) return `${r}`;
+  if (r === 0) return `${i}j`;
+  return `(${r}${i >= 0 ? "+" : ""}${i}j)`;
+}
+
+// Format a U_mat gate call for Cirq: cirq.MatrixGate(np.array(...))(qubits[q])
+function formatUMatCirq(qubit, param) {
+  try {
+    const raw = paramToStr(param);
+    let p = {};
+    if (raw.startsWith("{")) {
+      p = JSON.parse(raw);
+    }
+    if (Array.isArray(p.matrix) && p.matrix.length === 4) {
+      const row0 = `[${formatComplexPython(p.matrix[0])}, ${formatComplexPython(p.matrix[1])}]`;
+      const row1 = `[${formatComplexPython(p.matrix[2])}, ${formatComplexPython(p.matrix[3])}]`;
+      return `cirq.MatrixGate(np.array([${row0}, ${row1}]))(qubits[${qubit}])`;
+    }
+  } catch {}
+  return `cirq.MatrixGate(np.eye(2))(qubits[${qubit}])`;
 }

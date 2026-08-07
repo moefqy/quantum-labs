@@ -100,12 +100,19 @@ export const MiniCircuitRenderer = (() => {
           
           if (cell.param != null && cell.param !== "") {
             let badgeText = "";
-            if (cell.gate === "U1") {
+            if (cell.gate === "U_mat") {
               try {
-                const p = JSON.parse(cell.param);
-                badgeText = p.name || "U₁";
+                const p = typeof cell.param === "string" ? JSON.parse(cell.param) : cell.param;
+                badgeText = p.name || "U_mat";
               } catch {
-                badgeText = "U₁";
+                badgeText = "U_mat";
+              }
+            } else if (cell.gate === "U") {
+              try {
+                const p = typeof cell.param === "string" ? JSON.parse(cell.param) : cell.param;
+                badgeText = p.name || "U";
+              } catch {
+                badgeText = "U";
               }
             } else {
               badgeText = GateMath.toHTML(GateMath.formatParam(cell.param));

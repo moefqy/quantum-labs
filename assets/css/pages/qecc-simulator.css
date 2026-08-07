@@ -11,7 +11,6 @@
   padding: var(--sp-1);
 }
 
-
 /* Matrix field */
 .qecc-matrix-field {
   margin-bottom: var(--sp-3);
@@ -688,7 +687,7 @@
 
 /* QECC Block Sub-Modal */
 
-/* Override shared modal-overlay — centre-align, identical to U2 mini-circuit modal */
+/* Override shared modal-overlay — centre-align, identical to custom mini-circuit modal */
 #qecc-block-modal {
   align-items: center;
   justify-content: center;

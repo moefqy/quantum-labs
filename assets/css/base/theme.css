@@ -101,7 +101,7 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Param popover (U1/Param Edit) & U2 Modal */
+/* Param popover (U / Param Edit) & Custom Gate Modal */
 [data-theme="light"] .param-popover,
 [data-theme="light"] #mini-circuit-modal .modal-container,
 [data-theme="light"] #qecc-block-modal .modal-container {
@@ -112,13 +112,24 @@
 
 /* Param Popover */
 [data-theme="light"] .param-popover input[type="text"],
-[data-theme="light"] .u2-name-input {
+[data-theme="light"] .custom-gate-name-input {
   color: var(--bone);
   background: var(--graphite);
   border-color: var(--wire);
 }
 [data-theme="light"] .param-popover input[type="range"] {
   background: var(--wire);
+}
+
+/* Matrix Popover*/
+[data-theme="light"] .matrix-result-box,
+[data-theme="light"] .matrix-method-btn {
+  background: var(--graphite);
+  border-color: var(--wire);
+}
+[data-theme="light"] .matrix-method-btn.active {
+  background: var(--ember-15);
+  border-color: var(--ember);
 }
 
 /* Buttons */

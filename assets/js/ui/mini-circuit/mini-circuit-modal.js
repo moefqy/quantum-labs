@@ -11,7 +11,7 @@ import { UI } from "../ui-helpers.js";
 import { App } from "../../app.js";
 
 // Ensure this matches the available gates in the builder
-export const U2_PALETTE_GATES = [
+export const CUSTOM_GATE_PALETTE_GATES = [
   "H", "X", "Y", "Z", "S", "Sdg", "T", "Tdg", "Rx", "Ry", "Rz",
   "CNOT", "CY", "CZ", "CH", "CRx", "CRy", "CRz", "SWAP",
   "Toffoli", "CSWAP", "MCX"
@@ -37,14 +37,14 @@ export const MiniCircuitModal = (() => {
       <div class="modal-container">
         <div class="modal-body et-container" id="mini-circuit-body">
           <div class="param-header">
-            <label id="u2-label"></label>
+            <label id="custom-gate-label"></label>
           </div>
           <div id="mini-circuit-palette"></div>
           <div class="et-circuit" id="mini-circuit-grid"></div>
           <div class="modal-actions">
             <div class="modal-actions-left">
-              <div class="u1-angle-section mini-circuit-label">Gate Name</div>
-              <input type="text" id="u2-name" class="u2-name-input" placeholder="e.g. MyGate">
+              <div class="custom-gate-section mini-circuit-label">Gate Name</div>
+              <input type="text" id="custom-gate-name" class="custom-gate-name-input" placeholder="e.g. MyGate">
             </div>
             <div class="modal-actions-right">
               <button class="btn" id="mini-circuit-cancel">Cancel</button>
@@ -62,7 +62,7 @@ export const MiniCircuitModal = (() => {
     const paletteEl = document.getElementById("mini-circuit-palette");
     let allGatesHtml = "";
     
-    U2_PALETTE_GATES.forEach(id => {
+    CUSTOM_GATE_PALETTE_GATES.forEach(id => {
       const g = QuantumGates.get(id);
       if (!g || !g.palette) {
         return;
@@ -73,12 +73,12 @@ export const MiniCircuitModal = (() => {
     });
 
     paletteEl.innerHTML = `
-      <div class="gate-category u2-gate-category">
-        <div class="ql-group-header u2-group-header">GATE PALETTE</div>
+      <div class="gate-category custom-gate-category">
+        <div class="ql-group-header custom-group-header">GATE PALETTE</div>
         <div class="mc-gate-grid">${allGatesHtml}</div>
       </div>
       <div class="gate-category">
-        <div class="ql-group-header u2-group-header compact">MINI CIRCUIT</div>
+        <div class="ql-group-header custom-group-header compact">MINI CIRCUIT</div>
       </div>
     `;
   }
@@ -113,14 +113,14 @@ export const MiniCircuitModal = (() => {
 
       const gridEl = document.getElementById("mini-circuit-grid");
       const paletteEl = document.getElementById("mini-circuit-palette");
-      const u2Label = document.getElementById("u2-label");
-      const nameInput = document.getElementById("u2-name");
+      const customLabel = document.getElementById("custom-gate-label");
+      const nameInput = document.getElementById("custom-gate-name");
       const btnOk = document.getElementById("mini-circuit-ok");
       const btnCancel = document.getElementById("mini-circuit-cancel");
 
       // Setup UI
       nameInput.value = initialName || "";
-      u2Label.innerHTML = GateMath.toHTML("\\mathbf{U}_2") + (isNew ? " Custom Gate Creation" : " Edit Custom Gate");
+      customLabel.innerHTML = GateMath.toHTML("\\mathbf{f}(x)") + (isNew ? " Custom Gate Creation" : " Edit Custom Gate");
       renderPalette();
       App.bindTooltips();
       modalEl.classList.add("open");
@@ -284,7 +284,7 @@ export const MiniCircuitModal = (() => {
       };
 
       document.getElementById("mini-circuit-ok").addEventListener("click", () => {
-        const gateName = nameInput.value.trim() || "U₂";
+        const gateName = nameInput.value.trim() || "f(x)";
         let lastFilled = -1;
         for (let i = stepsData.length - 1; i >= 0; i--) {
           if (stepsData[i].some(cell => cell !== null)) {

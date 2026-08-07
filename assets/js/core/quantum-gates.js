@@ -86,10 +86,10 @@ export const QuantumGates = (() => {
     };
   }
 
-  // U1 (Unitary Type 1): U(θ, φ, λ) — IBM-style general single-qubit gate
+  // U: U(θ, φ, λ) — IBM-style general single-qubit unitary gate
   // Matrix: [[cos(θ/2),  -e^(iλ)·sin(θ/2)],
   //          [e^(iφ)·sin(θ/2), e^(i(φ+λ))·cos(θ/2)]]
-  function _U1(param) {
+  function _U(param) {
     // param is a JSON string: '{"theta":...,"phi":...,"lambda":...}'
     let theta = 0,
       phi = 0,
@@ -123,6 +123,53 @@ export const QuantumGates = (() => {
         [Math.cos(phi) * sinH, Math.sin(phi) * sinH], // [1,0]
         [Math.cos(phi + lambda) * cosH, Math.sin(phi + lambda) * cosH], // [1,1]
       ],
+      qubits: 1,
+    };
+  }
+
+  // U_mat: Custom 2x2 Unitary Matrix Gate
+  function _U_mat(param) {
+    // Default matrix matches the initial UI matrix: Pauli X [ [0,0], [1,0], [1,0], [0,0] ]
+    let mat = [
+      [0, 0],
+      [1, 0],
+      [1, 0],
+      [0, 0],
+    ];
+    try {
+      let p = {};
+      if (typeof param === "string") {
+        if (param.startsWith("{")) {
+          p = JSON.parse(param);
+        } else if (param.includes("|")) {
+          const parts = param.split("|");
+          p = {
+            name: parts[0],
+            raw: [parts[1], parts[2], parts[3], parts[4]],
+            method: parts[5],
+          };
+        }
+      } else {
+        p = param || {};
+      }
+
+      if (Array.isArray(p.matrix) && p.matrix.length === 4) {
+        mat = p.matrix.map((c) => {
+          if (Array.isArray(c)) {
+            return [Number(c[0]) || 0, Number(c[1]) || 0];
+          }
+          if (typeof c === "number") {
+            return [c, 0];
+          }
+          return [0, 0];
+        });
+      }
+    } catch (e) {
+      // fallback to default mat
+    }
+
+    return {
+      matrix: mat,
       qubits: 1,
     };
   }
@@ -747,16 +794,16 @@ export const QuantumGates = (() => {
     },
 
     // Custom Gates
-    // u1 gate (single-qubit general unitary)
-    U1: {
-      name: "Unitary Type 1",
+    // U gate (single-qubit general unitary)
+    U: {
+      name: "General Unitary",
       type: "single",
       param: true,
-      paramType: "u1", // signals the UI to show the 3-angle popover
-      generator: _U1,
+      paramType: "u", // signals the UI to show the 3-angle popover
+      generator: _U,
       latex: {
         matrix: "U(\\theta,\\phi,\\lambda)",
-        symbol: "\\mathbf{U}_1(\\theta,\\phi,\\lambda)",
+        symbol: "\\mathbf{U}(\\theta,\\phi,\\lambda)",
         ket: "\\text{General single-qubit unitary}",
       },
       qiskit: (qubits, param) => {
@@ -770,29 +817,64 @@ export const QuantumGates = (() => {
       cirq: "MatrixGate",
       palette: {
         group: "Custom",
-        label: "\\mathbf{U}_1",
+        label: "\\mathbf{U}",
         desc: "General single-qubit unitary gate (θ, φ, λ)",
       },
     },
-    // u2 gate (multi-qubit general unitary)
-    U2: {
-      name: "Unitary Type 2",
+    // U_mat gate (single-qubit custom unitary matrix)
+    U_mat: {
+      name: "Unitary Matrix",
+      type: "single",
+      param: true,
+      paramType: "matrix", // signals the UI to show the matrix popover
+      generator: _U_mat,
+      latex: {
+        matrix: "\\mathbf{U}_\\text{mat}",
+        symbol: "\\mathbf{U}_\\text{mat}",
+        ket: "\\text{Custom unitary 2x2 matrix}",
+      },
+      qiskit: (qubits, param) => {
+        try {
+          const p =
+            typeof param === "string" ? JSON.parse(param) : param || {};
+          if (
+            p.theta !== undefined &&
+            p.phi !== undefined &&
+            p.lambda !== undefined
+          ) {
+            return `u(${p.theta}, ${p.phi}, ${p.lambda}, q[${qubits[0]}])`;
+          }
+          return `unitary([[...]], [q[${qubits[0]}]], label="${p.name || "U_mat"}")`;
+        } catch {
+          return `u(0, 0, 0, q[${qubits[0]}])`;
+        }
+      },
+      cirq: "MatrixGate",
+      palette: {
+        group: "Custom",
+        label: "\\mathbf{U}_\\text{mat}",
+        desc: "Custom unitary 2x2 matrix gate",
+      },
+    },
+    // f(x) gate (multi-qubit custom sub-circuit)
+    "f(x)": {
+      name: "Custom Sub-Circuit",
       type: "multi",
       targets: "span",
       param: true,
-      paramType: "u2", // Signals the UI to show the mini-circuit modal
-      generator: null, // Custom math logic will be handled later
+      paramType: "custom", // Signals the UI to show the mini-circuit modal
+      generator: null, // Custom math logic handled via unroller
       latex: {
         matrix: "U",
-        symbol: "\\mathbf{U}_2",
-        ket: "\\text{Compressed Sub-Circuit}",
+        symbol: "\\mathbf{f}(x)",
+        ket: "\\text{Custom Sub-Circuit}",
       },
-      qiskit: null, // To be handled later by unroller
-      cirq: null, // To be handled later by unroller
+      qiskit: null, // Handled by unroller
+      cirq: null, // Handled by unroller
       palette: {
         group: "Custom",
-        label: "\\mathbf{U}_2",
-        desc: "Compressed multi-qubit sub-circuit",
+        label: "\\mathbf{f}(x)",
+        desc: "Custom multi-qubit sub-circuit",
       },
     },
   };
@@ -811,7 +893,7 @@ export const QuantumGates = (() => {
       return null;
     }
     if (g.generator) {
-      if (g.paramType === "u1") {
+      if (g.paramType === "u" || g.paramType === "matrix") {
         return g.generator(param);
       }
       return g.generator(parseAngle(param));
@@ -843,6 +925,8 @@ export const QuantumGates = (() => {
     Rx: _Rx,
     Ry: _Ry,
     Rz: _Rz,
+    U: _U,
+    U_mat: _U_mat,
     // Expose math helpers for engine
     cmul,
     cadd,

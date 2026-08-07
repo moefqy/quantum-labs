@@ -328,6 +328,192 @@ export const QuantumMath = (() => {
     return outVec;
   }
 
+// Checks if a 2x2 complex matrix is unitary: U†U = I
+// matrix: [[r,i], [r,i], [r,i], [r,i]] (row-major: m00, m01, m10, m11)
+// Returns true if all three unitary conditions hold within epsilon tolerance.
+function isUnitary2x2(matrix, epsilon = 1e-6) {
+  const m00r = matrix[0][0], m00i = matrix[0][1];
+  const m01r = matrix[1][0], m01i = matrix[1][1];
+  const m10r = matrix[2][0], m10i = matrix[2][1];
+  const m11r = matrix[3][0], m11i = matrix[3][1];
+
+  const col0Norm = m00r*m00r + m00i*m00i + m10r*m10r + m10i*m10i;
+  if (Math.abs(col0Norm - 1.0) > epsilon) return false;
+
+  const col1Norm = m01r*m01r + m01i*m01i + m11r*m11r + m11i*m11i;
+  if (Math.abs(col1Norm - 1.0) > epsilon) return false;
+
+  const dotReal = m00r*m01r + m00i*m01i + m10r*m11r + m10i*m11i;
+  const dotImag = m00r*m01i - m00i*m01r + m10r*m11i - m10i*m11r;
+  if (Math.abs(dotReal) > epsilon || Math.abs(dotImag) > epsilon) return false;
+
+  return true;
+}
+
+// Completes/orthonormalizes a 2x2 complex matrix using Gram-Schmidt (QR).
+// matrix: [[r,i], [r,i], [r,i], [r,i]] row-major (m00, m01, m10, m11)
+// Returns a new matrix in the same format, guaranteed to be unitary.
+function enforceUnitary2x2_qr(matrix) {
+  let c0r = matrix[0][0], c0i = matrix[0][1];
+  let c1r = matrix[2][0], c1i = matrix[2][1];
+  let d0r = matrix[1][0], d0i = matrix[1][1];
+  let d1r = matrix[3][0], d1i = matrix[3][1];
+
+  const n0 = Math.sqrt(c0r*c0r + c0i*c0i + c1r*c1r + c1i*c1i);
+  if (n0 < 1e-12) {
+    return [[1,0],[0,0],[0,0],[1,0]];
+  }
+  const q0_0r = c0r/n0, q0_0i = c0i/n0;
+  const q0_1r = c1r/n0, q0_1i = c1i/n0;
+
+  const projR = q0_0r*d0r + q0_0i*d0i + q0_1r*d1r + q0_1i*d1i;
+  const projI = q0_0r*d0i - q0_0i*d0r + q0_1r*d1i - q0_1i*d1r;
+
+  let u1_0r = d0r - (projR*q0_0r - projI*q0_0i);
+  let u1_0i = d0i - (projR*q0_0i + projI*q0_0r);
+  let u1_1r = d1r - (projR*q0_1r - projI*q0_1i);
+  let u1_1i = d1i - (projR*q0_1i + projI*q0_1r);
+
+  const n1 = Math.sqrt(u1_0r*u1_0r + u1_0i*u1_0i + u1_1r*u1_1r + u1_1i*u1_1i);
+  if (n1 < 1e-12) {
+    u1_0r = q0_1r; u1_0i = -q0_1i;
+    u1_1r = -q0_0r; u1_1i = q0_0i;
+  } else {
+    u1_0r /= n1; u1_0i /= n1;
+    u1_1r /= n1; u1_1i /= n1;
+  }
+
+  const r11R = u1_0r*d0r + u1_0i*d0i + u1_1r*d1r + u1_1i*d1i;
+  const r11I = u1_0r*d0i - u1_0i*d0r + u1_1r*d1i - u1_1i*d1r;
+  const r11Abs = Math.sqrt(r11R*r11R + r11I*r11I);
+  if (r11Abs > 1e-12) {
+    const phR = r11R / r11Abs, phI = r11I / r11Abs;
+    const new00r = u1_0r*phR - u1_0i*phI;
+    const new00i = u1_0i*phR + u1_0r*phI;
+    const new10r = u1_1r*phR - u1_1i*phI;
+    const new10i = u1_1i*phR + u1_1r*phI;
+    u1_0r = new00r; u1_0i = new00i;
+    u1_1r = new10r; u1_1i = new10i;
+  }
+
+  return [
+    [q0_0r, q0_0i],
+    [u1_0r, u1_0i],
+    [q0_1r, q0_1i],
+    [u1_1r, u1_1i],
+  ];
+}
+
+// Finds the nearest unitary matrix using SVD / Polar decomposition.
+// matrix: [[r,i], [r,i], [r,i], [r,i]] row-major (m00, m01, m10, m11)
+// Returns a new matrix in the same format, guaranteed to be unitary.
+function enforceUnitary2x2_polar(matrix, epsilon = 1e-9) {
+  const m00r = matrix[0][0], m00i = matrix[0][1];
+  const m01r = matrix[1][0], m01i = matrix[1][1];
+  const m10r = matrix[2][0], m10i = matrix[2][1];
+  const m11r = matrix[3][0], m11i = matrix[3][1];
+
+  // H = A†A (Hermitian): h00, h11 real; h01 complex, h10 = conj(h01)
+  const h00 = m00r*m00r + m00i*m00i + m10r*m10r + m10i*m10i;
+  const h11 = m01r*m01r + m01i*m01i + m11r*m11r + m11i*m11i;
+  const h01r = m00r*m01r + m00i*m01i + m10r*m11r + m10i*m11i;
+  const h01i = m00r*m01i - m00i*m01r + m10r*m11i - m10i*m11r;
+
+  const trace = h00 + h11;
+  const diffSq = (h00 - h11) * (h00 - h11);
+  const offSq  = 4 * (h01r*h01r + h01i*h01i);
+  const disc   = Math.sqrt(Math.max(0, diffSq + offSq));
+  const lam1   = Math.max(0, (trace + disc) / 2);
+  const lam2   = Math.max(0, (trace - disc) / 2);
+
+  // A is (near-)singular: polar factor isn't uniquely defined. Fall back to
+  // Gram-Schmidt, which at least returns a valid, sensible unitary.
+  if (lam1 < epsilon) {
+    return enforceUnitary2x2_qr(matrix);
+  }
+
+  const s1 = Math.sqrt(lam1);
+  let Acoef, Bcoef;
+  if (Math.abs(lam1 - lam2) < epsilon) {
+    // Degenerate (equal singular values): H^{-1/2} = (1/s1)·I
+    Acoef = 0;
+    Bcoef = 1 / s1;
+  } else {
+    const s2 = Math.sqrt(Math.max(lam2, epsilon)); // guard divide-by-zero
+    const c1 = 1 / (s1 * (lam1 - lam2));
+    const c2 = 1 / (s2 * (lam2 - lam1));
+    Acoef = c1 + c2;
+    Bcoef = -(c1*lam2 + c2*lam1);
+  }
+
+  // H^{-1/2} = Acoef*H - Bcoef*I  (careful: Bcoef already carries the sign
+  // for "- Bcoef*I" above being ADDED, since we folded the minus sign in)
+  const p00 = Acoef*h00 + Bcoef;
+  const p11 = Acoef*h11 + Bcoef;
+  const p01r = Acoef*h01r, p01i = Acoef*h01i;
+  const p10r = p01r, p10i = -p01i; // p10 = conj(p01)
+
+  // U = A · H^{-1/2}
+  // row0 = (m00, m01), row1 = (m10, m11); columns of P: col0=(p00,p10), col1=(p01,p11)
+  const u00r = m00r*p00 + m01r*p10r - m01i*p10i;
+  const u00i = m00i*p00 + m01r*p10i + m01i*p10r;
+  const u01r = m00r*p01r - m00i*p01i + m01r*p11;
+  const u01i = m00r*p01i + m00i*p01r + m01i*p11;
+  const u10r = m10r*p00 + m11r*p10r - m11i*p10i;
+  const u10i = m10i*p00 + m11r*p10i + m11i*p10r;
+  const u11r = m10r*p01r - m10i*p01i + m11r*p11;
+  const u11i = m10r*p01i + m10i*p01r + m11i*p11;
+
+  return [
+    [u00r, u00i],
+    [u01r, u01i],
+    [u10r, u10i],
+    [u11r, u11i],
+  ];
+}
+
+// Decomposes a 2x2 unitary matrix into 3 Euler angles.
+// matrix: [[r,i], [r,i], [r,i], [r,i]] row-major (m00, m01, m10, m11)
+// Returns { theta, phi, lambda, alpha } all in radians.
+function decomposeUnitary2x2(matrix) {
+  const m00r = matrix[0][0], m00i = matrix[0][1];
+  const m01r = matrix[1][0], m01i = matrix[1][1];
+  const m10r = matrix[2][0], m10i = matrix[2][1];
+  const m11r = matrix[3][0], m11i = matrix[3][1];
+
+  let alpha, theta, phi, lambda;
+
+  const m00abs = Math.sqrt(m00r*m00r + m00i*m00i);
+  const m10abs = Math.sqrt(m10r*m10r + m10i*m10i);
+
+  theta = 2 * Math.atan2(m10abs, m00abs);
+
+  if (m00abs > 1e-12) {
+    alpha = Math.atan2(m00i, m00r);
+    const ca = Math.cos(alpha), sa = Math.sin(alpha);
+    if (m10abs > 1e-12) {
+      const u10r = m10r*ca + m10i*sa, u10i = m10i*ca - m10r*sa;
+      const u01r = m01r*ca + m01i*sa, u01i = m01i*ca - m01r*sa;
+      phi = Math.atan2(u10i, u10r);
+      lambda = Math.atan2(-u01i, -u01r);
+    } else {
+      // theta = 0
+      lambda = 0;
+      const u11r = m11r*ca + m11i*sa, u11i = m11i*ca - m11r*sa;
+      phi = Math.atan2(u11i, u11r);
+    }
+  } else {
+    // theta = pi
+    phi = 0;
+    alpha = Math.atan2(m10i, m10r);
+    const ca = Math.cos(alpha), sa = Math.sin(alpha);
+    const u01r = m01r*ca + m01i*sa, u01i = m01i*ca - m01r*sa;
+    lambda = Math.atan2(-u01i, -u01r);
+  }
+
+  return { theta, phi, lambda, alpha };
+}
+
   return {
     apply2x2Matrix,
     applyCNOT,
@@ -341,5 +527,9 @@ export const QuantumMath = (() => {
     measure,
     tensorProduct2x2,
     multiplyMatrixVector,
+    isUnitary2x2,
+    enforceUnitary2x2_qr,
+    enforceUnitary2x2_polar,
+    decomposeUnitary2x2,
   };
 })();

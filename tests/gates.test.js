@@ -162,24 +162,56 @@ export function runGatesTests() {
     assertBasisState(applyGate(ket0(1), "I"), 0);
   });
 
-  // General unitary U1 gate
-  test("U1 identity at (0,0,0)", () => {
+  // General unitary U gate
+  test("U identity at (0,0,0)", () => {
     const s = applyGate(
       ket0(1),
-      "U1",
+      "U",
       JSON.stringify({ theta: 0, phi: 0, lambda: 0 })
     );
     assertBasisState(s, 0);
   });
 
-  test("U1 bit-flip at (π,0,0)", () => {
+  test("U bit-flip at (π,0,0)", () => {
     const s = applyGate(
       ket0(1),
-      "U1",
+      "U",
       JSON.stringify({ theta: "pi", phi: 0, lambda: 0 })
     );
     assertAmp(s, 0, 0, 0);
     assertAmp(s, 1, 1, 0);
+  });
+
+  // U_mat custom matrix gate
+  test("U_mat identity on |0⟩", () => {
+    const matParam = JSON.stringify({
+      name: "CustomI",
+      matrix: [[1, 0], [0, 0], [0, 0], [1, 0]],
+    });
+    const s = applyGate(ket0(1), "U_mat", matParam);
+    assertAmp(s, 0, 1, 0);
+    assertAmp(s, 1, 0, 0);
+  });
+
+  test("U_mat bit-flip on |0⟩ → |1⟩", () => {
+    const matParam = JSON.stringify({
+      name: "CustomX",
+      matrix: [[0, 0], [1, 0], [1, 0], [0, 0]],
+    });
+    const s = applyGate(ket0(1), "U_mat", matParam);
+    assertAmp(s, 0, 0, 0);
+    assertAmp(s, 1, 1, 0);
+  });
+
+  test("U_mat Hadamard on |0⟩ → (|0⟩+|1⟩)/√2", () => {
+    const invSqrt2 = 1 / Math.sqrt(2);
+    const matParam = JSON.stringify({
+      name: "CustomH",
+      matrix: [[invSqrt2, 0], [invSqrt2, 0], [invSqrt2, 0], [-invSqrt2, 0]],
+    });
+    const s = applyGate(ket0(1), "U_mat", matParam);
+    assertAmp(s, 0, invSqrt2, 0);
+    assertAmp(s, 1, invSqrt2, 0);
   });
 
   console.log("\n§ Multi-Qubit Gate Truth Tables");

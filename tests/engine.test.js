@@ -169,6 +169,32 @@ export function runEngineTests() {
     }
   });
 
+  test("U_mat circuit: Pauli X matrix flips |0⟩ to |1⟩", () => {
+    const xParam = JSON.stringify({
+      name: "U_mat",
+      raw: ["0", "1", "1", "0"],
+      matrix: [[0, 0], [1, 0], [1, 0], [0, 0]],
+    });
+    const r = runCircuit(1, [{ gate: "U_mat", qubits: [0], param: xParam }]);
+    assertAmp(r.state, 0, 0, 0);
+    assertAmp(r.state, 1, 1, 0);
+  });
+
+  test("U_mat circuit: Bell state via custom H and CNOT", () => {
+    const hParam = JSON.stringify({
+      name: "CustomH",
+      matrix: [[SQRT2_INV, 0], [SQRT2_INV, 0], [SQRT2_INV, 0], [-SQRT2_INV, 0]],
+    });
+    const r = runCircuit(2, [
+      { gate: "U_mat", qubits: [0], param: hParam },
+      { gate: "CNOT", qubits: [0, 1] },
+    ]);
+    assertAmp(r.state, 0, SQRT2_INV, 0);
+    assertAmp(r.state, 1, 0, 0);
+    assertAmp(r.state, 2, 0, 0);
+    assertAmp(r.state, 3, SQRT2_INV, 0);
+  });
+
   return suite.report();
 }
 

@@ -863,7 +863,7 @@
 }
 
 /* Param Toggle Btn */
-.param-toggle-btn, .u1-toggle-btn {
+.param-toggle-btn, .triple-angle-toggle-btn {
   padding: 2px 6px;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -873,7 +873,7 @@
   border-radius: 2px;
   cursor: pointer;
 }
-.param-toggle-btn.active, .u1-toggle-btn.active {
+.param-toggle-btn.active, .triple-angle-toggle-btn.active {
   color: var(--ember);
   background: var(--graphite);
 }
@@ -937,24 +937,104 @@
   flex: 1;
 }
 
-/* U1 Gate Popover (3-angle) */
-.u1-popover {
+/* Triple Angle Gate Popover */
+.triple-angle-popover {
   width: 230px;
 }
 
-/* U1 Popover */
-.u1-popover input[type="text"] {
+/* Triple Angle Popover */
+.triple-angle-popover input[type="text"] {
   width: 100%;
   box-sizing: border-box;
 }
 
-/* U1 Gate Popover — angle section labels (θ, φ, λ) */
-.u1-angle-section {
+/* Angle section labels (θ, φ, λ) and Custom Gate sections */
+.triple-angle-section, .custom-gate-section, .matrix-popover-section {
   font-size: var(--text-xs);
   font-family: var(--font-mono);
   color: var(--ash);
   margin-top: var(--sp-2);
-  margin-bottom: 4px;
+  margin-bottom: var(--sp-1);
+}
+
+/* Unitary Matrix Gate Popover (U_mat) */
+.matrix-popover {
+  width: 280px;
+}
+
+.matrix-popover input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.matrix-grid-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-1);
+  margin-top: var(--sp-1);
+}
+
+.matrix-grid-inputs input[type="text"] {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: var(--sp-1) var(--sp-2);
+}
+
+#matrix-method-toggle-container {
+  margin-top: var(--sp-1);
+}
+
+.matrix-unitary-status {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  margin-top: var(--sp-2);
+  color: var(--success);
+}
+
+.matrix-unitary-status.is-valid {
+  color: var(--success);
+}
+
+.matrix-unitary-status.is-adjusted {
+  color: var(--warning);
+}
+
+.matrix-unitary-status.is-invalid {
+  color: var(--danger);
+}
+
+.matrix-result-box {
+  background: var(--carbon);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-2) var(--sp-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--toolbar-height);
+  margin-top: var(--sp-1);
+  overflow-x: auto;
+}
+
+.matrix-result-box .katex {
+  font-size: 0.95em;
+}
+
+.matrix-result-preview-empty {
+  color: var(--smoke);
+  font-size: var(--text-xs);
+}
+
+.matrix-decomp-text {
+  font-size: var(--text-xs);
+  color: var(--ash);
+  margin-top: var(--sp-1);
+  font-family: var(--font-mono);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Empty State */
@@ -969,8 +1049,8 @@
   text-align: center;
 }
 
-/* U2 Name Input (Matches U1 Popover) */
-.u2-name-input {
+/* Custom Gate Name Input */
+.custom-gate-name-input {
   width: 100%;
   box-sizing: border-box;
   padding: var(--sp-1) var(--sp-2);
@@ -983,8 +1063,8 @@
   outline: none;
 }
 
-/* U2 Name Input */
-.u2-name-input:focus {
+/* Custom Gate Name Input Focus */
+.custom-gate-name-input:focus {
   border-color: var(--ember);
 }
 
@@ -1233,7 +1313,7 @@
   line-height: 1.4;
 }
 
-/* MINI-CIRCUIT MODAL (U2 Gate) */
+/* MINI-CIRCUIT MODAL (f(x) Custom Gate) */
 
 #mini-circuit-modal {
   align-items: center;

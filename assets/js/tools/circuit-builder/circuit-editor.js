@@ -469,7 +469,7 @@ export const CircuitEditor = (() => {
           }
         }
 
-        // Handle "span" target gates (e.g. U2) — second click finishes and selects everything in between
+        // Handle "span" target gates (e.g. f(x)) — second click finishes and selects everything in between
         if (pending.needed === "span") {
           const startQ = pending.qubits[0];
           const minQ = Math.min(startQ, qubit);

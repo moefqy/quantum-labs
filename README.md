@@ -8,8 +8,9 @@ A free, open-source quantum circuit simulator and toolkit built with pure HTML, 
 
 - **Drag-and-Drop Builder**: Intuitively design quantum circuits by dragging gates onto the grid.
 - **Real-Time Simulation**: Instantly visualize the statevector and measurement probabilities of your circuit.
-- **Custom Gates**: Encapsulate complex sub-circuits into custom U2 gates or define arbitrary phase rotations with U1 gates.
-- **Bloch Sphere & State Analyzer**: Dive deep into the mathematical state of each qubit using interactive visual tools.
+- **Custom Gates**: Encapsulate complex sub-circuits into custom f(x) gates, define arbitrary unitary rotations with U gates, or input custom 2x2 matrices backed by Unitary Projection Methods (U_mat).
+- **Bloch Sphere, State Analyzer & Entanglement Tracker**: Dive deep into the mathematical state of each qubit and visualize quantum entanglement dynamics using interactive tools.
+- **QECC Simulator**: Explore Quantum Error Correction Codes and noise models with a dedicated simulation environment.
 - **Stateless URL Sharing**: Share complex circuits instantly via deep links. The entire state of the simulator is serialized into a highly readable and compact URL query string.
 - **Local Storage Saves**: Save your work securely in your browser's Local Storage for quick access later.
 - **Premium Design**: Beautiful, modern aesthetic with dynamic micro-animations, glassmorphism, and system-aware light/dark themes.
@@ -45,10 +46,10 @@ quantum-lab/
 │   ├── img/          # Favicons and graphical assets
 │   └── js/
 │       ├── app.js    # Application entry point, router initialization, global UI
-│       ├── core/     # Quantum math engine, state management, web worker
-│       ├── circuit/  # Core logic for the drag-and-drop circuit builder & serialization
-│       ├── tools/    # Dedicated logic for side tools (Bloch Sphere, State Analyzer, Entanglement Tracker)
-│       └── pages/    # Specific view controllers (Home, Simulator, Docs, Examples)
+│       ├── core/     # Quantum math engine, state management, web worker, and exporters
+│       ├── tools/    # Domain logic (Circuit Builder, Bloch Sphere, State Analyzer, Entanglement Tracker, QECC Simulator)
+│       ├── ui/       # Shared UI components, toolbars, and dynamic modals
+│       └── pages/    # Specific view controllers (Home, Simulator, Docs, Examples, About)
 ├── docs/             # Advanced architecture and technical documentation
 ├── simulator/        # Static sub-route for Sitelinks SEO
 ├── examples/         # Static sub-route for Sitelinks SEO
@@ -74,7 +75,9 @@ Each gate operation is formatted as `[step]:[qubits]:[type]:[param]` and delimit
 - Parameterized Gate (e.g., Rx rotation by π/2 on Qubit 0 at Step 1): `1:0:Rx:π/2`
 - Multi-Qubit Gate (e.g., CNOT controlled by Qubit 0 targeting Qubit 1 at Step 2): `2:0,1:CX`
 - N-Qubit Gate (e.g., Toffoli/CCX controlled by Q0, Q1 targeting Q2 at Step 3): `3:0,1,2:Toffoli`
-- Custom U2 Gate: `0:0,1:U2:{"name":"MyGate","steps":"0:0:H;1:0,1:CX;"}`
+- General Unitary U Gate: `1:0:U:{"name":"U","theta":"π/2","phi":"0","lambda":"π"}`
+- Custom Matrix U_mat Gate: `1:0:U_mat:{"name":"U_mat","matrix":[[0,1],[1,0],[1,0],[0,0]],"method":"polar"}`
+- Custom f(x) Sub-Circuit Gate: `0:0,1:f(x):{"name":"MyGate","steps":"0:0:H;1:0,1:CX;"}`
 
 ## Preview
 
@@ -91,6 +94,9 @@ Take a look at Quantum Labs in action! From building complex circuits to visuali
 
 ### Entanglement Tracker
 <img src="https://i.imgur.com/lpIW2J6.png" width="100%" alt="Entanglement Tracker" />
+
+### QECC Simulator
+<img src="https://i.imgur.com/w86zmrU.png" width="100%" alt="QECC Simulator" />
 
 ## Contact
 

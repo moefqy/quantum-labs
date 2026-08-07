@@ -161,7 +161,7 @@
   margin: 0;
   white-space: nowrap;
 }
-#mini-circuit-modal .u2-name-input {
+#mini-circuit-modal .custom-gate-name-input {
   width: 200px;
 }
 #mini-circuit-modal .modal-actions-right {
@@ -182,7 +182,7 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  #mini-circuit-modal .u2-name-input {
+  #mini-circuit-modal .custom-gate-name-input {
     width: 100%;
   }
   #mini-circuit-modal .modal-actions-right {

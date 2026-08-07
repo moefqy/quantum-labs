@@ -317,10 +317,10 @@ export const CircuitModel = (() => {
           }
         }
 
-        if (cell.gate === "U2" && gateParam) {
+        if (cell.gate === "f(x)" && gateParam) {
           try {
-            const u2Data = JSON.parse(gateParam);
-            let subSteps = u2Data.steps;
+            const customData = JSON.parse(gateParam);
+            let subSteps = customData.steps;
             const minQ = Math.min(...(cell.linkedQubits || [q]));
             const maxQ = Math.max(...(cell.linkedQubits || [q]));
             const numQubits = maxQ - minQ + 1;
@@ -342,7 +342,12 @@ export const CircuitModel = (() => {
                 if (slot.param != null) {
                   rawSubParam = slot.param;
                   const info = QuantumGates.get(slot.gate);
-                  if (info && info.paramType === "u1") {
+                  if (
+                    info &&
+                    (info.paramType === "u" ||
+                      info.paramType === "matrix" ||
+                      info.paramType === "custom")
+                  ) {
                     subParam = slot.param;
                   } else {
                     subParam = QuantumGates.parseAngle(slot.param);
@@ -362,7 +367,7 @@ export const CircuitModel = (() => {
               }
             }
           } catch (e) {
-            console.error("Failed to unroll U2", e);
+            console.error("Failed to unroll custom gate", e);
           }
           continue;
         }
@@ -372,7 +377,12 @@ export const CircuitModel = (() => {
         let rawParam = null;
         if (gateParam != null) {
           rawParam = gateParam;
-          if (info && info.paramType === "u1") {
+          if (
+            info &&
+            (info.paramType === "u" ||
+              info.paramType === "matrix" ||
+              info.paramType === "custom")
+          ) {
             finalParam = gateParam;
           } else {
             finalParam = QuantumGates.parseAngle(gateParam);

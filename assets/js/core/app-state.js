@@ -50,7 +50,7 @@ export const AppState = (() => {
 
     // 1. Segmented buttons
     document
-      .querySelectorAll(".segmented-btn")
+      .querySelectorAll(".segmented-btn[data-mode]")
       .forEach((b) => b.classList.remove("active"));
     const activeBtn = document.querySelector(
       `.segmented-btn[data-mode="${mode}"]`,

@@ -167,17 +167,30 @@ export const CircuitRenderer = (() => {
     // Check if it is a multi-qubit gate control node
     const isControlNode = info?.type === "multi" && cell.role === "control";
 
-    // Param badge — U1 shows custom name; others show formatted angle
+    // Param badge — U and f(x) show custom name; others show formatted angle
     if (cell.param != null && cell.param !== "" && !isControlNode) {
       const badge = document.createElement("span");
       badge.className = "param-badge";
-      if (cell.gate === "U1") {
+      if (cell.gate === "U") {
         try {
-          const p = JSON.parse(cell.param);
-          // Show the user's custom name in the badge
-          badge.textContent = p.name || "U₁";
+          const p = typeof cell.param === "string" ? JSON.parse(cell.param) : cell.param;
+          badge.textContent = p.name || "U";
         } catch {
-          badge.textContent = "U₁";
+          badge.textContent = "U";
+        }
+      } else if (cell.gate === "U_mat") {
+        try {
+          const p = typeof cell.param === "string" ? JSON.parse(cell.param) : cell.param;
+          badge.textContent = p.name || "U_mat";
+        } catch {
+          badge.textContent = "U_mat";
+        }
+      } else if (cell.gate === "f(x)") {
+        try {
+          const p = typeof cell.param === "string" ? JSON.parse(cell.param) : cell.param;
+          badge.textContent = p.name || "f(x)";
+        } catch {
+          badge.textContent = "f(x)";
         }
       } else {
         badge.innerHTML = GateMath.toHTML(GateMath.formatParam(cell.param));

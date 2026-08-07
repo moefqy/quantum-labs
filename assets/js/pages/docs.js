@@ -263,14 +263,20 @@ export const DocumentationPage = (() => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathbf{U}_1(\\theta, \\phi, \\lambda)")}</span></td>
-                    <td>Unitary Type 1</td>
+                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathbf{U}(\\theta, \\phi, \\lambda)")}</span></td>
+                    <td>General Unitary</td>
                     <td>1</td>
-                    <td>General single-qubit unitary rotation specified by 3 Euler angles.</td>
+                    <td>General single-qubit unitary rotation specified by 3 Euler angles (θ, φ, λ).</td>
                   </tr>
                   <tr>
-                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathbf{U}_2")}</span></td>
-                    <td>Unitary Type 2</td>
+                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathbf{U}_{mat}")}</span></td>
+                    <td>Custom Unitary Matrix</td>
+                    <td>1</td>
+                    <td>A custom 2x2 matrix. Non-unitary inputs are automatically projected to a valid unitary using your chosen Unitary Projection Method (Polar or QR).</td>
+                  </tr>
+                  <tr>
+                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathbf{f}(x)")}</span></td>
+                    <td>Custom Sub-Circuit</td>
                     <td>Variable</td>
                     <td>A user-defined sub-circuit grouped into a single reusable multi-qubit gate.</td>
                   </tr>
