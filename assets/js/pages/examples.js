@@ -159,11 +159,25 @@ export const ExamplesPage = (() => {
         `We use a combination of ${GateMath.toHTML("\\mathbf{R}_y")} rotations and ${GateMath.toHTML("\\mathbf{CNOT}")} gates to meticulously distribute the amplitude evenly across the three qubits!`,
       qubits: 3,
       preview: [
-        ["Rx", "", "●", "", "●", "", "●", "X"],
-        ["", "Rx", "CX", "Rx", "CX", "●", "CX", ""],
+        ["Ry", "", "●", "", "●", "", "●", "X"],
+        ["", "Ry", "CX", "Ry", "CX", "●", "CX", ""],
         ["", "", "", "", "", "CX", "", ""],
       ],
       tags: ["Entanglement", "3 Qubits"],
+    },
+    {
+      name: "Quantum Neural Network",
+      url: "?qubits=2&cbits=1&steps=8&mode=shots&shots=1&gates=0%3A0%3AX%3A%3B0%3A1%3AX%3A%3B1%3A0%2C1%3Af(x)%3A%257B%2522name%2522%253A%25221st%2520layer%2522%252C%2522steps%2522%253A%25220%253A0%253ARy%253A1.5708%253B0%253A1%253ARy%253A-1.5708%2522%257D%3B2%3A0%2C1%3ACNOT%3A%3B3%3A0%2C1%3Af(x)%3A%257B%2522name%2522%253A%25222nd%2520layer%2522%252C%2522steps%2522%253A%25220%253A0%253ARy%253A1.5708%253B0%253A1%253ARy%253A1.4627%2522%257D%3B4%3A0%2C2%3AM%3A",
+      desc: () =>
+        `A Parameterized Quantum Circuit (PQC) solving the XOR benchmark. Unlike classical networks with weights on edges, it encodes learnable weights as rotation angles in parameterized gates like ${GateMath.toHTML("\\mathbf{R}_y(\\theta)")}.`,
+      tip: () =>
+        `To change the input, use an ${GateMath.toHTML("\\mathbf{X}")} gate to flip the qubit ${GateMath.toHTML("|0\\rangle")}, and click "Edit" on the subcircuits to see inside the layers!`,
+      qubits: 2,
+      preview: [
+        ["Ry", "●", "Ry", "M"],
+        ["Ry", "CX", "Ry", ""],
+      ],
+      tags: ["Machine Learning", "2 Qubits"],
     },
   ];
 
