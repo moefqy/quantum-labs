@@ -5,6 +5,7 @@
 import { QECCMath } from "./qecc-math.js";
 import { QECCBlockModal } from "./qecc-block-modal.js";
 import { QECCSerializer } from "./qecc-serializer.js";
+import { QECCExportManager } from "./qecc-export.js";
 import { UI } from "../../ui/ui-helpers.js";
 import { Icons } from "../../ui/ui-icons.js";
 import { UIComponent } from "../../ui/ui-component.js";
@@ -54,7 +55,7 @@ class QECCSimulator extends UIComponent {
 
           <div class="toolbar-right">
             <div class="preset-dropdown">
-              <button class="btn" id="qecc-preset-btn" title="Load preset code">
+              <button class="btn btn-icon" id="qecc-preset-btn" title="Load Preset Code">
                 ${Icons.preset}
               </button>
               <div class="preset-menu" id="qecc-preset-menu">
@@ -70,6 +71,19 @@ class QECCSimulator extends UIComponent {
             <button class="btn btn-icon" id="qecc-copy-link" title="Copy Shareable Link">
               ${Icons.link}
             </button>
+            <div class="preset-dropdown">
+              <button class="btn btn-icon" id="qecc-export-btn" title="Export">
+                ${Icons.download}
+              </button>
+              <div class="preset-menu" id="qecc-export-menu">
+                <button class="preset-menu-item" id="qecc-export-qiskit">
+                  <div class="preset-name">Export to Qiskit</div>
+                </button>
+                <button class="preset-menu-item" id="qecc-export-cirq">
+                  <div class="preset-name">Export to Cirq</div>
+                </button>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -327,6 +341,10 @@ class QECCSimulator extends UIComponent {
       hxWrapper:     this.container.querySelector("#qecc-hx-wrapper"),
       hzWrapper:     this.container.querySelector("#qecc-hz-wrapper"),
       presetMenu:    this.container.querySelector("#qecc-preset-menu"),
+      exportBtn:     this.container.querySelector("#qecc-export-btn"),
+      exportMenu:    this.container.querySelector("#qecc-export-menu"),
+      exportQiskit:  this.container.querySelector("#qecc-export-qiskit"),
+      exportCirq:    this.container.querySelector("#qecc-export-cirq"),
     };
   }
 
@@ -382,10 +400,8 @@ class QECCSimulator extends UIComponent {
     if (presetBtn && this.elements.presetMenu) {
       presetBtn.addEventListener("click", (e) => {
         e.stopPropagation();
+        this.elements.exportMenu?.classList.remove("show");
         this.elements.presetMenu.classList.toggle("show");
-      });
-      document.addEventListener("click", () => {
-        this.elements.presetMenu?.classList.remove("show");
       });
     }
 
@@ -393,6 +409,49 @@ class QECCSimulator extends UIComponent {
     this.container.querySelectorAll("[data-preset]").forEach((btn) => {
       btn.addEventListener("click", this.handlePresetLoad);
     });
+
+    // Export dropdown
+    if (this.elements.exportBtn && this.elements.exportMenu) {
+      this.elements.exportBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (!this.state.analysisResult) {
+          UI.showToast("Analyze a code first to export", "error");
+          return;
+        }
+        this.elements.presetMenu?.classList.remove("show");
+        this.elements.exportMenu.classList.toggle("show");
+      });
+    }
+
+    // Close all menus when clicking outside
+    document.addEventListener("click", () => {
+      this.elements.presetMenu?.classList.remove("show");
+      this.elements.exportMenu?.classList.remove("show");
+    });
+
+    if (this.elements.exportQiskit) {
+      this.elements.exportQiskit.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.elements.exportMenu?.classList.remove("show");
+        if (this.state.analysisResult) {
+          QECCExportManager.exportToQiskit(this.state.analysisResult);
+        } else {
+          UI.showToast("Analyze a code first to export", "error");
+        }
+      });
+    }
+
+    if (this.elements.exportCirq) {
+      this.elements.exportCirq.addEventListener("click", (e) => {
+        e.stopPropagation();
+        this.elements.exportMenu?.classList.remove("show");
+        if (this.state.analysisResult) {
+          QECCExportManager.exportToCirq(this.state.analysisResult);
+        } else {
+          UI.showToast("Analyze a code first to export", "error");
+        }
+      });
+    }
 
     // Copy Link
     const copyLinkBtn = this.container.querySelector("#qecc-copy-link");
@@ -654,8 +713,8 @@ class QECCSimulator extends UIComponent {
 
     // Logical operators and circuit descriptors
     const sf = QECCMath.toStandardForm(Hx, Hz);
-    const { X_bar: xBar, Z_bar: zBar } = QECCMath.deriveLogicals(sf.blocks, sf.r, sf.s, sf.K, sf.N, sf.colPerm);
-    const encoderCircuit = QECCMath.describeEncoderCircuit(n, k, r, xBar, HxRref, HzRref);
+    const { X_bar: xBar, Z_bar: zBar, X_bar_st: xBarSt, Z_bar_st: zBarSt } = QECCMath.deriveLogicals(sf.blocks, sf.r, sf.s, sf.K, sf.N, sf.colPerm);
+    const encoderCircuit = QECCMath.describeEncoderCircuit(n, k, sf.r, sf.s, sf.blocks.E2, sf.hx_st, sf.hz_st);
     const stabCircuit    = QECCMath.describeStabilizerCircuit(n, k, Hx, Hz);
 
     // Syndrome LUT and distance
@@ -663,8 +722,13 @@ class QECCSimulator extends UIComponent {
     const canCorrect = QECCMath.checkSingleErrorCorrection(lut, hasDegeneracy);
     const d          = QECCMath.computeDistance(rref, xBar, zBar);
 
+    // Permuted PCM if column permutation was required
+    const isPermuted = sf.colPerm.some((c, i) => c !== i);
+    const permHx = Hx.map((row) => sf.colPerm.map((c) => row[c]));
+    const permHz = Hz.map((row) => sf.colPerm.map((c) => row[c]));
+
     // Store result and update UI
-    this.state.analysisResult = { Hx, Hz, n, k, r, d, encoderCircuit, stabCircuit, lut, hasDegeneracy, canCorrect, xBar, zBar };
+    this.state.analysisResult = { Hx, Hz, permHx, permHz, colPerm: sf.colPerm, isPermuted, n, k, r, r_sf: sf.r, s: sf.s, d, encoderCircuit, stabCircuit, lut, hasDegeneracy, canCorrect, xBar, zBar, xBarSt, zBarSt };
     this._renderResults();
     this._updateURL();
     if (showToast !== false) {

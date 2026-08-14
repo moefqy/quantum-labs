@@ -471,11 +471,11 @@ export const QECCMath = (() => {
     const E2 = sliceCols(botHz, r + s, N);   // s × K
 
     return {
-      Hx_st: hx,
-      Hz_st: hz,
-      colPerm,        // colPerm[i] = original qubit index now at position i
       r, s, K, N,
-      blocks: { A1, A2, B, C1, C2, D1, E2 },
+      colPerm,
+      hx_st: hx,
+      hz_st: hz,
+      blocks: { A1, A2, B, C1, C2, D1, E2 }
     };
   }
 
@@ -556,7 +556,7 @@ export const QECCMath = (() => {
       return orig;
     });
 
-    return { X_bar: unpermute(X_bar), Z_bar: unpermute(Z_bar) };
+    return { X_bar: unpermute(X_bar), Z_bar: unpermute(Z_bar), X_bar_st: X_bar, Z_bar_st: Z_bar };
   }
 
   // Input Parsing & Validation
@@ -989,21 +989,21 @@ export const QECCMath = (() => {
 
   // Encoder circuit descriptor
   //
-  // Describes the encoding circuit as a sequence of gate steps.
-  // Based on the RREF of [Hx | Hz]: Hadamard on ancilla qubits, then
-  // controlled-Pauli gates determined by the RREF rows, then Hadamard again.
+  // Phase 1: Controlled-X from data qubits (n-k..n-1) to Z-pivot ancillas (r..r+s-1) via E2
+  // Phase 2: Hadamard on X-pivot ancillas (0..r-1), followed by controlled-Pauli gates
+  //          determined by standard-form rows [Hx_st | Hz_st].
   //
-  // Returns: { n, k, r, ancillaQubits[], steps[{type, qubit|control+target}] }
+  // Returns: { n, k, r, s, steps[{type, qubit|control+targets}] }
 
-  function describeEncoderCircuit(n, k, r, xBar, HxRref, HzRref) {
+  function describeEncoderCircuit(n, k, r, s, E2, hx_st, hz_st) {
     const steps = [];
 
-    // Phase 1: X_bar mapping
+    // Phase 1: Map data parities to Z-pivots via E2 block
     for (let i = 0; i < k; i++) {
       const targets = [];
-      for (let j = r; j < n - k; j++) {
-        if (xBar[i] && xBar[i][j]) {
-          targets.push({ qubit: j, pauli: 'X' });
+      for (let j = 0; j < s; j++) {
+        if (E2[j] && E2[j][i] === 1) {
+          targets.push({ qubit: r + j, pauli: 'X' });
         }
       }
       if (targets.length > 0) {
@@ -1011,15 +1011,15 @@ export const QECCMath = (() => {
       }
     }
 
-    // Phase 2: Stabilizer generation
+    // Phase 2: Stabilizer generation from X-pivots
     for (let i = 0; i < r; i++) {
       steps.push({ type: 'H', qubit: i });
       
       const targets = [];
       for (let j = 0; j < n; j++) {
         if (i === j) continue;
-        const x = HxRref[i] ? HxRref[i][j] : 0;
-        const z = HzRref[i] ? HzRref[i][j] : 0;
+        const x = hx_st[i] ? hx_st[i][j] : 0;
+        const z = hz_st[i] ? hz_st[i][j] : 0;
         
         if (x === 1 && z === 1) {
           targets.push({ qubit: j, pauli: 'Y' });
@@ -1034,7 +1034,7 @@ export const QECCMath = (() => {
       }
     }
 
-    return { n, k, r, steps };
+    return { n, k, r, s, steps };
   }
 
   // Enriched syndrome LUT (simulator-ready)

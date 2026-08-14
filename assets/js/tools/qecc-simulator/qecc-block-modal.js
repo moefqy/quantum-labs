@@ -112,9 +112,9 @@ export const QECCBlockModal = (() => {
         <div class="sc-grid" style="grid-template-columns: auto 20px repeat(${numCols}, 40px) 20px 10px auto; grid-template-rows: 36px repeat(${n}, 28px) 20px auto;">
     `;
     
-    // Left Labels (0..r-1 are |0>, r..n-1 are |\psi>)
+    // Left Labels (0..n-k-1 are |0>, n-k..n-1 are |\psi>)
     for (let i = 0; i < n; i++) {
-      const label = i < r ? "|0\\rangle" : "|\\psi\\rangle";
+      const label = i < (n - k) ? "|0\\rangle" : "|\\psi\\rangle";
       html += `<div class="sc-label" style="grid-column: 1; grid-row: ${i + 2};">${GateMath.toHTML(label)}</div>`;
     }
 
