@@ -1279,8 +1279,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-mono);
-  font-weight: 700;
   font-size: var(--text-xs);
   z-index: var(--z-top);
   position: relative;

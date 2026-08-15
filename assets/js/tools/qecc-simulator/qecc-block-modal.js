@@ -140,7 +140,7 @@ export const QECCBlockModal = (() => {
       
       for (const step of colSteps) {
         if (step.type === 'H') {
-          html += `<div class="sc-node" style="grid-column: ${gridCol}; grid-row: ${step.qubit + 2};"><span>H</span></div>`;
+          html += `<div class="sc-node" style="grid-column: ${gridCol}; grid-row: ${step.qubit + 2};">${GateMath.toHTML("\\mathcal{H}")}</div>`;
         } else if (step.type === 'MULTI_CTRL') {
           const qs = [step.control, ...step.targets.map(t => t.qubit)];
           const top = Math.min(...qs);
@@ -150,7 +150,7 @@ export const QECCBlockModal = (() => {
           html += `<div class="sc-control" style="grid-column: ${gridCol}; grid-row: ${step.control + 2};"></div>`;
           
           for (const target of step.targets) {
-            html += `<div class="sc-node" style="grid-column: ${gridCol}; grid-row: ${target.qubit + 2};"><span>${target.pauli}</span></div>`;
+            html += `<div class="sc-node" style="grid-column: ${gridCol}; grid-row: ${target.qubit + 2};">${GateMath.toHTML(`\\mathbf{${target.pauli}}`)}</div>`;
           }
         }
       }
@@ -278,7 +278,7 @@ export const QECCBlockModal = (() => {
         
         if (pauli !== "") {
           if (firstQubit === -1) firstQubit = i;
-          nodesForGen += `<div class="sc-node" style="grid-column: ${j + 4}; grid-row: ${i + 2};"><span>${pauli}</span></div>`;
+          nodesForGen += `<div class="sc-node" style="grid-column: ${j + 4}; grid-row: ${i + 2};">${GateMath.toHTML(`\\mathbf{${pauli}}`)}</div>`;
         }
       }
 
@@ -365,7 +365,7 @@ export const QECCBlockModal = (() => {
       html += `<div class="sc-h-wire sc-h-wire--flush" style="grid-column: ${COL_L_SP} / ${COL_M + 1}; grid-row: ${row};"></div>`;
 
       // H1 gate
-      html += `<div class="sc-node" style="grid-column: ${COL_H1}; grid-row: ${row};"><span>H</span></div>`;
+      html += `<div class="sc-node" style="grid-column: ${COL_H1}; grid-row: ${row};">${GateMath.toHTML("\\mathcal{H}")}</div>`;
 
       // v-wire: starts at brace tails, 8px gap from arm
       html += `<div class="sc-v-wire sc-v-wire--flush-start" style="grid-column: ${col}; grid-row: ${ROW_TOP_GAP} / ${row + 1};"></div>`;
@@ -374,10 +374,10 @@ export const QECCBlockModal = (() => {
       html += `<div class="sc-control" style="grid-column: ${col}; grid-row: ${row};"></div>`;
 
       // H2 gate
-      html += `<div class="sc-node" style="grid-column: ${COL_H2}; grid-row: ${row};"><span>H</span></div>`;
+      html += `<div class="sc-node" style="grid-column: ${COL_H2}; grid-row: ${row};">${GateMath.toHTML("\\mathcal{H}")}</div>`;
 
       // Measurement gate
-      html += `<div class="sc-node" style="grid-column: ${COL_M}; grid-row: ${row};"><span>M</span></div>`;
+      html += `<div class="sc-node" style="grid-column: ${COL_M}; grid-row: ${row};">${GateMath.toHTML("\\mathcal{M}")}</div>`;
 
       // Classical double wire
       html += `<div class="sc-classical-wire" style="grid-column: ${COL_CW}; grid-row: ${row};"></div>`;

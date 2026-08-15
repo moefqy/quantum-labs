@@ -245,14 +245,14 @@ export const QuantumGates = (() => {
       latex: {
         matrix:
           "\\frac{1}{\\sqrt{2}}\\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}",
-        symbol: "\\mathbf{H}",
+        symbol: "\\mathcal{H}",
         ket: "|0\\rangle \\to |+\\rangle,\\; |1\\rangle \\to |-\\rangle",
       },
       qiskit: "h",
       cirq: "H",
       palette: {
         group: "Single Qubit",
-        label: "\\mathbf{H}",
+        label: "\\mathcal{H}",
         desc: "Creates superposition",
       },
     },

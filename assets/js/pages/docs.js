@@ -86,7 +86,7 @@ export const DocumentationPage = (() => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathbf{H}")}</span></td>
+                    <td><span class="gate-ref-symbol">${GateMath.toHTML("\\mathcal{H}")}</span></td>
                     <td>Hadamard</td>
                     <td>Creates superposition. Maps ${GateMath.toHTML("|0\\rangle \\to |+\\rangle")}</td>
                     <td class="doc-math" data-gate="H"></td>

@@ -343,6 +343,9 @@ export const ExamplesPage = (() => {
                               if (g === "M") {
                                 return `<div class="example-gate">${GateMath.toHTML("\\mathcal{M}")}${lineHtml}</div>`;
                               }
+                              if (g === "H") {
+                                return `<div class="example-gate">${GateMath.toHTML("\\mathcal{H}")}${lineHtml}</div>`;
+                              }
 
                               return `<div class="example-gate">${GateMath.toHTML(`\\mathbf{${gateTex}}`)}${lineHtml}</div>`;
                             })
