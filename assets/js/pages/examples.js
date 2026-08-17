@@ -240,10 +240,10 @@ export const ExamplesPage = (() => {
     },
     {
       name: "[[16,6,4]] Tesseract Color Codes",
-      url: "?pcm=gf4&type=custom&h=1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1%0A0+1+0+1+0+1+0+1+0+1+0+1+0+1+0+1%0A0+0+1+1+0+0+1+1+0+0+1+1+0+0+1+1%0A0+0+0+0+1+1+1+1+0+0+0+0+1+1+1+1%0A0+0+0+0+0+0+0+0+1+1+1+1+1+1+1+1%0Aw+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w%0A0+w+0+w+0+w+0+w+0+w+0+w+0+w+0+w%0A0+0+w+w+0+0+w+w+0+0+w+w+0+0+w+w%0A0+0+0+0+w+w+w+w+0+0+0+0+w+w+w+w%0A0+0+0+0+0+0+0+0+w+w+w+w+w+w+w+w",
+      url: "?pcm=gf2&type=dual-css&hx=1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1%0A0+1+0+1+0+1+0+1+0+1+0+1+0+1+0+1%0A0+0+1+1+0+0+1+1+0+0+1+1+0+0+1+1%0A0+0+0+0+1+1+1+1+0+0+0+0+1+1+1+1%0A0+0+0+0+0+0+0+0+1+1+1+1+1+1+1+1",
       desc: () => "A self-dual 4D color code defined on a tesseract, featuring both types of stabilizer generators on each cube. Two of its logical qubits can also be utilized as gauge qubits to adapt it into a tesseract subsystem code.",
-      preview: "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n       \\vdots       \n0 0 0 0 w w w w 0 0 0 0 w w w w\n0 0 0 0 0 0 0 0 w w w w w w w w",
-      tags: ["Custom", "16 Qubits", "Distance 4"],
+      preview: "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1\n0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n0 0 1 1 0 0 1 1 0 0 1 1 0 0 1 1\n0 0 0 0 1 1 1 1 0 0 0 0 1 1 1 1\n0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1",
+      tags: ["Dual CSS", "16 Qubits", "Distance 4"],
     },
     {
       name: "[[5,1,3]] Quaternary Hamming Codes",
