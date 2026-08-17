@@ -42,19 +42,20 @@ Quantum Labs relies on a deeply modular, static-file architecture:
 ```
 quantum-lab/
 ├── assets/
-│   ├── css/          # Modular CSS (base variables, components, page layouts)
-│   ├── img/          # Favicons and graphical assets
+│   ├── css/          # Modular design system, components, and page stylesheets
+│   ├── img/          # Favicons, vector icons, and graphical assets
 │   └── js/
-│       ├── app.js    # Application entry point, router initialization, global UI
-│       ├── core/     # Quantum math engine, state management, web worker, and exporters
-│       ├── tools/    # Domain logic (Circuit Builder, Bloch Sphere, State Analyzer, Entanglement Tracker, QECC Simulator)
-│       ├── ui/       # Shared UI components, toolbars, and dynamic modals
-│       └── pages/    # Specific view controllers (Home, Simulator, Docs, Examples, About)
-├── docs/             # Advanced architecture and technical documentation
-├── simulator/        # Static sub-route for Sitelinks SEO
-├── examples/         # Static sub-route for Sitelinks SEO
-├── documentation/    # Static sub-route for Sitelinks SEO
-└── index.html        # The main SPA host file
+│       ├── core/     # Simulation engine, quantum math library, Web Worker, and code exporters
+│       ├── tools/    # Interactive tools (Circuit Builder, Bloch Sphere, State Analyzer, QECC, etc.)
+│       ├── ui/       # Shared UI components, toolbars, matrix inputs, and popovers
+│       ├── pages/    # SPA page controllers (Home, Simulator, Docs, Examples, About)
+│       ├── app.js    # Application entry point and lifecycle coordinator
+│       └── router.js # Client-side SPA routing system
+├── tests/            # Automated test suites for simulation engine, gates, and math
+├── 404.html          # SPA fallback route handler
+├── index.html        # Main HTML host file
+├── serve.json        # Static server rewrite configuration
+└── sitemap.xml       # Search engine sitemap
 ```
 
 ## Circuit Serialization
